@@ -1,0 +1,220 @@
+:root {
+  --motion-expo: cubic-bezier(.16, 1, .3, 1);
+  --motion-swift: cubic-bezier(.2, .8, .2, 1);
+}
+
+@keyframes motion-typeset-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes motion-chain-word-in {
+  0% { opacity: 0; transform: translateY(10px); }
+  62% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes motion-chain-rule {
+  0% { opacity: 0; transform: scaleX(0); }
+  45%, 76% { opacity: .65; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(1); }
+}
+
+@keyframes motion-arrow-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes motion-target-start {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes motion-stat-flip {
+  0% { opacity: .3; transform: translateY(-5px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes motion-message-in {
+  from { opacity: 0; transform: translateX(-7px); clip-path: inset(0 100% 0 0); }
+  to { opacity: 1; transform: translateX(0); clip-path: inset(0 0 0 0); }
+}
+
+@keyframes motion-panel-open {
+  from { opacity: 0; transform: translateY(-6px); clip-path: inset(0 0 100% 0); }
+  to { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); }
+}
+
+@keyframes motion-popover-open {
+  from { opacity: 0; transform: translateY(8px) scale(.985); box-shadow: 3px 4px 0 rgba(18, 18, 17, 0.08); }
+  to { opacity: 1; transform: translateY(0) scale(1); box-shadow: 10px 12px 0 rgba(18, 18, 17, 0.16); }
+}
+
+@keyframes motion-scrim-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes motion-result-in {
+  from { opacity: 0; transform: translateY(14px) scale(.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Coordinated first impression: the page settles like a freshly composed proof. */
+.entry-section { animation: motion-typeset-in 620ms 560ms var(--motion-expo) both; }
+.margin-column .stats-bar { animation: motion-typeset-in 560ms 620ms var(--motion-expo) both; }
+.margin-column .side-actions { animation: motion-typeset-in 560ms 690ms var(--motion-expo) both; }
+.margin-column .note-block:nth-of-type(1) { animation: motion-typeset-in 560ms 750ms var(--motion-expo) both; }
+.margin-column .note-block:nth-of-type(2) { animation: motion-typeset-in 560ms 810ms var(--motion-expo) both; }
+
+.game-mode-btn,
+.diff-btn,
+.level-card,
+.hint-word,
+.campaign-reset,
+.campaign-hud button {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 220ms var(--motion-expo),
+    transform 220ms var(--motion-expo),
+    opacity 180ms ease;
+}
+
+.game-mode-btn:hover:not(:disabled),
+.campaign-reset:hover:not(:disabled),
+.campaign-hud button:hover:not(:disabled) {
+  color: var(--head);
+}
+
+.game-mode-btn:active:not(:disabled),
+.diff-btn:active:not(:disabled),
+.campaign-reset:active:not(:disabled),
+.campaign-hud button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn:not(:disabled):hover { transform: translateY(-1px); }
+.btn-primary:not(:disabled):hover { box-shadow: 6px 6px 0 var(--rule); }
+.btn-primary:not(:disabled):active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--rule); }
+
+.hint-word:hover:not(:disabled) { transform: translateY(-2px); }
+
+.level-card:hover:not(:disabled) {
+  z-index: 1;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 0 rgb(23 23 21 / .08);
+}
+
+.level-card:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 rgb(23 23 21 / .1);
+}
+
+.input-area input {
+  transition: border-color 180ms ease, background-color 180ms ease, box-shadow 220ms var(--motion-expo);
+}
+
+.input-area input:focus {
+  box-shadow: inset 0 -2px 0 var(--head), 4px 4px 0 rgb(35 91 154 / .1);
+  outline: none;
+}
+
+.chain-word.motion-chain-enter {
+  position: relative;
+  animation: motion-chain-word-in 460ms var(--motion-expo) both;
+}
+
+.chain-word.motion-chain-enter::after {
+  position: absolute;
+  right: 0;
+  bottom: -3px;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: currentColor;
+  transform-origin: left center;
+  animation: motion-chain-rule 520ms 40ms var(--motion-expo) both;
+}
+
+.chain-arrow.motion-chain-enter {
+  animation: motion-arrow-in 300ms var(--motion-expo) both;
+}
+
+.target-letters.motion-target-refresh {
+  animation: motion-target-start 420ms var(--motion-expo) both;
+}
+
+.stat .value.motion-stat-change,
+.campaign-move-count strong.motion-stat-change,
+.campaign-progress-value.motion-stat-change {
+  animation: motion-stat-flip 340ms var(--motion-expo) both;
+}
+
+.message.show.motion-message-enter { animation: motion-message-in 340ms var(--motion-expo) both; }
+.hints-panel.show { animation: motion-panel-open 320ms var(--motion-expo) both; }
+.solve-panel.motion-panel-enter { animation: motion-panel-open 340ms var(--motion-expo) both; }
+
+.campaign-home:not([hidden]) {
+  animation: motion-typeset-in 480ms var(--motion-expo) both;
+}
+
+.campaign-hud:not([hidden]) {
+  animation: motion-typeset-in 360ms var(--motion-expo) both;
+}
+
+.word-definition-popover:not([hidden]) {
+  transform-origin: 32px 0;
+  animation: motion-popover-open 300ms var(--motion-expo) both;
+}
+
+.overlay.show { animation: motion-scrim-in 260ms ease-out both; }
+.overlay.show .overlay-card { animation: motion-result-in 520ms var(--motion-expo) both; }
+
+.campaign-result-stars:not([hidden]) span,
+.campaign-result-stars:not([hidden]) {
+  animation: motion-typeset-in 420ms 110ms var(--motion-expo) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-section,
+  .margin-column .stats-bar,
+  .margin-column .side-actions,
+  .margin-column .note-block,
+  .chain-word.motion-chain-enter,
+  .chain-word.motion-chain-enter::after,
+  .chain-arrow.motion-chain-enter,
+  .target-letters.motion-target-refresh,
+  .stat .value.motion-stat-change,
+  .campaign-move-count strong.motion-stat-change,
+  .campaign-progress-value.motion-stat-change,
+  .message.show.motion-message-enter,
+  .hints-panel.show,
+  .solve-panel.motion-panel-enter,
+  .campaign-home:not([hidden]),
+  .campaign-hud:not([hidden]),
+  .word-definition-popover:not([hidden]),
+  .overlay.show,
+  .overlay.show .overlay-card,
+  .campaign-result-stars:not([hidden]) {
+    animation: none !important;
+  }
+
+  .btn,
+  .game-mode-btn,
+  .diff-btn,
+  .level-card,
+  .hint-word,
+  .input-area input,
+  .campaign-reset,
+  .campaign-hud button {
+    transition: none !important;
+  }
+
+  .btn:not(:disabled):hover,
+  .level-card:hover:not(:disabled),
+  .hint-word:hover:not(:disabled) {
+    transform: none;
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "word-chain-loop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "词环 · Word Loop progressive web app",
+  "scripts": {
+    "build": "node tools/build-sites.mjs",
+    "serve": "node tools/serve-pwa.js",
+    "validate:pwa": "node tools/validate-pwa.js"
+  },
+  "devDependencies": {
+    "@openai/sites-vite-plugin": "^0.2.0",
+    "vite": "^8.2.2"
+  }
+}

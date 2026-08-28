@@ -1,0 +1,22 @@
+{
+  "source": "SCOWL v2",
+  "scowl_size": 80,
+  "spellings": [
+    "American",
+    "British -ise",
+    "British -ize",
+    "Canadian",
+    "Australian"
+  ],
+  "word_count": 250835,
+  "tier_counts": {
+    "common": 80352,
+    "standard": 53134,
+    "extended": 117349
+  },
+  "lemma_count": 131794,
+  "start_vocabulary_count": 16874,
+  "minimum_length": 3,
+  "maximum_length": 45,
+  "generated_on": "2026-08-27"
+}

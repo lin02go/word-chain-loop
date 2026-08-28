@@ -1,0 +1,35 @@
+{
+  "id": "./word-chain-game.html",
+  "name": "词环 · Word Loop",
+  "short_name": "词环",
+  "description": "接住单词末尾的两个字母，把词链绕回最初的开头。",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "start_url": "./word-chain-game.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5f1e7",
+  "theme_color": "#171715",
+  "categories": ["games", "education", "word"],
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import { sites } from '@openai/sites-vite-plugin';
 const toolsDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(toolsDir, '..');
 const outDir = path.join(root, 'dist');
+const clientDir = path.join(outDir, 'client');
 
 const staticFiles = [
   'index.html',
@@ -46,7 +47,7 @@ await build({
 
 for (const relativePath of staticFiles) {
   const source = path.join(root, relativePath);
-  const destination = path.join(outDir, relativePath);
+  const destination = path.join(clientDir, relativePath);
   await fs.mkdir(path.dirname(destination), { recursive: true });
   await fs.copyFile(source, destination);
 }
@@ -56,6 +57,11 @@ await fs.mkdir(path.dirname(workerPath), { recursive: true });
 await fs.writeFile(workerPath, `export default {
   async fetch(request, env) {
     if (env && env.ASSETS && typeof env.ASSETS.fetch === 'function') {
+      const url = new URL(request.url);
+      if (url.pathname === '/') {
+        url.pathname = '/index.html';
+        return env.ASSETS.fetch(new Request(url, request));
+      }
       return env.ASSETS.fetch(request);
     }
     return new Response('Word Loop assets are unavailable.', {
@@ -69,7 +75,7 @@ await fs.writeFile(workerPath, `export default {
 const requiredOutputs = [
   'server/index.js',
   '.openai/hosting.json',
-  ...staticFiles
+  ...staticFiles.map((relativePath) => `client/${relativePath}`)
 ];
 
 for (const relativePath of requiredOutputs) {

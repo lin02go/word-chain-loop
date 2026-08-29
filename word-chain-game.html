@@ -1026,6 +1026,7 @@
   <link rel="stylesheet" href="campaign.css?v=3">
   <link rel="stylesheet" href="word-definitions.css?v=2">
   <link rel="stylesheet" href="achievements.css?v=1">
+  <link rel="stylesheet" href="user-system.css?v=1">
   <link rel="stylesheet" href="start-screen.css?v=1">
   <link rel="stylesheet" href="motion.css?v=3">
   <link rel="stylesheet" href="pwa.css?v=1">
@@ -1070,9 +1071,9 @@
           <p class="start-decision-copy" data-i18n="startIntroCopy">每次输入一个有效英文词，沿着末两位继续前进。用更少的词闭合环路，也可以在十二关挑战中争取三星。</p>
           <div class="start-actions">
             <button class="start-action start-action-primary" id="startGameBtn" type="button" data-i18n="startGame">开始游戏</button>
-            <button class="start-action" id="startAboutBtn" type="button" data-i18n="aboutUs">关于我们</button>
-            <button class="start-action" id="startLoginBtn" type="button" disabled>
-              <span data-i18n="login">登录</span><span class="start-login-note" data-i18n="comingSoon">暂未开放</span>
+            <button class="start-action" id="startAboutBtn" type="button" data-i18n="aboutUs">关于作者</button>
+            <button class="start-action" id="startLoginBtn" type="button">
+              <span id="startLoginLabel">登录</span><span class="start-login-note" id="startLoginNote">保存游戏进度</span>
             </button>
           </div>
         </div>
@@ -1104,16 +1105,68 @@
   <div class="start-about" id="startAbout" role="dialog" aria-modal="true" aria-labelledby="startAboutTitle" hidden>
     <div class="start-about-card">
       <div class="start-about-head">
-        <div>
-          <p class="start-panel-kicker" data-i18n="aboutKicker">关于这款游戏</p>
-          <h2 id="startAboutTitle" data-i18n="aboutTitle">我们为什么做「词环」</h2>
-        </div>
-        <button class="start-about-close" id="startAboutClose" type="button" data-i18n-aria="closeAbout" aria-label="关闭关于我们">×</button>
+        <h2 id="startAboutTitle" data-i18n="aboutTitle">关于作者</h2>
+        <button class="start-about-close" id="startAboutClose" type="button" data-i18n-aria="closeAbout" aria-label="关闭关于作者">×</button>
       </div>
-      <p data-i18n="aboutCopy">词环把英文词汇、路径判断和一点点运气放进同一场游戏。我们希望它既能让人轻松玩上一局，也能在反复尝试中认识更多单词。</p>
+      <section class="start-about-section" aria-labelledby="authorIntroTitle">
+        <h3 id="authorIntroTitle" data-i18n="authorIntroTitle">作者介绍</h3>
+        <p data-i18n="authorCopy">一名 XJTU 统计专业的大二学生，喜欢英语。</p>
+      </section>
+      <section class="start-about-section" aria-labelledby="aboutWhyTitle">
+        <h3 id="aboutWhyTitle" data-i18n="aboutWhyTitle">为什么做「词环」</h3>
+        <p data-i18n="aboutCopy">高中时，我发明了词环这个游戏，那时只能在纸上玩。如今有了 AI 工具的帮助，我终于能把它搬到线上，与大家分享，也希望更多人能从游戏中感受到英语的趣味。</p>
+      </section>
     </div>
   </div>
 </section>
+
+<div class="account-overlay" id="accountOverlay" role="dialog" aria-modal="true" aria-labelledby="accountTitle" hidden>
+  <div class="account-card">
+    <header class="account-card-head">
+      <div>
+        <p class="account-kicker" id="accountKicker">PLAYER PROFILE · CLOUD SAVE</p>
+        <h2 id="accountTitle">玩家档案</h2>
+      </div>
+      <button class="account-close" id="accountCloseBtn" type="button" aria-label="关闭玩家档案">×</button>
+    </header>
+    <section class="account-identity">
+      <div class="account-avatar" id="accountAvatar" aria-hidden="true">W</div>
+      <div>
+        <strong id="accountDisplayName">玩家</strong>
+        <span id="accountEmail"></span>
+      </div>
+      <span class="account-status" id="accountStatus">已登录</span>
+    </section>
+    <section class="account-stats" aria-label="玩家进度">
+      <div><strong id="accountLoops">0</strong><span id="accountLoopsLabel">完成词环</span></div>
+      <div><strong id="accountLevels">0 / 12</strong><span id="accountLevelsLabel">闯关完成</span></div>
+      <div><strong id="accountStars">0</strong><span id="accountStarsLabel">累计星数</span></div>
+    </section>
+    <form class="account-profile-form" id="accountProfileForm">
+      <label for="accountNickname" id="accountNicknameLabel">玩家昵称</label>
+      <div class="account-field-row">
+        <input id="accountNickname" name="nickname" type="text" minlength="2" maxlength="24" autocomplete="nickname" required>
+        <button type="submit" id="accountSaveBtn">保存</button>
+      </div>
+      <p class="account-hint" id="accountNicknameHint">2–24 个字符，只用于词环内展示。</p>
+    </form>
+    <section class="account-cloud">
+      <div class="account-cloud-copy">
+        <strong id="accountCloudTitle">云端进度</strong>
+        <span id="accountCloudStatus">正在检查同步状态…</span>
+      </div>
+      <div class="account-cloud-actions">
+        <button type="button" id="accountBackupBtn">立即同步</button>
+        <button type="button" id="accountRestoreBtn">恢复到此设备</button>
+      </div>
+    </section>
+    <div class="account-message" id="accountMessage" role="status" aria-live="polite"></div>
+    <footer class="account-footer">
+      <span id="accountPrivacy">身份由 ChatGPT 安全验证；词环不会保存你的密码。</span>
+      <a id="accountSignOut" href="/signout-with-chatgpt?return_to=%2Fword-chain-game.html">退出登录</a>
+    </footer>
+  </div>
+</div>
 
 <div class="page">
   <div class="container">
@@ -1122,6 +1175,7 @@
         <span data-i18n="utilityLabel">文字游戏 · 单人</span>
         <div class="utility-actions">
           <button class="start-home-link" id="returnHomeBtn" type="button" data-i18n="home">首页</button>
+          <button class="account-menu-btn" id="accountMenuBtn" type="button" aria-label="登录或查看玩家档案"><span class="account-menu-dot" aria-hidden="true"></span><span id="accountMenuLabel">登录</span></button>
           <button class="pwa-install-btn" type="button" data-pwa-install data-i18n="installApp" hidden>安装应用</button>
           <span class="utility-copy" data-i18n="utilityCopy">接住词尾，绕回词首</span>
           <div class="language-switch" data-i18n-aria="languageLabel">
@@ -1388,13 +1442,14 @@ var UI_TEXT = {
     startWelcomeCopy: '接住一个单词的最后两个字母，找到下一个词，最终绕回最初的两位。',
     startIntroKicker: '游戏简介', startIntroTitle: '让词尾成为下一步的开头。',
     startIntroCopy: '每次输入一个有效英文词，沿着末两位继续前进。用更少的词闭合环路，也可以在十二关挑战中争取三星。',
-    startGame: '开始游戏', aboutUs: '关于我们', login: '登录', comingSoon: '暂未开放',
+    startGame: '开始游戏', aboutUs: '关于作者', login: '登录', comingSoon: '暂未开放',
     chooseModeKicker: '选择游戏方式', chooseModeTitle: '今天想怎样玩？',
     startCasualCopy: '自由选择难度，随时开始一个新词环。', startCampaignCopy: '挑战固定关卡、最大步数和三星目标。',
     backToWelcome: '← 返回', startFooterLeft: '文字游戏 · 单人', startFooterRight: '从词尾出发，回到词首', home: '首页',
-    aboutKicker: '关于这款游戏', aboutTitle: '我们为什么做「词环」',
-    aboutCopy: '词环把英文词汇、路径判断和一点点运气放进同一场游戏。我们希望它既能让人轻松玩上一局，也能在反复尝试中认识更多单词。',
-    closeAbout: '关闭关于我们',
+    aboutTitle: '关于作者', authorIntroTitle: '作者介绍',
+    authorCopy: '一名 XJTU 统计专业的大二学生，喜欢英语。', aboutWhyTitle: '为什么做「词环」',
+    aboutCopy: '高中时，我发明了词环这个游戏，那时只能在纸上玩。如今有了 AI 工具的帮助，我终于能把它搬到线上，与大家分享，也希望更多人能从游戏中感受到英语的趣味。',
+    closeAbout: '关闭关于作者',
     editionNote: '把一个词的最后两个字母，交给下一个词。', gameName: '词环',
     casualMode: '休闲', campaignMode: '闯关',
     difficultyEasy: '简单', difficultyMedium: '标准', difficultyHard: '困难',
@@ -1450,13 +1505,14 @@ var UI_TEXT = {
     startWelcomeCopy: 'Catch the final two letters of one word, find the next, and make your way back to the opening pair.',
     startIntroKicker: 'About the game', startIntroTitle: 'Let every ending begin the next move.',
     startIntroCopy: 'Enter a valid English word and continue from its final pair. Close the loop in fewer words, or chase three stars across twelve fixed challenges.',
-    startGame: 'Start game', aboutUs: 'About us', login: 'Log in', comingSoon: 'Coming soon',
+    startGame: 'Start game', aboutUs: 'About the author', login: 'Log in', comingSoon: 'Coming soon',
     chooseModeKicker: 'Choose how to play', chooseModeTitle: 'How would you like to play today?',
     startCasualCopy: 'Choose a difficulty and begin a fresh loop whenever you like.', startCampaignCopy: 'Take on fixed levels, move limits, and three-star targets.',
     backToWelcome: '← Back', startFooterLeft: 'WORD PUZZLE · SINGLE PLAYER', startFooterRight: 'Follow the ending. Return to the beginning.', home: 'Home',
-    aboutKicker: 'About the game', aboutTitle: 'Why we made Word Loop',
-    aboutCopy: 'Word Loop brings English vocabulary, route finding, and a little luck into one game. It is designed for a quick relaxed round and for discovering more words through repeated play.',
-    closeAbout: 'Close About us',
+    aboutTitle: 'About the author', authorIntroTitle: 'Author introduction',
+    authorCopy: 'A second-year Statistics student at XJTU who loves English.', aboutWhyTitle: 'Why I made Word Loop',
+    aboutCopy: 'I invented Word Loop in high school, when it could only be played on paper. With the help of AI tools, I can now bring it online, share it with everyone, and let more people discover how much fun English can be.',
+    closeAbout: 'Close About the author',
     editionNote: 'Build a chain in which every word hands its final two letters to the next.', gameName: 'Word Loop',
     casualMode: 'Casual', campaignMode: 'Campaign',
     difficultyEasy: 'Easy', difficultyMedium: 'Medium', difficultyHard: 'Hard',
@@ -1546,6 +1602,7 @@ function applyLanguage(language) {
   if (window.campaignController && window.campaignController.refreshLanguage) window.campaignController.refreshLanguage();
   if (window.wordDefinitionController && window.wordDefinitionController.refreshLanguage) window.wordDefinitionController.refreshLanguage();
   if (window.achievementController && window.achievementController.refreshLanguage) window.achievementController.refreshLanguage();
+  if (window.userSystemController && window.userSystemController.refreshLanguage) window.userSystemController.refreshLanguage();
   if (window.pwaController && window.pwaController.refreshLanguage) window.pwaController.refreshLanguage();
 }
 
@@ -2416,6 +2473,7 @@ var WordChainGame = (function() {
   WordChainGame.prototype.saveRecord = function() {
     var key = 'word-chain-loop:record:v3:' + this.difficulty + ':' + this.startWord;
     try { localStorage.setItem(key, String(this.record)); } catch (err) { /* storage may be unavailable */ }
+    window.dispatchEvent(new CustomEvent('wordloop:progress-changed'));
   };
 
   WordChainGame.prototype.setDifficulty = function(diff) {
@@ -2527,6 +2585,7 @@ try {
 <script src="campaign.js?v=4"></script>
 <script src="start-screen.js?v=1"></script>
 <script src="achievements.js?v=1"></script>
+<script src="user-system.js?v=1"></script>
 <script src="word-definitions.js?v=6"></script>
 <script src="motion.js?v=3"></script>
 <script src="pwa.js?v=1"></script>

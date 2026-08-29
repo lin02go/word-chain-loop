@@ -39,6 +39,15 @@
       });
     }
 
+    this.modePicker.addEventListener('keydown', function(event) {
+      if (event.key === 'Tab' || event.key.indexOf('Arrow') === 0) {
+        self.modePicker.classList.add('is-keyboard-nav');
+      }
+    });
+    this.modePicker.addEventListener('pointermove', function() {
+      self.modePicker.classList.remove('is-keyboard-nav');
+    });
+
     document.addEventListener('keydown', function(event) {
       if (event.key !== 'Escape' || self.screen.hidden) return;
       if (!self.about.hidden) self.closeAbout();
@@ -65,6 +74,7 @@
   StartScreenController.prototype.showModePicker = function() {
     this.welcomePanel.hidden = true;
     this.modePicker.hidden = false;
+    this.modePicker.classList.remove('is-keyboard-nav');
     var firstMode = this.modePicker.querySelector('[data-start-mode]');
     if (firstMode) firstMode.focus({ preventScroll: true });
   };

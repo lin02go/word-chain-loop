@@ -128,6 +128,7 @@
   AchievementController.prototype.save = function() {
     this.data.updatedAt = new Date().toISOString();
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data)); } catch (err) { /* storage may be unavailable */ }
+    window.dispatchEvent(new CustomEvent('wordloop:progress-changed'));
   };
 
   AchievementController.prototype.backfillExistingProgress = function() {

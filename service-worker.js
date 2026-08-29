@@ -1,6 +1,6 @@
 'use strict';
 
-var SHELL_CACHE = 'word-loop-shell-v1';
+var SHELL_CACHE = 'word-loop-shell-v4';
 var SHELL_FILES = [
   './',
   './index.html',
@@ -9,6 +9,7 @@ var SHELL_FILES = [
   './campaign.css',
   './word-definitions.css',
   './achievements.css',
+  './user-system.css',
   './start-screen.css',
   './motion.css',
   './pwa.css',
@@ -17,6 +18,7 @@ var SHELL_FILES = [
   './campaign.js',
   './start-screen.js',
   './achievements.js',
+  './user-system.js',
   './word-definitions.js',
   './motion.js',
   './pwa.js',
@@ -55,6 +57,7 @@ self.addEventListener('message', function(event) {
 self.addEventListener('fetch', function(event) {
   var request = event.request;
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
+  if (new URL(request.url).pathname.indexOf('/api/') === 0) return;
 
   if (request.mode === 'navigate') {
     event.respondWith(

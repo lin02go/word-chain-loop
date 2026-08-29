@@ -103,6 +103,7 @@
 
   CampaignController.prototype.saveProgress = function() {
     try { localStorage.setItem(CAMPAIGN_PROGRESS_KEY, JSON.stringify(this.progress)); } catch (err) { /* storage may be unavailable */ }
+    window.dispatchEvent(new CustomEvent('wordloop:progress-changed'));
   };
 
   CampaignController.prototype.installGameHooks = function() {

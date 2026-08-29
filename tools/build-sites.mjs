@@ -11,6 +11,7 @@ const clientDir = path.join(outDir, 'client');
 
 const staticFiles = [
   'index.html',
+  '_routes.json',
   'word-chain-game.html',
   'manifest.webmanifest',
   'service-worker.js',

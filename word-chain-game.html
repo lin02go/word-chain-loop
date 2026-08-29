@@ -1026,7 +1026,7 @@
   <link rel="stylesheet" href="campaign.css?v=3">
   <link rel="stylesheet" href="word-definitions.css?v=2">
   <link rel="stylesheet" href="achievements.css?v=1">
-  <link rel="stylesheet" href="user-system.css?v=1">
+  <link rel="stylesheet" href="user-system.css?v=2">
   <link rel="stylesheet" href="start-screen.css?v=1">
   <link rel="stylesheet" href="motion.css?v=3">
   <link rel="stylesheet" href="pwa.css?v=1">
@@ -1129,42 +1129,67 @@
       </div>
       <button class="account-close" id="accountCloseBtn" type="button" aria-label="关闭玩家档案">×</button>
     </header>
-    <section class="account-identity">
-      <div class="account-avatar" id="accountAvatar" aria-hidden="true">W</div>
-      <div>
-        <strong id="accountDisplayName">玩家</strong>
-        <span id="accountEmail"></span>
+    <section class="account-auth-view" id="accountAuthView">
+      <div class="account-auth-tabs" role="tablist" aria-label="账户操作">
+        <button id="accountLoginTab" class="is-active" type="button" role="tab" aria-selected="true" data-auth-mode="login">登录</button>
+        <button id="accountRegisterTab" type="button" role="tab" aria-selected="false" data-auth-mode="register">注册</button>
       </div>
-      <span class="account-status" id="accountStatus">已登录</span>
+      <p class="account-auth-intro" id="accountAuthIntro">登录后可跨设备保存词环进度。</p>
+      <form class="account-auth-form" id="accountAuthForm">
+        <label for="accountAuthEmail" id="accountEmailLabel">邮箱</label>
+        <input id="accountAuthEmail" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" required>
+        <div id="accountRegisterFields" hidden>
+          <label for="accountRegisterNickname" id="accountRegisterNicknameLabel">玩家昵称</label>
+          <input id="accountRegisterNickname" name="nickname" type="text" minlength="2" maxlength="24" autocomplete="nickname">
+        </div>
+        <label for="accountAuthPassword" id="accountPasswordLabel">密码</label>
+        <div class="account-password-row">
+          <input id="accountAuthPassword" name="password" type="password" minlength="10" maxlength="128" autocomplete="current-password" required>
+          <button id="accountPasswordToggle" type="button" aria-label="显示密码">显示</button>
+        </div>
+        <p class="account-hint" id="accountPasswordHint">至少 10 个字符。</p>
+        <button class="account-auth-submit" id="accountAuthSubmit" type="submit">登录</button>
+      </form>
+      <p class="account-auth-security" id="accountAuthSecurity">密码经加盐派生后保存；本站不会读取或保存明文密码。</p>
     </section>
-    <section class="account-stats" aria-label="玩家进度">
-      <div><strong id="accountLoops">0</strong><span id="accountLoopsLabel">完成词环</span></div>
-      <div><strong id="accountLevels">0 / 12</strong><span id="accountLevelsLabel">闯关完成</span></div>
-      <div><strong id="accountStars">0</strong><span id="accountStarsLabel">累计星数</span></div>
-    </section>
-    <form class="account-profile-form" id="accountProfileForm">
-      <label for="accountNickname" id="accountNicknameLabel">玩家昵称</label>
-      <div class="account-field-row">
-        <input id="accountNickname" name="nickname" type="text" minlength="2" maxlength="24" autocomplete="nickname" required>
-        <button type="submit" id="accountSaveBtn">保存</button>
-      </div>
-      <p class="account-hint" id="accountNicknameHint">2–24 个字符，只用于词环内展示。</p>
-    </form>
-    <section class="account-cloud">
-      <div class="account-cloud-copy">
-        <strong id="accountCloudTitle">云端进度</strong>
-        <span id="accountCloudStatus">正在检查同步状态…</span>
-      </div>
-      <div class="account-cloud-actions">
-        <button type="button" id="accountBackupBtn">立即同步</button>
-        <button type="button" id="accountRestoreBtn">恢复到此设备</button>
-      </div>
-    </section>
+    <div class="account-profile-view" id="accountProfileView" hidden>
+      <section class="account-identity">
+        <div class="account-avatar" id="accountAvatar" aria-hidden="true">W</div>
+        <div>
+          <strong id="accountDisplayName">玩家</strong>
+          <span id="accountEmail"></span>
+        </div>
+        <span class="account-status" id="accountStatus">已登录</span>
+      </section>
+      <section class="account-stats" aria-label="玩家进度">
+        <div><strong id="accountLoops">0</strong><span id="accountLoopsLabel">完成词环</span></div>
+        <div><strong id="accountLevels">0 / 12</strong><span id="accountLevelsLabel">闯关完成</span></div>
+        <div><strong id="accountStars">0</strong><span id="accountStarsLabel">累计星数</span></div>
+      </section>
+      <form class="account-profile-form" id="accountProfileForm">
+        <label for="accountNickname" id="accountNicknameLabel">玩家昵称</label>
+        <div class="account-field-row">
+          <input id="accountNickname" name="nickname" type="text" minlength="2" maxlength="24" autocomplete="nickname" required>
+          <button type="submit" id="accountSaveBtn">保存</button>
+        </div>
+        <p class="account-hint" id="accountNicknameHint">2–24 个字符，只用于词环内展示。</p>
+      </form>
+      <section class="account-cloud">
+        <div class="account-cloud-copy">
+          <strong id="accountCloudTitle">云端进度</strong>
+          <span id="accountCloudStatus">正在检查同步状态…</span>
+        </div>
+        <div class="account-cloud-actions">
+          <button type="button" id="accountBackupBtn">立即同步</button>
+          <button type="button" id="accountRestoreBtn">恢复到此设备</button>
+        </div>
+      </section>
+      <footer class="account-footer">
+        <span id="accountPrivacy">账户和游戏进度保存在 Cloudflare；词环不会保存你的明文密码。</span>
+        <button id="accountSignOut" type="button">退出登录</button>
+      </footer>
+    </div>
     <div class="account-message" id="accountMessage" role="status" aria-live="polite"></div>
-    <footer class="account-footer">
-      <span id="accountPrivacy">身份由 ChatGPT 安全验证；词环不会保存你的密码。</span>
-      <a id="accountSignOut" href="/signout-with-chatgpt?return_to=%2Fword-chain-game.html">退出登录</a>
-    </footer>
   </div>
 </div>
 
@@ -2585,7 +2610,7 @@ try {
 <script src="campaign.js?v=4"></script>
 <script src="start-screen.js?v=1"></script>
 <script src="achievements.js?v=1"></script>
-<script src="user-system.js?v=1"></script>
+<script src="user-system.js?v=2"></script>
 <script src="word-definitions.js?v=6"></script>
 <script src="motion.js?v=3"></script>
 <script src="pwa.js?v=1"></script>

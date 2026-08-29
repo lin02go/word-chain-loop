@@ -45,6 +45,24 @@
 .account-close { width: 38px; height: 38px; flex: 0 0 auto; border: 1px solid var(--rule-strong); color: var(--ink); background: transparent; font: 24px/1 var(--serif); cursor: pointer; }
 .account-close:hover { color: var(--paper); background: var(--ink); }
 
+.account-auth-view { padding-top: 24px; }
+.account-auth-view[hidden], .account-profile-view[hidden], #accountRegisterFields[hidden] { display: none !important; }
+.account-auth-tabs { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--rule-strong); }
+.account-auth-tabs button { min-height: 44px; border: 0; color: var(--muted); background: transparent; font: 700 11px/1 var(--mono); letter-spacing: .08em; cursor: pointer; }
+.account-auth-tabs button + button { border-left: 1px solid var(--rule-strong); }
+.account-auth-tabs button.is-active { color: var(--paper); background: var(--ink); }
+.account-auth-intro { margin: 20px 0; color: var(--muted); font: 16px/1.6 var(--serif); }
+.account-auth-form { display: grid; gap: 8px; }
+.account-auth-form label { margin-top: 8px; font: 700 11px/1.3 var(--mono); letter-spacing: .07em; }
+.account-auth-form input { width: 100%; height: 48px; padding: 10px 12px; border: 1px solid var(--rule-strong); border-radius: 0; color: var(--ink); background: rgb(255 255 255 / .35); font: 16px/1 var(--mono); }
+.account-password-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+.account-password-row input { border-right: 0; }
+.account-password-row button { min-width: 64px; border: 1px solid var(--rule-strong); color: var(--ink); background: var(--paper-deep); font: 700 10px/1 var(--mono); cursor: pointer; }
+.account-auth-submit { min-height: 50px; margin-top: 10px; border: 1px solid var(--ink); color: var(--paper); background: var(--ink); font: 700 11px/1 var(--mono); letter-spacing: .08em; cursor: pointer; }
+.account-auth-submit:hover, .account-password-row button:hover { color: var(--paper); background: var(--head); }
+.account-auth-submit:disabled { cursor: wait; opacity: .52; }
+.account-auth-security { margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--rule); color: var(--muted); font: 10px/1.55 var(--mono); }
+
 .account-identity { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 22px 0; border-bottom: 1px solid var(--rule-strong); }
 .account-avatar { display: grid; place-items: center; width: 54px; height: 54px; color: var(--paper); background: var(--head); font: 700 25px/1 var(--serif); text-transform: uppercase; }
 .account-identity strong { display: block; overflow: hidden; font-family: var(--serif); font-size: 25px; text-overflow: ellipsis; white-space: nowrap; }
@@ -75,9 +93,9 @@
 .account-message.is-error { color: #9a2e28; }
 .account-footer { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding-top: 12px; color: var(--muted); font: 10px/1.5 var(--mono); }
 .account-footer span { max-width: 48ch; }
-.account-footer a { flex: 0 0 auto; color: var(--ink); text-underline-offset: 4px; }
+.account-footer button { flex: 0 0 auto; padding: 3px 0; border: 0; border-bottom: 1px solid currentColor; color: var(--ink); background: transparent; font: 10px/1.4 var(--mono); cursor: pointer; }
 
-.account-menu-btn:focus-visible, .account-close:focus-visible, .account-field-row input:focus-visible, .account-field-row button:focus-visible, .account-cloud-actions button:focus-visible, .account-footer a:focus-visible {
+.account-menu-btn:focus-visible, .account-close:focus-visible, .account-auth-tabs button:focus-visible, .account-auth-form input:focus-visible, .account-auth-form button:focus-visible, .account-field-row input:focus-visible, .account-field-row button:focus-visible, .account-cloud-actions button:focus-visible, .account-footer button:focus-visible {
   outline: 2px solid var(--head);
   outline-offset: 3px;
 }

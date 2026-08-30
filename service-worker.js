@@ -1,11 +1,13 @@
 'use strict';
 
-var SHELL_CACHE = 'word-loop-shell-v5';
+var SHELL_CACHE = 'word-loop-shell-v6';
 var SHELL_FILES = [
   './',
   './index.html',
   './word-chain-game.html',
   './manifest.webmanifest',
+  './og.png',
+  './game.css',
   './campaign.css',
   './word-definitions.css',
   './achievements.css',
@@ -14,6 +16,7 @@ var SHELL_FILES = [
   './motion.css',
   './pwa.css',
   './dictionary.js',
+  './game.js',
   './campaign-levels.js',
   './campaign.js',
   './start-screen.js',

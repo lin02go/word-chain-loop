@@ -1,8 +1,11 @@
 const encoder = new TextEncoder();
 const COOKIE_NAME = 'word_loop_session';
 const SESSION_SECONDS = 60 * 60 * 24 * 30;
-const PASSWORD_ITERATIONS = 210000;
+// Workers Free allows 10 ms of CPU per request. A server-side pepper keeps
+// database-only leaks resistant while this PBKDF2 cost stays within that budget.
+const PASSWORD_ITERATIONS = 50000;
 const MAX_BODY_BYTES = 110000;
+const PEPPERED_SALT_PREFIX = 'p1.';
 const DUMMY_SALT = 'AAAAAAAAAAAAAAAAAAAAAA';
 const DUMMY_HASH = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 let schemaReady;
@@ -36,6 +39,12 @@ export function handleError(error) {
 export function requireDatabase(env) {
   if (!env || !env.DB) throw new HttpError(503, 'DB_UNAVAILABLE', 'Account storage is unavailable.');
   return env.DB;
+}
+
+export function requirePasswordPepper(env) {
+  const pepper = typeof env?.PASSWORD_PEPPER === 'string' ? env.PASSWORD_PEPPER : '';
+  if (pepper.length < 32) throw new HttpError(503, 'AUTH_CONFIG', 'Account security is unavailable.');
+  return pepper;
 }
 
 export async function ensureSchema(db) {
@@ -137,26 +146,50 @@ export async function sha256(value) {
   return toBase64Url(new Uint8Array(digest));
 }
 
-async function derivePassword(password, salt, iterations) {
-  const material = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits']);
+async function pepperPassword(password, pepper) {
+  const key = await crypto.subtle.importKey(
+    'raw', encoder.encode(pepper), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'],
+  );
+  return new Uint8Array(await crypto.subtle.sign('HMAC', key, encoder.encode(password)));
+}
+
+async function derivePassword(password, salt, iterations, pepper) {
+  const passwordBytes = pepper ? await pepperPassword(password, pepper) : encoder.encode(password);
+  const material = await crypto.subtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveBits']);
   const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations }, material, 256);
   return new Uint8Array(bits);
 }
 
-export async function createPasswordRecord(password) {
+export async function createPasswordRecord(password, pepper) {
   const salt = randomBytes(16);
-  const hash = await derivePassword(validatePassword(password), salt, PASSWORD_ITERATIONS);
-  return { salt: toBase64Url(salt), hash: toBase64Url(hash), iterations: PASSWORD_ITERATIONS };
+  const hash = await derivePassword(validatePassword(password), salt, PASSWORD_ITERATIONS, pepper);
+  return {
+    salt: PEPPERED_SALT_PREFIX + toBase64Url(salt),
+    hash: toBase64Url(hash),
+    iterations: PASSWORD_ITERATIONS,
+  };
 }
 
-export async function verifyPassword(password, record) {
-  const salt = fromBase64Url(record?.passwordSalt || DUMMY_SALT);
+export async function verifyPassword(password, record, pepper) {
+  const storedSalt = record?.passwordSalt || PEPPERED_SALT_PREFIX + DUMMY_SALT;
+  const peppered = storedSalt.startsWith(PEPPERED_SALT_PREFIX);
+  const salt = fromBase64Url(peppered ? storedSalt.slice(PEPPERED_SALT_PREFIX.length) : storedSalt);
   const expected = fromBase64Url(record?.passwordHash || DUMMY_HASH);
-  const actual = await derivePassword(password, salt, Number(record?.passwordIterations) || PASSWORD_ITERATIONS);
+  const actual = await derivePassword(
+    password,
+    salt,
+    Number(record?.passwordIterations) || PASSWORD_ITERATIONS,
+    peppered ? pepper : null,
+  );
   if (actual.length !== expected.length) return false;
   let difference = 0;
   for (let index = 0; index < actual.length; index += 1) difference |= actual[index] ^ expected[index];
   return Boolean(record) && difference === 0;
+}
+
+export function passwordNeedsUpgrade(record) {
+  return !record?.passwordSalt?.startsWith(PEPPERED_SALT_PREFIX) ||
+    Number(record?.passwordIterations) !== PASSWORD_ITERATIONS;
 }
 
 function cookies(request) {

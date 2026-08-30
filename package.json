@@ -1,12 +1,16 @@
 {
   "name": "word-chain-loop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "词环 · Word Loop progressive web app",
   "scripts": {
     "build": "node tools/build-sites.mjs",
     "serve": "node tools/serve-pwa.js",
-    "validate:pwa": "node tools/validate-pwa.js"
+    "validate:pwa": "node tools/validate-pwa.js",
+    "validate:campaign": "node tools/validate-campaign-levels.js",
+    "validate:auth": "node tools/validate-auth.mjs",
+    "validate:worker": "node tools/validate-worker.mjs",
+    "check": "npm run validate:pwa && npm run validate:campaign && npm run validate:auth && npm run build && npm run validate:worker"
   },
   "devDependencies": {
     "@openai/sites-vite-plugin": "^0.2.0",

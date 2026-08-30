@@ -1,13 +1,14 @@
 import {
   accountPayload, createPasswordRecord, ensureSchema, handleError, HttpError, json,
   newSessionRecord, normalizeEmail, readJson, requireDatabase, sessionCookie,
-  validateNickname, validatePassword, verifyOrigin,
+  requirePasswordPepper, validateNickname, validatePassword, verifyOrigin,
 } from '../../_lib/auth.js';
 
 export async function onRequestPost(context) {
   try {
     verifyOrigin(context.request);
     const db = requireDatabase(context.env);
+    const pepper = requirePasswordPepper(context.env);
     await ensureSchema(db);
     const body = await readJson(context.request);
     const email = normalizeEmail(body.email);
@@ -16,7 +17,7 @@ export async function onRequestPost(context) {
     const existing = await db.prepare('SELECT id FROM users WHERE email = ?').bind(email).first();
     if (existing) throw new HttpError(409, 'EMAIL_EXISTS', 'Email is already registered.');
 
-    const passwordRecord = await createPasswordRecord(password);
+    const passwordRecord = await createPasswordRecord(password, pepper);
     const user = { id: crypto.randomUUID(), email, nickname };
     const session = await newSessionRecord(user.id);
     const now = new Date().toISOString();

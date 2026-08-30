@@ -62,8 +62,10 @@ if (manifest) {
 
 const workerText = read('service-worker.js');
 const pwaText = read('pwa.js');
+const gameText = read('game.js');
 try { new vm.Script(workerText, { filename: 'service-worker.js' }); } catch (error) { fail(error.message); }
 try { new vm.Script(pwaText, { filename: 'pwa.js' }); } catch (error) { fail(error.message); }
+try { new vm.Script(gameText, { filename: 'game.js' }); } catch (error) { fail(error.message); }
 
 const shellMatch = workerText.match(/var SHELL_FILES = \[([\s\S]*?)\];/);
 if (!shellMatch) {
@@ -80,12 +82,23 @@ if (!shellMatch) {
 const html = read('word-chain-game.html');
 if (!/rel="manifest" href="manifest\.webmanifest"/.test(html)) fail('Game page does not link the manifest');
 if (!/navigator\.serviceWorker\.register\('\.\/service-worker\.js'/.test(pwaText)) fail('PWA script does not register the Service Worker');
+if (/\son[a-z]+\s*=/i.test(html)) fail('Game page contains inline event handlers');
+if (!/<script src="dictionary\.js\?[^">]+" defer><\/script>/.test(html)) fail('Dictionary script must load with defer');
 
 const inlineScripts = Array.from(html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi), (match) => match[1]);
+if (inlineScripts.length) fail('Game page should not contain inline scripts');
 inlineScripts.forEach((script, index) => {
   try { new vm.Script(script, { filename: `word-chain-game.inline-${index + 1}.js` }); }
   catch (error) { fail(error.message); }
 });
+
+if (shellMatch) {
+  const cached = new Set(Array.from(shellMatch[1].matchAll(/'([^']+)'/g), (match) => match[1].replace(/^\.\//, '')));
+  const pageAssets = Array.from(html.matchAll(/<(?:script|link)\b[^>]*(?:src|href)="([^"?#]+)(?:[?#][^"]*)?"/gi), (match) => match[1]);
+  pageAssets.forEach((asset) => {
+    if (!/^https?:/.test(asset) && !cached.has(asset)) fail(`Page asset is missing from the offline shell: ${asset}`);
+  });
+}
 
 if (failures.length) {
   console.error('PWA validation failed:');
@@ -93,4 +106,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`PWA validation passed: ${manifest.icons.length} manifest icons, ${inlineScripts.length} inline scripts.`);
+console.log(`PWA validation passed: ${manifest.icons.length} manifest icons, external game assets cached.`);

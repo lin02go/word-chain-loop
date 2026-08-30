@@ -221,7 +221,21 @@ function hintCountsAlongRoute(mode, startInfo, route) {
 
 const modes = {};
 const report = [];
-let invalid = 0;
+const structureFailures = [];
+const levelIds = new Set();
+const startWords = new Set();
+if (!Array.isArray(campaign.CAMPAIGN_LEVELS) || campaign.CAMPAIGN_LEVELS.length !== 100) {
+  structureFailures.push('campaign must contain exactly 100 levels');
+}
+for (let i = 0; i < campaign.CAMPAIGN_LEVELS.length; i++) {
+  const level = campaign.CAMPAIGN_LEVELS[i];
+  if (level.id !== i + 1) structureFailures.push(`level ${i + 1} has a non-sequential id`);
+  if (levelIds.has(level.id)) structureFailures.push(`duplicate level id ${level.id}`);
+  if (startWords.has(level.startWord)) structureFailures.push(`duplicate start word ${level.startWord}`);
+  levelIds.add(level.id);
+  startWords.add(level.startWord);
+}
+let invalid = structureFailures.length;
 
 for (const level of campaign.CAMPAIGN_LEVELS) {
   const mode = modes[level.difficulty] ||= buildMode(level.difficulty);
@@ -284,7 +298,10 @@ for (const level of campaign.CAMPAIGN_LEVELS) {
 }
 
 const suggestions = {};
-for (const difficulty of new Set(report.filter(item => !item.valid).map(item => item.difficulty))) {
+const suggestAll = process.argv.includes('--suggest');
+const suggestionDifficulties = suggestAll ? Object.keys(configs) :
+  [...new Set(report.filter(item => !item.valid).map(item => item.difficulty))];
+for (const difficulty of suggestionDifficulties) {
   const mode = modes[difficulty] ||= buildMode(difficulty);
   const rows = [];
   for (const info of mode.wordInfo.values()) {
@@ -315,10 +332,56 @@ for (const difficulty of new Set(report.filter(item => !item.valid).map(item => 
     if (familiarRoutes.length < 2) continue;
     rows.push({ word: info.word, tier: info.tier, distance, routeCount, familiarClosers: closerLemmas.size,
       familiarRouteCount: familiarRoutes.length, sampleRoute: familiarRoutes[0] });
-    if (rows.length >= 60) break;
   }
-  suggestions[difficulty] = rows;
+  if (suggestAll && rows.length > 120) {
+    suggestions[difficulty] = Array.from({ length: 120 }, (_, index) =>
+      rows[Math.floor(index * rows.length / 120)]
+    );
+  } else {
+    suggestions[difficulty] = rows.slice(0, 120);
+  }
 }
 
-console.log(JSON.stringify({ valid: invalid === 0, invalid, levels: report, suggestions }, null, 2));
+try {
+  const savedLevels = {};
+  for (let id = 1; id <= 12; id++) savedLevels[id] = { completed: true };
+  const controllerContext = {
+    window: {},
+    localStorage: {
+      getItem() {
+        return JSON.stringify({ version: 1, unlockedLevel: 12, lastPlayedLevel: 12, levels: savedLevels });
+      }
+    }
+  };
+  vm.createContext(controllerContext);
+  vm.runInContext(fs.readFileSync('campaign.js', 'utf8'), controllerContext, { filename: 'campaign.js' });
+  const prototype = controllerContext.window.CampaignController.prototype;
+  const migrated = prototype.loadProgress.call({
+    levels: campaign.CAMPAIGN_LEVELS,
+    emptyProgress: prototype.emptyProgress
+  });
+  if (migrated.unlockedLevel !== 13) {
+    structureFailures.push('completed legacy campaign progress must unlock level 13');
+    invalid++;
+  }
+} catch (error) {
+  structureFailures.push(`campaign progress migration failed: ${error.message}`);
+  invalid++;
+}
+
+const output = { valid: invalid === 0, invalid, structureFailures, levels: report, suggestions };
+const summary = {
+  valid: output.valid,
+  invalid: output.invalid,
+  structureFailures,
+  levelCount: report.length,
+  difficultyCounts: report.reduce((counts, level) => {
+    counts[level.difficulty] = (counts[level.difficulty] || 0) + 1;
+    return counts;
+  }, {}),
+  failedLevels: report.filter((level) => !level.valid),
+};
+const printable = process.argv.includes('--suggest-only') ? { suggestions } :
+  (process.argv.includes('--report') ? output : summary);
+console.log(JSON.stringify(printable, null, 2));
 process.exitCode = invalid === 0 ? 0 : 1;

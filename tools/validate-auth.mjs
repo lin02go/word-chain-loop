@@ -29,4 +29,22 @@ if (!(await auth.verifyPassword(password, currentRow, pepper))) throw new Error(
 if (await auth.verifyPassword('incorrect password', currentRow, pepper)) throw new Error('Incorrect password was accepted');
 if (auth.passwordNeedsUpgrade(currentRow)) throw new Error('Current password was marked for upgrade');
 
-console.log('Authentication validation passed: legacy upgrade and peppered records verified.');
+const parsedBody = await auth.readJson(new Request('https://word-loop.test/api', {
+  method: 'POST',
+  body: JSON.stringify({ ok: true }),
+  headers: { 'content-type': 'application/json' },
+}));
+if (parsedBody.ok !== true) throw new Error('Bounded JSON reader changed a valid body');
+
+let oversizedCode = '';
+try {
+  await auth.readJson(new Request('https://word-loop.test/api', {
+    method: 'POST',
+    body: 'x'.repeat(110001),
+  }));
+} catch (error) {
+  oversizedCode = error.code;
+}
+if (oversizedCode !== 'PAYLOAD_TOO_LARGE') throw new Error('Streaming body limit was not enforced');
+
+console.log('Authentication validation passed: password records and bounded JSON bodies verified.');

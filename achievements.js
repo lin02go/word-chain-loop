@@ -2,6 +2,7 @@
   'use strict';
 
   var STORAGE_KEY = 'word-chain-loop:achievements:v1';
+  var CAMPAIGN_LEVEL_COUNT = typeof CAMPAIGN_LEVELS !== 'undefined' ? CAMPAIGN_LEVELS.length : 100;
 
   var TEXT = {
     zh: {
@@ -17,7 +18,8 @@
       firstOptimalTitle: '一步不差', firstOptimalDesc: '第一次按理论最短路线闭环。',
       fiveOptimalTitle: '路线校对员', fiveOptimalDesc: '累计 5 次按最短路线闭环。',
       threeCleanTitle: '独立成环', threeCleanDesc: '累计 3 次不使用提示、答案或撤销完成。',
-      campaignAllTitle: '十二关全刊', campaignAllDesc: '完成全部 12 个闯关关卡。'
+      campaignAllTitle: '十二关全刊', campaignAllDesc: '完成初版 12 个闯关关卡。',
+      campaignHundredTitle: '百关成书', campaignHundredDesc: '完成全部 100 个闯关关卡。'
     },
     en: {
       summaryTitle: 'Achievement archive', uniqueStarts: 'Opening words', optimalWins: 'Shortest wins', open: 'View all achievements', openShort: 'Achievements',
@@ -32,7 +34,8 @@
       firstOptimalTitle: 'Exact Route', firstOptimalDesc: 'Close a loop on a theoretical shortest route.',
       fiveOptimalTitle: 'Route Editor', fiveOptimalDesc: 'Close 5 loops on shortest routes.',
       threeCleanTitle: 'Independent Loop', threeCleanDesc: 'Complete 3 loops without hints, solutions, or undo.',
-      campaignAllTitle: 'Complete Edition', campaignAllDesc: 'Clear all 12 campaign levels.'
+      campaignAllTitle: 'Original Edition', campaignAllDesc: 'Clear the original 12 campaign levels.',
+      campaignHundredTitle: 'Hundred-Loop Chronicle', campaignHundredDesc: 'Clear all 100 campaign levels.'
     }
   };
 
@@ -44,7 +47,8 @@
     { id: 'first-optimal', metric: 'optimalWins', goal: 1, title: 'firstOptimalTitle', description: 'firstOptimalDesc' },
     { id: 'five-optimal', metric: 'optimalWins', goal: 5, title: 'fiveOptimalTitle', description: 'fiveOptimalDesc' },
     { id: 'three-clean', metric: 'unassistedWins', goal: 3, title: 'threeCleanTitle', description: 'threeCleanDesc' },
-    { id: 'campaign-all', metric: 'campaignLevelIds', goal: 12, title: 'campaignAllTitle', description: 'campaignAllDesc' }
+    { id: 'campaign-all', metric: 'campaignLevelIds', goal: 12, title: 'campaignAllTitle', description: 'campaignAllDesc' },
+    { id: 'campaign-hundred', metric: 'campaignLevelIds', goal: CAMPAIGN_LEVEL_COUNT, title: 'campaignHundredTitle', description: 'campaignHundredDesc' }
   ];
 
   function language() {
@@ -75,7 +79,7 @@
     if (!Array.isArray(values)) return result;
     for (var i = 0; i < values.length; i++) {
       var value = parseInt(values[i], 10);
-      if (!isFinite(value) || value < 1 || seen[value]) continue;
+      if (!isFinite(value) || value < 1 || value > CAMPAIGN_LEVEL_COUNT || seen[value]) continue;
       seen[value] = true;
       result.push(value);
     }
@@ -266,7 +270,7 @@
       [this.data.uniqueStartWords.length, text('uniqueStarts')],
       [this.data.optimalWins, text('optimalWins')],
       [this.data.unassistedWins, text('unassistedWins')],
-      [this.data.campaignLevelIds.length + ' / 12', text('campaignLevels')]
+      [this.data.campaignLevelIds.length + ' / ' + CAMPAIGN_LEVEL_COUNT, text('campaignLevels')]
     ];
     var html = '';
     for (var i = 0; i < values.length; i++) {

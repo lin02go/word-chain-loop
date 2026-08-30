@@ -1,5 +1,5 @@
 import {
-  accountPayload, createPasswordRecord, ensureSchema, handleError, HttpError, json,
+  accountPayload, createPasswordRecord, handleError, HttpError, json,
   newSessionRecord, normalizeEmail, readJson, requireDatabase, sessionCookie,
   requirePasswordPepper, validateNickname, validatePassword, verifyOrigin,
 } from '../../_lib/auth.js';
@@ -9,7 +9,6 @@ export async function onRequestPost(context) {
     verifyOrigin(context.request);
     const db = requireDatabase(context.env);
     const pepper = requirePasswordPepper(context.env);
-    await ensureSchema(db);
     const body = await readJson(context.request);
     const email = normalizeEmail(body.email);
     const password = validatePassword(body.password);

@@ -6,11 +6,11 @@
 
   var CAMPAIGN_TEXT = {
     zh: {
-      homeKicker: '闯关模式 · 12 关', homeTitle: '十二关词环挑战',
+      homeKicker: '闯关模式 · {levels} 关', homeTitle: '{levels} 关词环挑战',
       homeCopy: '逐关闭合词环，在最大步数内完成，并尝试拿到三星。',
       completed: '已完成关卡', reset: '重置闯关进度', resetConfirm: '确定清除全部闯关进度吗？此操作无法撤销。',
       continueLevel: '继续第 {id} 关',
-      totalStars: '总星数 {stars} / 36', level: '第 {id} 关', locked: '尚未解锁',
+      totalStars: '总星数 {stars} / {maxStars}', level: '第 {id} 关', locked: '尚未解锁',
       difficultyEasy: '简单', difficultyMedium: '标准', difficultyHard: '困难',
       best: '最佳 {moves} 步', bestOne: '最佳 1 步', notCompleted: '尚未完成',
       homeModeDescription: '固定关卡 · 三星评价 · 最大步数限制',
@@ -19,19 +19,19 @@
       hudLabel: '闯关状态', levelCompleteKicker: '关卡完成', levelComplete: '闯关成功',
       resultCopy: '你用 {moves} 步闭合了词环；三星目标为 {par} 步。',
       assisted: '本关使用了提示或撤销，最高评价受到限制。', newBest: '刷新了本关最佳步数。',
-      next: '下一关', replay: '再玩一次', levelList: '返回选关', allComplete: '十二关全部完成',
-      allCompleteCopy: '你已经完成全部 12 关，可以返回选关继续挑战更高星级。',
+      next: '下一关', replay: '再玩一次', levelList: '返回选关', allComplete: '全部 {levels} 关完成',
+      allCompleteCopy: '你已经完成全部 {levels} 关，可以返回选关继续挑战更高星级。',
       failedKicker: '超过步数', failedTitle: '本次挑战未完成',
       failedCopy: '本关最多允许 {max} 步。你可以撤销最后一步，或重新挑战。',
       levelUnavailable: '该关卡当前无法加载，请重新验证关卡数据。',
-      campaignReady: '闯关模式已准备：12 个关卡'
+      campaignReady: '闯关模式已准备：{levels} 个关卡'
     },
     en: {
-      homeKicker: 'CAMPAIGN · 12 LEVELS', homeTitle: 'Twelve Word Loops',
+      homeKicker: 'CAMPAIGN · {levels} LEVELS', homeTitle: '{levels} Word Loops',
       homeCopy: 'Close each loop within the move limit and try to earn three stars.',
       completed: 'Levels completed', reset: 'Reset campaign progress', resetConfirm: 'Clear all campaign progress? This cannot be undone.',
       continueLevel: 'Continue Level {id}',
-      totalStars: 'Total stars {stars} / 36', level: 'Level {id}', locked: 'Locked',
+      totalStars: 'Total stars {stars} / {maxStars}', level: 'Level {id}', locked: 'Locked',
       difficultyEasy: 'Easy', difficultyMedium: 'Medium', difficultyHard: 'Hard',
       best: 'Best: {moves} moves', bestOne: 'Best: 1 move', notCompleted: 'Not completed',
       homeModeDescription: 'Fixed levels · three-star ratings · move limits',
@@ -40,12 +40,12 @@
       hudLabel: 'Campaign status', levelCompleteKicker: 'LEVEL COMPLETE', levelComplete: 'Loop closed',
       resultCopy: 'You closed the loop in {moves} moves; the three-star target was {par}.',
       assisted: 'A hint or undo was used, so the highest rating was limited.', newBest: 'New best move count for this level.',
-      next: 'Next level', replay: 'Play again', levelList: 'Level list', allComplete: 'All twelve complete',
-      allCompleteCopy: 'You completed all 12 levels. Return to the list to improve your star ratings.',
+      next: 'Next level', replay: 'Play again', levelList: 'Level list', allComplete: 'All {levels} complete',
+      allCompleteCopy: 'You completed all {levels} levels. Return to the list to improve your star ratings.',
       failedKicker: 'MOVE LIMIT', failedTitle: 'Challenge not completed',
       failedCopy: 'This level allows {max} moves. Undo the last move or restart the level.',
       levelUnavailable: 'This level cannot be loaded. Please validate the campaign data again.',
-      campaignReady: 'Campaign ready: 12 levels'
+      campaignReady: 'Campaign ready: {levels} levels'
     }
   };
 
@@ -82,7 +82,7 @@
     var savedMode = 'casual';
     try { savedMode = localStorage.getItem(GAME_MODE_KEY) || 'casual'; } catch (err) { savedMode = 'casual'; }
     this.setMode(savedMode === 'campaign' ? 'campaign' : 'casual', true);
-    console.log(campaignText('campaignReady'));
+    console.log(campaignText('campaignReady', { levels: this.levels.length }));
   }
 
   CampaignController.prototype.emptyProgress = function() {
@@ -93,7 +93,13 @@
     try {
       var parsed = JSON.parse(localStorage.getItem(CAMPAIGN_PROGRESS_KEY) || 'null');
       if (!parsed || parsed.version !== 1 || !parsed.levels) return this.emptyProgress();
-      parsed.unlockedLevel = Math.max(1, Math.min(this.levels.length, parsed.unlockedLevel || 1));
+      var unlockedFromResults = 1;
+      for (var levelId in parsed.levels) {
+        if (!Object.prototype.hasOwnProperty.call(parsed.levels, levelId) || !parsed.levels[levelId].completed) continue;
+        unlockedFromResults = Math.max(unlockedFromResults, (parseInt(levelId, 10) || 0) + 1);
+      }
+      parsed.unlockedLevel = Math.max(1, Math.min(this.levels.length,
+        Math.max(parsed.unlockedLevel || 1, unlockedFromResults)));
       parsed.lastPlayedLevel = Math.max(1, Math.min(this.levels.length, parsed.lastPlayedLevel || 1));
       return parsed;
     } catch (err) {
@@ -205,12 +211,14 @@
       if (this.progress.levels[key].completed) completed++;
       totalStars += this.progress.levels[key].stars || 0;
     }
-    document.getElementById('campaignKicker').textContent = campaignText('homeKicker');
-    document.getElementById('campaignHomeTitle').textContent = campaignText('homeTitle');
+    document.getElementById('campaignKicker').textContent = campaignText('homeKicker', { levels: this.levels.length });
+    document.getElementById('campaignHomeTitle').textContent = campaignText('homeTitle', { levels: this.levels.length });
     document.getElementById('campaignHomeCopy').textContent = campaignText('homeCopy');
     document.getElementById('campaignProgressValue').textContent = completed + ' / ' + this.levels.length;
     document.getElementById('campaignProgressLabel').textContent = campaignText('completed');
-    document.getElementById('campaignTotalStars').textContent = campaignText('totalStars', { stars: totalStars });
+    document.getElementById('campaignTotalStars').textContent = campaignText('totalStars', {
+      stars: totalStars, maxStars: this.levels.length * 3
+    });
     document.getElementById('campaignResetBtn').textContent = campaignText('reset');
     document.getElementById('campaignContinueBtn').textContent = campaignText('continueLevel', {
       id: String(this.continueLevelId()).padStart(2, '0')
@@ -414,11 +422,11 @@
     this.overlayState = 'complete';
     document.getElementById('campaignOverlayKicker').textContent = campaignText('levelCompleteKicker');
     document.getElementById('campaignOverlayTitle').textContent =
-      result.isLast ? campaignText('allComplete') : campaignText('levelComplete');
+      result.isLast ? campaignText('allComplete', { levels: this.levels.length }) : campaignText('levelComplete');
     var starBox = document.getElementById('campaignResultStars');
     starBox.hidden = false;
     starBox.textContent = '★'.repeat(result.stars) + '☆'.repeat(3 - result.stars);
-    var copy = result.isLast ? campaignText('allCompleteCopy') :
+    var copy = result.isLast ? campaignText('allCompleteCopy', { levels: this.levels.length }) :
       campaignText('resultCopy', { moves: result.moves, par: result.par });
     if (result.assisted) copy += ' ' + campaignText('assisted');
     if (result.newBest) copy += ' ' + campaignText('newBest');

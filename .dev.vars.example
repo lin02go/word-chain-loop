@@ -1,0 +1,3 @@
+# Copy this file to .dev.vars for local Pages Functions development.
+# Replace the placeholder with at least 32 random characters and never commit it.
+PASSWORD_PEPPER=replace-with-a-local-secret-of-at-least-32-characters

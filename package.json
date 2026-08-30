@@ -1,18 +1,27 @@
 {
   "name": "word-chain-loop",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "private": true,
   "description": "词环 · Word Loop progressive web app",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "node tools/build-sites.mjs",
     "build:cloudflare": "node tools/build-cloudflare.mjs",
+    "dev:cloudflare": "npm run build:cloudflare && wrangler pages dev cloudflare-dist",
     "deploy:cloudflare": "npm run check && npm run build:cloudflare && wrangler pages deploy cloudflare-dist --project-name word-chain-loop --branch main",
     "serve": "node tools/serve-pwa.js",
+    "validate:project": "node tools/validate-project.mjs",
     "validate:pwa": "node tools/validate-pwa.js",
     "validate:campaign": "node tools/validate-campaign-levels.js",
     "validate:auth": "node tools/validate-auth.mjs",
     "validate:worker": "node tools/validate-worker.mjs",
-    "check": "npm run validate:pwa && npm run validate:campaign && npm run validate:auth && npm run build && npm run validate:worker"
+    "types:cloudflare": "wrangler types worker-configuration.d.ts --include-runtime false --check",
+    "validate:cloudflare": "npm run build:cloudflare && wrangler pages functions build functions --outdir cloudflare-dist/functions-build --project-directory .",
+    "check": "npm run validate:project && npm run validate:pwa && npm run validate:campaign && npm run validate:auth && npm run build && npm run validate:worker && npm run types:cloudflare && npm run validate:cloudflare",
+    "test": "npm run check"
   },
   "devDependencies": {
     "@openai/sites-vite-plugin": "^0.2.0",

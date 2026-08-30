@@ -1,5 +1,5 @@
 import {
-  accountPayload, assertNotRateLimited, createPasswordRecord, ensureSchema, handleError,
+  accountPayload, assertNotRateLimited, createPasswordRecord, handleError,
   HttpError, json, newSessionRecord, normalizeEmail, passwordNeedsUpgrade,
   rateLimitKey, readJson, recordLoginFailure, requireDatabase, requirePasswordPepper,
   sessionCookie, validatePassword, verifyOrigin, verifyPassword,
@@ -10,7 +10,6 @@ export async function onRequestPost(context) {
     verifyOrigin(context.request);
     const db = requireDatabase(context.env);
     const pepper = requirePasswordPepper(context.env);
-    await ensureSchema(db);
     const body = await readJson(context.request);
     const email = normalizeEmail(body.email);
     const password = validatePassword(body.password);

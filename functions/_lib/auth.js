@@ -1,14 +1,13 @@
 const encoder = new TextEncoder();
 const COOKIE_NAME = 'word_loop_session';
 const SESSION_SECONDS = 60 * 60 * 24 * 30;
-// Workers Free allows 10 ms of CPU per request. A server-side pepper keeps
-// database-only leaks resistant while this PBKDF2 cost stays within that budget.
+// A server-side pepper hardens database-only leaks while the PBKDF2 cost stays
+// modest enough for an edge request.
 const PASSWORD_ITERATIONS = 50000;
 const MAX_BODY_BYTES = 110000;
 const PEPPERED_SALT_PREFIX = 'p1.';
 const DUMMY_SALT = 'AAAAAAAAAAAAAAAAAAAAAA';
 const DUMMY_HASH = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-let schemaReady;
 
 export class HttpError extends Error {
   constructor(status, code, message) {
@@ -32,7 +31,11 @@ export function json(data, status = 200, extraHeaders = {}) {
 
 export function handleError(error) {
   if (error instanceof HttpError) return json({ error: error.message, code: error.code }, error.status);
-  console.error('Word Loop account error', error);
+  console.error(JSON.stringify({
+    message: 'Word Loop account error',
+    error: error instanceof Error ? error.message : String(error),
+    name: error instanceof Error ? error.name : 'UnknownError',
+  }));
   return json({ error: 'Unexpected server error.', code: 'SERVER_ERROR' }, 500);
 }
 
@@ -47,46 +50,6 @@ export function requirePasswordPepper(env) {
   return pepper;
 }
 
-export async function ensureSchema(db) {
-  if (schemaReady) return schemaReady;
-  schemaReady = db.batch([
-    db.prepare(`CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY,
-      email TEXT NOT NULL,
-      password_salt TEXT NOT NULL,
-      password_hash TEXT NOT NULL,
-      password_iterations INTEGER NOT NULL,
-      nickname TEXT NOT NULL,
-      created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL,
-      UNIQUE(email)
-    )`),
-    db.prepare(`CREATE TABLE IF NOT EXISTS sessions (
-      token_hash TEXT PRIMARY KEY,
-      user_id TEXT NOT NULL,
-      expires_at INTEGER NOT NULL,
-      created_at INTEGER NOT NULL,
-      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    )`),
-    db.prepare(`CREATE TABLE IF NOT EXISTS login_attempts (
-      attempt_key TEXT PRIMARY KEY,
-      failures INTEGER NOT NULL,
-      reset_at INTEGER NOT NULL,
-      blocked_until INTEGER NOT NULL
-    )`),
-    db.prepare(`CREATE TABLE IF NOT EXISTS player_progress (
-      user_id TEXT PRIMARY KEY,
-      snapshot_json TEXT NOT NULL,
-      updated_at TEXT NOT NULL,
-      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    )`),
-  ]).catch((error) => {
-    schemaReady = null;
-    throw error;
-  });
-  return schemaReady;
-}
-
 export function verifyOrigin(request) {
   const origin = request.headers.get('origin');
   if (origin && origin !== new URL(request.url).origin) throw new HttpError(403, 'INVALID_ORIGIN', 'Invalid request origin.');
@@ -95,8 +58,32 @@ export function verifyOrigin(request) {
 export async function readJson(request) {
   const length = Number(request.headers.get('content-length') || 0);
   if (length > MAX_BODY_BYTES) throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Request is too large.');
-  try { return await request.json(); }
-  catch { throw new HttpError(400, 'INVALID_JSON', 'Invalid JSON body.'); }
+  const reader = request.body && request.body.getReader();
+  if (!reader) throw new HttpError(400, 'INVALID_JSON', 'Invalid JSON body.');
+  const chunks = [];
+  let total = 0;
+  try {
+    while (true) {
+      const result = await reader.read();
+      if (result.done) break;
+      total += result.value.byteLength;
+      if (total > MAX_BODY_BYTES) {
+        await reader.cancel();
+        throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Request is too large.');
+      }
+      chunks.push(result.value);
+    }
+    const bytes = new Uint8Array(total);
+    let offset = 0;
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch (error) {
+    if (error instanceof HttpError) throw error;
+    throw new HttpError(400, 'INVALID_JSON', 'Invalid JSON body.');
+  }
 }
 
 export function normalizeEmail(value) {

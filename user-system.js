@@ -2,6 +2,7 @@
   'use strict';
 
   var SYNC_META_KEY = 'word-chain-loop:account-sync:v1';
+  var CAMPAIGN_LEVEL_COUNT = typeof CAMPAIGN_LEVELS !== 'undefined' ? CAMPAIGN_LEVELS.length : 100;
   var TEXT = {
     zh: {
       login: '登录', register: '注册', loginNote: '保存游戏进度', profile: '玩家档案', menuLabel: '登录或查看玩家档案',
@@ -232,7 +233,7 @@
   UserSystemController.prototype.renderStats = function() {
     var stats = this.localStats();
     document.getElementById('accountLoops').textContent = stats.loops;
-    document.getElementById('accountLevels').textContent = stats.levels + ' / 12';
+    document.getElementById('accountLevels').textContent = stats.levels + ' / ' + CAMPAIGN_LEVEL_COUNT;
     document.getElementById('accountStars').textContent = stats.stars;
   };
 

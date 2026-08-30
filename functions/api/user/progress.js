@@ -1,12 +1,17 @@
 import {
-  ensureSchema, handleError, HttpError, json, readJson, requireDatabase,
+  handleError, HttpError, json, readJson, requireDatabase,
   requireSession, verifyOrigin,
 } from '../../_lib/auth.js';
+
+function isProgressKey(key) {
+  return key === 'word-chain-loop:achievements:v1' ||
+    key === 'word-chain-loop:campaign-progress:v3' ||
+    key.startsWith('word-chain-loop:record:v3:');
+}
 
 export async function onRequestGet(context) {
   try {
     const db = requireDatabase(context.env);
-    await ensureSchema(db);
     const session = await requireSession(context.request, db);
     const row = await db.prepare('SELECT snapshot_json AS snapshotJson, updated_at AS updatedAt FROM player_progress WHERE user_id = ?')
       .bind(session.user.id).first();
@@ -24,7 +29,6 @@ export async function onRequestPut(context) {
   try {
     verifyOrigin(context.request);
     const db = requireDatabase(context.env);
-    await ensureSchema(db);
     const session = await requireSession(context.request, db);
     const body = await readJson(context.request);
     const snapshot = body && body.snapshot;
@@ -32,7 +36,7 @@ export async function onRequestPut(context) {
       throw new HttpError(400, 'VALIDATION', 'Invalid progress snapshot.');
     }
     const keys = Object.keys(snapshot.values);
-    if (keys.length > 160 || keys.some((key) => !key.startsWith('word-chain-loop:') || typeof snapshot.values[key] !== 'string')) {
+    if (keys.length > 160 || keys.some((key) => !isProgressKey(key) || typeof snapshot.values[key] !== 'string')) {
       throw new HttpError(400, 'VALIDATION', 'Invalid progress entries.');
     }
     const serialized = JSON.stringify(snapshot);

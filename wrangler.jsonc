@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "word-chain-loop",
+  "pages_build_output_dir": "./cloudflare-dist",
+  "compatibility_date": "2026-08-28",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lin02go",
+      "database_id": "8c38c924-c40c-41bb-9d8a-00093dbd800b",
+      "migrations_dir": "./migrations"
+    }
+  ]
+}

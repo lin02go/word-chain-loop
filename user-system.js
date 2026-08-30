@@ -12,7 +12,7 @@
       loops: '完成词环', levels: '闯关完成', stars: '累计星数', nicknameHint: '2–24 个字符，只用于词环内展示。', save: '保存',
       cloudTitle: '云端进度', checking: '正在检查同步状态…', noCloud: '尚无云端记录', lastSync: '上次同步：{time}',
       backup: '立即同步', restore: '恢复到此设备', privacy: '账户和游戏进度保存在 Cloudflare；词环不会保存你的明文密码。', signOut: '退出登录',
-      saved: '昵称已保存。', synced: '此设备的进度已同步到云端。', restored: '云端进度已恢复，正在重新载入游戏…',
+      saved: '昵称已保存。', synced: '此设备的进度已同步到云端。', restored: '云端进度已恢复，正在重新载入游戏…', restoredNoChange: '此设备已经是最新进度，无需重新载入。',
       restoreConfirm: '将云端记录写入此设备并重新载入游戏。现有进度不会被删除，确定继续吗？', noRestore: '云端还没有可恢复的进度。',
       unavailable: '暂时无法连接账户服务，请稍后重试。', invalidName: '昵称需要 2–24 个字符。', invalidForm: '请填写有效邮箱；密码至少需要 10 个字符。',
       invalidCredentials: '邮箱或密码不正确。', emailExists: '该邮箱已注册，请直接登录。', rateLimited: '尝试次数过多，请稍后再试。', registered: '账户已创建并登录。', loggedIn: '登录成功。'
@@ -26,7 +26,7 @@
       loops: 'Loops closed', levels: 'Levels cleared', stars: 'Total stars', nicknameHint: '2–24 characters, displayed only inside Word Loop.', save: 'Save',
       cloudTitle: 'Cloud progress', checking: 'Checking sync status…', noCloud: 'No cloud record yet', lastSync: 'Last synced: {time}',
       backup: 'Sync now', restore: 'Restore to this device', privacy: 'Your account and progress are stored on Cloudflare. Word Loop never stores your plain-text password.', signOut: 'Log out',
-      saved: 'Player name saved.', synced: 'This device is now synced to the cloud.', restored: 'Cloud progress restored. Reloading the game…',
+      saved: 'Player name saved.', synced: 'This device is now synced to the cloud.', restored: 'Cloud progress restored. Reloading the game…', restoredNoChange: 'This device already has the latest progress. No reload is needed.',
       restoreConfirm: 'Write the cloud record to this device and reload the game? Existing progress will not be deleted.', noRestore: 'There is no cloud progress to restore yet.',
       unavailable: 'The account service is unavailable. Please try again later.', invalidName: 'Your player name must contain 2–24 characters.', invalidForm: 'Enter a valid email and a password of at least 10 characters.',
       invalidCredentials: 'The email or password is incorrect.', emailExists: 'That email is already registered. Please log in.', rateLimited: 'Too many attempts. Please try again later.', registered: 'Account created and signed in.', loggedIn: 'Signed in successfully.'
@@ -40,6 +40,11 @@
     return value.replace(/\{(\w+)\}/g, function(match, name) { return params[name] === undefined ? match : params[name]; });
   }
   function safeJson(value, fallback) { try { return JSON.parse(value); } catch (err) { return fallback; } }
+  function isProgressKey(key) {
+    return key === 'word-chain-loop:achievements:v1' ||
+      key === 'word-chain-loop:campaign-progress:v3' ||
+      key.indexOf('word-chain-loop:record:v3:') === 0;
+  }
   function api(path, options) {
     var requestOptions = options || {};
     requestOptions.headers = Object.assign({ accept: 'application/json' }, requestOptions.headers || {});
@@ -102,7 +107,7 @@
       if (!result.authenticated) return;
       if (result.hasCloudProgress) {
         self.updateCloudStatus(result.progressUpdatedAt);
-        if (!self.hasMeaningfulLocalProgress()) self.restoreProgress(true);
+        if (!self.hasMeaningfulLocalProgress() && !self.hasSyncedVersion(result.progressUpdatedAt)) self.restoreProgress(true);
       } else if (self.hasMeaningfulLocalProgress()) self.backupProgress(false);
       else self.updateCloudStatus(null);
     }).catch(function() {
@@ -175,7 +180,7 @@
       self.render();
       self.renderStats();
       self.showMessage(text(self.authMode === 'register' ? 'registered' : 'loggedIn'));
-      if (result.hasCloudProgress && !self.hasMeaningfulLocalProgress()) self.restoreProgress(true);
+      if (result.hasCloudProgress && !self.hasMeaningfulLocalProgress() && !self.hasSyncedVersion(result.progressUpdatedAt)) self.restoreProgress(true);
       else if (!result.hasCloudProgress && self.hasMeaningfulLocalProgress()) self.backupProgress(false);
     }).catch(function(error) {
       var key = error.code === 'INVALID_CREDENTIALS' ? 'invalidCredentials' : error.code === 'EMAIL_EXISTS' ? 'emailExists' : error.code === 'RATE_LIMITED' ? 'rateLimited' : error.code === 'VALIDATION' ? 'invalidForm' : 'unavailable';
@@ -236,8 +241,7 @@
     var size = 0;
     for (var i = 0; i < localStorage.length && Object.keys(values).length < 160; i++) {
       var key = localStorage.key(i) || '';
-      var allowed = key === 'word-chain-loop:achievements:v1' || key === 'word-chain-loop:campaign-progress:v3' || key.indexOf('word-chain-loop:record:v3:') === 0;
-      if (!allowed) continue;
+      if (!isProgressKey(key)) continue;
       var value = localStorage.getItem(key);
       size += key.length + (value ? value.length : 0);
       if (size > 90000) break;
@@ -251,6 +255,16 @@
     if (stats.loops > 0 || stats.levels > 0) return true;
     for (var i = 0; i < localStorage.length; i++) if ((localStorage.key(i) || '').indexOf('word-chain-loop:record:v3:') === 0) return true;
     return false;
+  };
+
+  UserSystemController.prototype.hasSyncedVersion = function(updatedAt) {
+    if (!updatedAt) return false;
+    try {
+      var meta = safeJson(localStorage.getItem(SYNC_META_KEY), {});
+      return meta.updatedAt === updatedAt;
+    } catch (err) {
+      return false;
+    }
   };
 
   UserSystemController.prototype.backupProgress = function(announce) {
@@ -276,15 +290,21 @@
     var self = this;
     var button = document.getElementById('accountRestoreBtn');
     button.disabled = true;
-    api('/api/user/progress').then(function(result) {
+    return api('/api/user/progress').then(function(result) {
       var values = result.snapshot && result.snapshot.values;
       if (!values || typeof values !== 'object') throw new Error('No snapshot');
+      var changed = false;
       Object.keys(values).forEach(function(key) {
-        if (key.indexOf('word-chain-loop:') === 0 && typeof values[key] === 'string') localStorage.setItem(key, values[key]);
+        if (!isProgressKey(key) || typeof values[key] !== 'string') return;
+        if (localStorage.getItem(key) === values[key]) return;
+        localStorage.setItem(key, values[key]);
+        changed = true;
       });
-      localStorage.setItem(SYNC_META_KEY, JSON.stringify({ updatedAt: result.updatedAt }));
-      if (!silent) self.showMessage(text('restored'));
-      setTimeout(function() { window.location.reload(); }, silent ? 0 : 650);
+      var updatedAt = result.updatedAt || self.user.progressUpdatedAt;
+      if (updatedAt) localStorage.setItem(SYNC_META_KEY, JSON.stringify({ updatedAt: updatedAt }));
+      if (!silent) self.showMessage(text(changed ? 'restored' : 'restoredNoChange'));
+      if (changed) setTimeout(function() { window.location.reload(); }, silent ? 0 : 650);
+      else button.disabled = false;
     }).catch(function() { button.disabled = false; if (!silent) self.showMessage(text('unavailable'), true); });
   };
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var SHELL_CACHE = 'word-loop-shell-v6';
+var SHELL_CACHE = 'word-loop-shell-v7';
 var SHELL_FILES = [
   './',
   './index.html',

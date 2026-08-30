@@ -3,6 +3,7 @@
 
   var installPrompt = null;
   var registration = null;
+  var refreshRequested = false;
   var statusTimer = 0;
   var installButtons = document.querySelectorAll('[data-pwa-install]');
   var status = document.getElementById('pwaStatus');
@@ -41,6 +42,7 @@
     if (refreshButton) {
       refreshButton.onclick = function() {
         refreshButton.disabled = true;
+        refreshRequested = true;
         worker.postMessage({ type: 'SKIP_WAITING' });
       };
     }
@@ -101,7 +103,7 @@
 
     var refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', function() {
-      if (refreshing) return;
+      if (!refreshRequested || refreshing) return;
       refreshing = true;
       window.location.reload();
     });

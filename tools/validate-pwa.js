@@ -63,9 +63,14 @@ if (manifest) {
 const workerText = read('service-worker.js');
 const pwaText = read('pwa.js');
 const gameText = read('game.js');
+const userSystemText = read('user-system.js');
 try { new vm.Script(workerText, { filename: 'service-worker.js' }); } catch (error) { fail(error.message); }
 try { new vm.Script(pwaText, { filename: 'pwa.js' }); } catch (error) { fail(error.message); }
 try { new vm.Script(gameText, { filename: 'game.js' }); } catch (error) { fail(error.message); }
+try { new vm.Script(userSystemText, { filename: 'user-system.js' }); } catch (error) { fail(error.message); }
+if (!/!self\.hasSyncedVersion\(result\.progressUpdatedAt\)/.test(userSystemText)) fail('Automatic cloud restore must guard against repeated versions');
+if (!/if \(changed\) setTimeout\(function\(\) \{ window\.location\.reload\(\); \}/.test(userSystemText)) fail('Cloud restore must reload only after progress changes');
+if (!/if \(!refreshRequested \|\| refreshing\) return;/.test(pwaText)) fail('Service Worker reload must require a user-requested update');
 
 const shellMatch = workerText.match(/var SHELL_FILES = \[([\s\S]*?)\];/);
 if (!shellMatch) {

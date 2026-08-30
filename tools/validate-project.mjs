@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const required = [
-  'README.md', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md', '.editorconfig',
+  'README.md', 'LICENSE', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md', '.editorconfig',
   '.gitattributes', '.gitignore', '.github/workflows/ci.yml', '.dev.vars.example',
   'wrangler.jsonc', 'worker-configuration.d.ts', 'migrations/0001_email_accounts.sql',
   'THIRD_PARTY_NOTICES/SCOWL-Copyright.txt',
@@ -14,6 +14,7 @@ const failures = required.filter((file) => !fs.existsSync(path.join(root, file))
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 if (packageJson.version !== '2.0.0') failures.push('package.json must identify the 100-level release as 2.0.0');
+if (packageJson.license !== 'MIT') failures.push('package.json must declare the MIT license');
 if (!String(packageJson.packageManager || '').startsWith('pnpm@')) failures.push('packageManager must pin pnpm');
 if (!packageJson.scripts?.check?.includes('validate:project')) failures.push('check must include validate:project');
 
@@ -35,4 +36,3 @@ if (failures.length) {
 }
 
 console.log(`Project validation passed: ${required.length} release files and README links verified.`);
-

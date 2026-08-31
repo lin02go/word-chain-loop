@@ -88,7 +88,7 @@ const html = read('word-chain-game.html');
 if (!/rel="manifest" href="manifest\.webmanifest"/.test(html)) fail('Game page does not link the manifest');
 if (!/navigator\.serviceWorker\.register\('\.\/service-worker\.js'/.test(pwaText)) fail('PWA script does not register the Service Worker');
 if (/\son[a-z]+\s*=/i.test(html)) fail('Game page contains inline event handlers');
-if (!/<script src="dictionary\.js\?[^">]+" defer><\/script>/.test(html)) fail('Dictionary script must load with defer');
+if (!/<script src="dictionary-core\.js\?[^">]+" defer><\/script>/.test(html)) fail('Core dictionary script must load with defer');
 
 const inlineScripts = Array.from(html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi), (match) => match[1]);
 if (inlineScripts.length) fail('Game page should not contain inline scripts');

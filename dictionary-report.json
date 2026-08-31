@@ -18,5 +18,52 @@
   "start_vocabulary_count": 16874,
   "minimum_length": 3,
   "maximum_length": 45,
-  "generated_on": "2026-08-27"
+  "generated_on": "2026-08-27",
+  "source_repository": "https://github.com/engramtech/scowl",
+  "source_revision": "unrecorded-existing-artifact",
+  "dictionary_sha256": "0b659eeb73992617350ac28a8c62c2eddf408571f34330f62d4d38853f41099f",
+  "featured_vocabulary_count": 39940,
+  "runtime_packs": {
+    "dictionary-core.js": {
+      "word_count": 133866,
+      "bytes": 2667930,
+      "sha256": "c4fccff7672b5025ed9966979926b8e9796e8c16ac5624cb457cf5205720a335"
+    },
+    "dictionary-extended.js": {
+      "word_count": 116969,
+      "bytes": 2428904,
+      "sha256": "fd5666717ef7bfeb5a6a47fc0682330c27181a45b2554608b90c8a96939c6761"
+    }
+  },
+  "provenance_status": "legacy-unrecorded",
+  "build_parameters": {
+    "sizes": {
+      "common": 60,
+      "standard": 70,
+      "extended": 80,
+      "start_baseline": 35
+    },
+    "spelling_codes": [
+      "A",
+      "B",
+      "Z",
+      "C",
+      "D"
+    ],
+    "variant_level": 4,
+    "excluded_parts_of_speech": [
+      "abbr",
+      "s"
+    ],
+    "categories": "",
+    "deaccent": true,
+    "ascii_lowercase_only": true,
+    "minimum_length": 3
+  },
+  "override_counts": {
+    "allowed": 0,
+    "denied": 0,
+    "featured_additions": 0,
+    "featured_removals": 0
+  }
 }

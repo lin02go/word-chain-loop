@@ -10,6 +10,7 @@ const words = context.DICTIONARY;
 const tiers = context.WORD_TIERS;
 const forms = context.WORD_FORMS;
 const starts = context.WORD_STARTS;
+const featured = context.WORD_FEATURED || starts;
 const modeWords = [];
 const graph = new Map();
 
@@ -87,7 +88,7 @@ for (const candidate of candidates) {
   candidate.qualityClosers = [];
   for (const { word, index } of modeWords) {
     if (word.slice(-2) !== candidate.head) continue;
-    if (Number(tiers[index]) !== 0 || forms[index] !== '0' || starts[index] !== '1' || word.length > 12) continue;
+    if (Number(tiers[index]) !== 0 || forms[index] !== '0' || featured[index] !== '1' || word.length > 12) continue;
     const closerHead = word.slice(0, 2);
     if (distances[candidate.tail] && distances[candidate.tail][closerHead] === candidate.distance - 1) {
       candidate.qualityClosers.push(word);
@@ -105,7 +106,7 @@ for (const { word, index } of modeWords) {
   const row = byHead[word.slice(-2)];
   if (!row || Number(tiers[index]) !== 0) continue;
   row.commonCount++;
-  if (forms[index] === '0' && starts[index] === '1' && word.length <= 12) {
+  if (forms[index] === '0' && featured[index] === '1' && word.length <= 12) {
     row.naturalCount++;
     if (row.naturalClosers.length < 12) row.naturalClosers.push(word);
   }

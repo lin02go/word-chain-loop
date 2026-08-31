@@ -14,6 +14,7 @@ const words = dictionary.DICTIONARY;
 const tiers = dictionary.WORD_TIERS;
 const forms = dictionary.WORD_FORMS;
 const starts = dictionary.WORD_STARTS;
+const featured = dictionary.WORD_FEATURED || starts;
 const lemmaIds = dictionary.WORD_LEMMA_IDS;
 
 const configs = {
@@ -41,6 +42,7 @@ function buildMode(difficulty) {
       tier,
       isLemma: !forms || forms.charAt(i) === '0',
       startEligible: !starts || starts.charAt(i) === '1',
+      featured: !featured || featured.charAt(i) === '1',
       lemma: words[lemmaIndex] || word,
       head: word.slice(0, 2),
       tail: word.slice(-2)
@@ -51,7 +53,7 @@ function buildMode(difficulty) {
     const edges = graph.get(info.head);
     if (!edges.has(info.tail)) edges.set(info.tail, []);
     edges.get(info.tail).push(word);
-    if (tier === 0 && info.isLemma && info.startEligible && word.length <= 12) {
+    if (tier === 0 && info.isLemma && info.featured && word.length <= 12) {
       if (!qualityClosers.has(info.tail)) qualityClosers.set(info.tail, []);
       qualityClosers.get(info.tail).push(word);
     }
@@ -133,7 +135,8 @@ function qualityRoutes(mode, startInfo, distance, limit) {
       if (!mode.distances[next] || mode.distances[next][startInfo.head] !== remaining - 1) continue;
       const candidates = edgeWords.filter(word => {
         const info = mode.wordInfo.get(word);
-        return info.tier === 0 && info.isLemma && info.word.length <= 12 && !usedLemmas.has(info.lemma);
+        return info.tier === 0 && info.isLemma && info.featured &&
+          info.word.length <= 12 && !usedLemmas.has(info.lemma);
       }).sort((a, b) => a.length - b.length || a.localeCompare(b));
       for (const word of candidates) {
         const lemma = mode.wordInfo.get(word).lemma;

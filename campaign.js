@@ -264,6 +264,21 @@
   CampaignController.prototype.startLevel = function(levelId) {
     var level = this.levels[levelId - 1];
     if (!level || level.id > this.progress.unlockedLevel) return;
+    if (!this.game.isDifficultyAvailable(level.difficulty)) {
+      var self = this;
+      this.pendingDictionaryLevelId = levelId;
+      this.game.showMessageKey('loadingDictionary', 'info');
+      this.game.ensureDifficultyAvailable(level.difficulty).then(function() {
+        if (self.pendingDictionaryLevelId !== levelId) return;
+        self.pendingDictionaryLevelId = null;
+        self.startLevel(levelId);
+      }).catch(function(error) {
+        console.error(error);
+        self.pendingDictionaryLevelId = null;
+        self.game.showMessageKey('dictionaryLoadFailed', 'error');
+      });
+      return;
+    }
     this.activeLevel = level;
     this.roundEnded = false;
     this.undoUsed = false;

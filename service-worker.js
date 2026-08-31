@@ -1,6 +1,6 @@
 'use strict';
 
-var SHELL_CACHE = 'word-loop-shell-v9';
+var SHELL_CACHE = 'word-loop-shell-v10';
 var SHELL_FILES = [
   './',
   './index.html',
@@ -15,7 +15,8 @@ var SHELL_FILES = [
   './start-screen.css',
   './motion.css',
   './pwa.css',
-  './dictionary.js',
+  './dictionary-core.js',
+  './dictionary-extended.js',
   './game.js',
   './campaign-levels.js',
   './campaign.js',

@@ -1,6 +1,6 @@
 // ============================================================
 // Dictionary: SCOWL-based English word list, length >= 3.
-// See DICTIONARY_SOURCES.md before replacing dictionary.js.
+// See DICTIONARY_SOURCES.md before rebuilding the dictionary packs.
 // ============================================================
 
 // ============================================================
@@ -49,6 +49,7 @@ var UI_TEXT = {
     letterKey: '颜色说明', wordHead: '单词开头', wordTail: '单词结尾', headTailOverlap: '开头与结尾重叠',
     cycleComplete: '词环完成', youWin: '你赢了！', playAgain: '再玩一次',
     noHints: '无提示', hintCounter: '提示 {remaining}/{limit}',
+    loadingDictionary: '正在加载扩展词库…', dictionaryLoadFailed: '扩展词库加载失败，请检查网络后重试。',
     noStartWords: '当前难度没有符合质量要求的起始词。',
     startError: '游戏启动失败：{error}', onlyLetters: '只能输入英文字母。',
     minimumLength: '单词至少需要 3 个字母。', notInDictionary: '词库中没有：{word}',
@@ -112,6 +113,7 @@ var UI_TEXT = {
     letterKey: 'Letter key', wordHead: 'Word head', wordTail: 'Word tail', headTailOverlap: 'Head and tail overlap',
     cycleComplete: 'Cycle Complete!', youWin: 'You Win!', playAgain: 'Play Again',
     noHints: 'No Hints', hintCounter: 'Hint {remaining}/{limit}',
+    loadingDictionary: 'Loading the extended dictionary…', dictionaryLoadFailed: 'The extended dictionary could not be loaded. Check your connection and try again.',
     noStartWords: 'No quality-controlled starting words are available for this mode.',
     startError: 'Error starting game: {error}', onlyLetters: 'Only English letters are allowed.',
     minimumLength: 'A word must have at least 3 letters.', notInDictionary: 'Not in dictionary: {word}',
@@ -211,6 +213,7 @@ var WordChainGame = (function() {
     this.wordTiers = new Map();
     this.wordIsLemma = new Map();
     this.wordStartEligible = new Map();
+    this.wordFeatured = new Map();
     this.wordLemmaRoots = new Map();
     this.dictionary = [];
     this.graph = null;       // Map<string, Map<string, string[]>>
@@ -234,20 +237,20 @@ var WordChainGame = (function() {
     this.minimumMoves = 0;
     this.roundId = 0;
     this._completionEmittedForRound = null;
+    this._processedDictionaryLength = 0;
+    this._extendedDictionaryPromise = null;
 
     this.initDictionary();
     this.buildGraph();
   }
 
   WordChainGame.prototype.initDictionary = function() {
-    var seen = Object.create(null);
-    this.allDictionary = [];
-    for (var i = 0; i < DICTIONARY.length; i++) {
+    var startIndex = this._processedDictionaryLength;
+    for (var i = startIndex; i < DICTIONARY.length; i++) {
       var w = DICTIONARY[i].toLowerCase().trim();
       if (w.length < 3) continue;
       if (!/^[a-z]+$/.test(w)) continue;
-      if (seen[w]) continue;
-      seen[w] = true;
+      if (this.allWordSet.has(w)) continue;
       var tier = (typeof WORD_TIERS === 'string' && WORD_TIERS.charAt(i)) ?
         parseInt(WORD_TIERS.charAt(i), 10) : 2;
       this.allDictionary.push(w);
@@ -255,11 +258,65 @@ var WordChainGame = (function() {
       this.wordTiers.set(w, isNaN(tier) ? 2 : tier);
       this.wordIsLemma.set(w, typeof WORD_FORMS !== 'string' || WORD_FORMS.charAt(i) === '0');
       this.wordStartEligible.set(w, typeof WORD_STARTS !== 'string' || WORD_STARTS.charAt(i) === '1');
+      this.wordFeatured.set(w, typeof WORD_FEATURED !== 'string' || WORD_FEATURED.charAt(i) === '1');
       var lemmaIndex = (typeof WORD_LEMMA_IDS === 'string' && WORD_LEMMA_IDS.length >= (i + 1) * 4) ?
         parseInt(WORD_LEMMA_IDS.substr(i * 4, 4), 36) : i;
       this.wordLemmaRoots.set(w, DICTIONARY[lemmaIndex] || w);
     }
+    this._processedDictionaryLength = DICTIONARY.length;
     console.log('Dictionary loaded: ' + this.allDictionary.length + ' words');
+  };
+
+  WordChainGame.prototype.isDifficultyAvailable = function(diff) {
+    if (!MODE_CONFIG[diff]) return false;
+    var loadedTier = DICTIONARY_META && typeof DICTIONARY_META.loadedThroughTier === 'number' ?
+      DICTIONARY_META.loadedThroughTier : 2;
+    return MODE_CONFIG[diff].maxTier <= loadedTier;
+  };
+
+  WordChainGame.prototype._mergeExtendedDictionaryPack = function() {
+    var pack = window.WORD_LOOP_EXTENDED_DICTIONARY_PACK;
+    if (!pack || !Array.isArray(pack.words)) throw new Error('Extended dictionary pack is missing');
+    if (pack.tiers.length !== pack.words.length || pack.forms.length !== pack.words.length ||
+        pack.starts.length !== pack.words.length || pack.featured.length !== pack.words.length ||
+        pack.lemmaIds.length !== pack.words.length * 4) {
+      throw new Error('Extended dictionary metadata is not aligned');
+    }
+    DICTIONARY = DICTIONARY.concat(pack.words);
+    WORD_TIERS += pack.tiers;
+    WORD_FORMS += pack.forms;
+    WORD_STARTS += pack.starts;
+    WORD_FEATURED += pack.featured;
+    WORD_LEMMA_IDS += pack.lemmaIds;
+    DICTIONARY_META.loadedThroughTier = pack.loadedThroughTier;
+    this.initDictionary();
+    window.WORD_LOOP_EXTENDED_DICTIONARY_PACK = null;
+  };
+
+  WordChainGame.prototype.ensureDifficultyAvailable = function(diff) {
+    var self = this;
+    if (!MODE_CONFIG[diff]) return Promise.reject(new Error('Unknown difficulty: ' + diff));
+    if (this.isDifficultyAvailable(diff)) return Promise.resolve();
+    if (this._extendedDictionaryPromise) return this._extendedDictionaryPromise;
+    this.showMessageKey('loadingDictionary', 'info');
+    this._extendedDictionaryPromise = new Promise(function(resolve, reject) {
+      var script = document.createElement('script');
+      script.src = 'dictionary-extended.js?v=1';
+      script.onload = function() {
+        try {
+          self._mergeExtendedDictionaryPack();
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      };
+      script.onerror = function() { reject(new Error('Failed to load dictionary-extended.js')); };
+      document.head.appendChild(script);
+    }).catch(function(error) {
+      self._extendedDictionaryPromise = null;
+      throw error;
+    });
+    return this._extendedDictionaryPromise;
   };
 
   WordChainGame.prototype.buildGraph = function() {
@@ -277,11 +334,10 @@ var WordChainGame = (function() {
       var tail = word.substring(word.length - 2);
       this.wordToEdge.set(word, { from: head, to: tail });
 
-      // A quality closer is familiar enough to be a fair final answer. Reuse
-      // the strict start-vocabulary flag as a frequency/recognition proxy and
-      // keep only canonical, reasonably short common words.
+      // Editorial visibility is independent from start eligibility: a word
+      // can be a fair answer/hint without also being selected as an opening.
       if (this.wordTiers.get(word) === 0 && this.wordIsLemma.get(word) &&
-          this.wordStartEligible.get(word) && word.length <= 12) {
+          this.wordFeatured.get(word) && word.length <= 12) {
         if (!this.qualityClosersByTail.has(tail)) this.qualityClosersByTail.set(tail, []);
         this.qualityClosersByTail.get(tail).push(word);
       }
@@ -764,7 +820,8 @@ var WordChainGame = (function() {
     }
     var self = this;
     hints.sort(function(a, b) {
-      return self.wordTiers.get(a) - self.wordTiers.get(b) || a.length - b.length || a.localeCompare(b);
+      return Number(!self.wordFeatured.get(a)) - Number(!self.wordFeatured.get(b)) ||
+        self.wordTiers.get(a) - self.wordTiers.get(b) || a.length - b.length || a.localeCompare(b);
     });
     return maxHints === null ? hints : hints.slice(0, maxHints);
   };
@@ -1052,12 +1109,16 @@ var WordChainGame = (function() {
   };
 
   WordChainGame.prototype.setDifficulty = function(diff) {
-    if (!MODE_CONFIG[diff]) return;
-    this.difficulty = diff;
-    this._usedStarts = [];
-    document.getElementById('modeDescription').textContent = t(MODE_CONFIG[diff].descriptionKey);
-    this.buildGraph();
-    this.newGame();
+    var self = this;
+    if (!MODE_CONFIG[diff]) return Promise.resolve(false);
+    return this.ensureDifficultyAvailable(diff).then(function() {
+      self.difficulty = diff;
+      self._usedStarts = [];
+      document.getElementById('modeDescription').textContent = t(MODE_CONFIG[diff].descriptionKey);
+      self.buildGraph();
+      self.newGame();
+      return true;
+    });
   };
 
   WordChainGame.prototype.refreshLocalizedUI = function() {
@@ -1141,12 +1202,20 @@ try {
   var diffBtns = document.querySelectorAll('.diff-btn');
   for (var i = 0; i < diffBtns.length; i++) {
     diffBtns[i].addEventListener('click', function() {
+      var requestedDifficulty = this.dataset.diff;
       var all = document.querySelectorAll('.diff-btn');
-      for (var j = 0; j < all.length; j++) {
-        all[j].classList.remove('active');
-      }
-      this.classList.add('active');
-      game.setDifficulty(this.dataset.diff);
+      for (var j = 0; j < all.length; j++) all[j].disabled = true;
+      game.setDifficulty(requestedDifficulty).then(function(changed) {
+        if (!changed) return;
+        for (var k = 0; k < all.length; k++) {
+          all[k].classList.toggle('active', all[k].dataset.diff === requestedDifficulty);
+        }
+      }).catch(function(error) {
+        console.error(error);
+        game.showMessageKey('dictionaryLoadFailed', 'error');
+      }).finally(function() {
+        for (var k = 0; k < all.length; k++) all[k].disabled = false;
+      });
     });
   }
 

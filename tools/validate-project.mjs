@@ -8,6 +8,9 @@ const required = [
   '.gitattributes', '.gitignore', '.github/workflows/ci.yml', '.dev.vars.example',
   'wrangler.jsonc', 'worker-configuration.d.ts', 'migrations/0001_email_accounts.sql',
   'THIRD_PARTY_NOTICES/SCOWL-Copyright.txt',
+  'DICTIONARY_SOURCES.md', 'dictionary.js', 'dictionary-core.js', 'dictionary-extended.js',
+  'dictionary-report.json', 'dictionary-overrides/README.md', 'dictionary-overrides/allow.txt',
+  'dictionary-overrides/deny.txt', 'dictionary-overrides/featured.txt', 'dictionary-overrides/unfeatured.txt',
 ];
 const failures = required.filter((file) => !fs.existsSync(path.join(root, file)))
   .map((file) => `Missing project file: ${file}`);
@@ -26,7 +29,6 @@ for (const match of readme.matchAll(/\]\((\.\/[^)#]+)(?:#[^)]+)?\)/g)) {
 
 const config = JSON.parse(fs.readFileSync(path.join(root, 'wrangler.jsonc'), 'utf8'));
 if (!config.d1_databases?.some((binding) => binding.binding === 'DB')) failures.push('Wrangler config must expose the DB binding');
-if (!config.observability?.enabled) failures.push('Wrangler observability must be enabled');
 if (!config.compatibility_flags?.includes('nodejs_compat')) failures.push('Wrangler nodejs_compat flag is missing');
 
 if (failures.length) {

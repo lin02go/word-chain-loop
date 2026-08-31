@@ -6,6 +6,8 @@
 
 接住前一个单词最后两个字母，把词链接下去，最后绕回起点。
 
+[中文](./README.md) · [English](./README-en.md)
+
 [在线试玩](https://word-chain-loop.pages.dev/word-chain-game) · [游戏规则](#怎么玩) · [本地运行](#本地运行) · [部署到 Cloudflare Pages](#部署到-cloudflare-pages)
 
 [![CI](https://github.com/lin02go/word-chain-loop/actions/workflows/ci.yml/badge.svg)](https://github.com/lin02go/word-chain-loop/actions/workflows/ci.yml)

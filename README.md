@@ -1,140 +1,176 @@
+<div align="center">
+
+![词环 · Word Loop](./og.png)
+
 # 词环 · Word Loop
 
-一个中英双语的英文单词接环 PWA。玩家使用前一个单词末尾两个字母作为下一个单词的开头，在限定步数内让词链回到起始字母组合。
+接住前一个单词最后两个字母，把词链接下去，最后绕回起点。
 
-[在线体验](https://word-chain-loop.pages.dev/word-chain-game)
+[在线试玩](https://word-chain-loop.pages.dev/word-chain-game) · [游戏规则](#怎么玩) · [本地运行](#本地运行) · [部署到 Cloudflare Pages](#部署到-cloudflare-pages)
 
-![词环社交预览](./og.png)
+[![CI](https://github.com/lin02go/word-chain-loop/actions/workflows/ci.yml/badge.svg)](https://github.com/lin02go/word-chain-loop/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-2f6f55.svg)](./LICENSE)
 
-## 功能
+</div>
 
-- 休闲模式与 100 关闯关模式。
-- 30 个简单、35 个标准、35 个困难关卡；每关经过词图自动验证。
-- 三星评价、最大步数、撤销、提示与最佳纪录。
-- “百关成书”全通关成就，以及闭环数、不同起始词、最短路线等长期成就。
-- 中英文界面、双语词义、音标与发音。
-- 离线 PWA、安装更新提示和本地进度。
-- Cloudflare Pages Functions、D1 邮箱账户和跨设备云存档。
+词环是一个中英双语的英文接龙游戏。玩法只盯住两个字母：看词尾，找一个能接上的新单词，直到整条词链闭合。单词长度可以变化，也没有唯一的标准答案。
 
-## 技术结构
+项目没有使用前端运行时框架。游戏、关卡、成就和离线功能都由原生 HTML、CSS 与 JavaScript 完成；账户和云存档运行在 Cloudflare Pages Functions 与 D1 上。
 
-| 部分 | 实现 |
-| --- | --- |
-| 前端 | 原生 HTML、CSS、JavaScript，无前端运行时框架 |
-| 词图 | 浏览器内构建两字母有向图并计算最短闭环路线 |
-| PWA | Web App Manifest、Service Worker、离线资源缓存 |
-| API | Cloudflare Pages Functions |
-| 数据库 | Cloudflare D1 |
-| 认证 | PBKDF2-SHA-256、服务端 Pepper、HttpOnly 会话 Cookie |
-| 构建与部署 | Node.js、pnpm、Wrangler |
+## 怎么玩
 
-## 快速开始
+每个新单词必须以前一个单词的最后两个字母开头。例如：
 
-环境要求：Node.js 22 或更高版本、pnpm 11。
+~~~text
+embrace → cede → deem
+   ce       de      em
+~~~
 
-```bash
+<code>embrace</code> 以 <code>em</code> 开头，<code>deem</code> 也以 <code>em</code> 结尾，这条词链就闭合了。
+
+游戏中还要遵守几条规则：
+
+- 单词至少有 3 个字母，并且必须存在于游戏词典中。
+- 同一局不能重复使用单词，也不能换个词形重复提交。
+- 步数越少，成绩越好；使用提示或查看答案后，该局记为练习。
+
+休闲模式会根据难度随机出题。闯关模式有 100 个固定关卡、最大步数和三星目标，通关后会解锁“百关成书”成就。
+
+## 游戏内容
+
+- 100 个经过自动求解验证的关卡：30 个简单、35 个标准、35 个困难。
+- 休闲模式、闯关模式、提示、撤销、最短路线和个人最佳纪录。
+- 9 项成就，包括闭环次数、不同起始词、最短通关和百关全通。
+- 中文与英文界面，可查询音标、发音、英文解释和中文释义。
+- 可安装的 PWA；核心游戏资源支持离线访问。
+- 游客进度保存在本机，登录后可通过 Cloudflare D1 跨设备同步。
+
+## 本地运行
+
+需要 Node.js 22 或更高版本，以及 pnpm 11。
+
+~~~bash
+git clone https://github.com/lin02go/word-chain-loop.git
+cd word-chain-loop
 pnpm install --frozen-lockfile
 pnpm serve
-```
+~~~
 
-浏览器打开 `http://127.0.0.1:4173/word-chain-game`。这个静态预览支持游戏和 PWA 页面，但不启动账户 API。
+打开 <http://127.0.0.1:4173/word-chain-game>。
 
-## 本地运行 Cloudflare 全栈版本
+这个启动方式适合调试游戏界面、关卡和 PWA，不会启动登录与云存档 API。
 
-1. 复制 `.dev.vars.example` 为 `.dev.vars`，替换 `PASSWORD_PEPPER`。不要提交 `.dev.vars`。
-2. 初始化本地 D1：
+### 运行完整 Cloudflare 环境
 
-```bash
+先创建本地环境变量文件：
+
+~~~bash
+cp .dev.vars.example .dev.vars
+~~~
+
+Windows PowerShell：
+
+~~~powershell
+Copy-Item .dev.vars.example .dev.vars
+~~~
+
+把 <code>.dev.vars</code> 中的 <code>PASSWORD_PEPPER</code> 换成至少 32 个随机字符。这个文件已被 Git 忽略，不要提交。
+
+初始化本地 D1 并启动 Pages：
+
+~~~bash
 pnpm exec wrangler d1 migrations apply DB --local
-```
-
-3. 启动 Pages 本地环境：
-
-```bash
 pnpm dev:cloudflare
-```
+~~~
 
-本地 D1 与线上 D1 相互隔离。`functions/` 通过文件路径映射 `/api/*` 路由。
+本地 D1 与线上数据库互不影响。账户接口位于 <code>/api/*</code>。
 
-## 验证
+## 检查
 
-```bash
+~~~bash
 pnpm check
-```
+~~~
 
-完整检查包括：
+这条命令会检查项目文件、PWA 缓存、100 个关卡的可解性、旧存档迁移、认证逻辑、请求体限制、静态路由、D1 类型以及 Pages Functions 编译。
 
-- PWA 清单、图标、离线资源和脚本语法。
-- 100 个关卡的编号、起始词唯一性、最短距离、路线数量、常用收尾词、提示与失败路径。
-- 原 12 关存档自动续接到第 13 关。
-- 密码记录、旧密码升级和有界 JSON 请求体。
-- 静态资源、账户 API 与 Pages Functions 编译。
-- Wrangler D1 绑定类型是否与配置一致。
+只验证关卡：
 
-生成候选关卡词：
+~~~bash
+pnpm validate:campaign
+~~~
 
-```bash
+生成可用于新关卡的候选起始词：
+
+~~~bash
 node tools/validate-campaign-levels.js --suggest --suggest-only
-```
+~~~
 
 ## 部署到 Cloudflare Pages
 
-### 新建自己的项目
+如果你 Fork 了这个项目，需要先创建自己的 D1 数据库：
 
-1. Fork 或克隆仓库。
-2. 创建 D1 数据库，并把 `wrangler.jsonc` 中的 `database_name`、`database_id` 替换成自己的值。
-3. 应用远程 migration：
+~~~bash
+pnpm exec wrangler d1 create word-chain-loop
+~~~
 
-```bash
+把命令返回的数据库名称和 ID 写入 [wrangler.jsonc](./wrangler.jsonc)，然后执行远程 migration：
+
+~~~bash
 pnpm exec wrangler d1 migrations apply DB --remote
-```
+~~~
 
-4. 给 Pages 项目设置至少 32 个随机字符的加密 Secret：
+为 Pages 项目设置密码 Pepper：
 
-```bash
+~~~bash
 pnpm exec wrangler pages secret put PASSWORD_PEPPER --project-name word-chain-loop
-```
+~~~
 
-5. 部署：
+最后部署：
 
-```bash
+~~~bash
 pnpm deploy:cloudflare
-```
+~~~
 
-也可以把 GitHub 仓库连接到 Cloudflare Pages。构建命令使用 `pnpm build:cloudflare`，输出目录为 `cloudflare-dist`；D1 binding 名必须为 `DB`。
+也可以在 Cloudflare Pages 中连接 GitHub 仓库：
 
-### 更新现有项目
+| 设置 | 值 |
+| --- | --- |
+| 构建命令 | <code>pnpm build:cloudflare</code> |
+| 输出目录 | <code>cloudflare-dist</code> |
+| D1 binding | <code>DB</code> |
 
-普通静态资源和 Functions 更新运行 `pnpm deploy:cloudflare` 即可。新增 migration 时，应先备份并执行 `wrangler d1 migrations apply DB --remote`。不要把 Secret 写进源码、GitHub Actions 文件或 `wrangler.jsonc`。
+数据库结构只通过 [migrations](./migrations) 管理。新增 migration 时，先备份线上数据，再执行远程迁移。
 
-## 项目目录
+## 项目结构
 
-```text
-assets/                  PWA 图标
+~~~text
+assets/                  图标与图片
 functions/               Cloudflare Pages Functions
-  _lib/                  认证与响应工具
-  api/                   账户和进度 API
-migrations/              D1 migrations
-tools/                   构建、验证与本地预览脚本
-campaign-levels.js       100 关配置
-campaign.js              闯关状态与界面
-achievements.js          成就统计与解锁
-game.js                  核心词图与游戏逻辑
-service-worker.js        PWA 离线缓存
-wrangler.jsonc           Cloudflare Pages 与 D1 配置
-```
+migrations/              D1 数据库迁移
+tools/                   构建、检查和本地预览脚本
+campaign-levels.js       100 个关卡的配置
+campaign.js              闯关流程与进度
+achievements.js          成就定义与统计
+game.js                  词图和核心游戏逻辑
+service-worker.js        离线缓存与版本更新
+word-chain-game.html     游戏页面
+wrangler.jsonc           Pages 与 D1 配置
+~~~
 
-## 数据与隐私
+## 数据与第三方服务
 
-- 未登录进度保存在浏览器 `localStorage`。
-- 登录后可把成就、闯关进度和纪录同步到 D1。
-- 密码明文不会写入数据库；生产环境必须配置 `PASSWORD_PEPPER`。
-- 词典来源与许可说明见 [DICTIONARY_SOURCES.md](./DICTIONARY_SOURCES.md) 和 [THIRD_PARTY_NOTICES](./THIRD_PARTY_NOTICES/SCOWL-Copyright.txt)。
+游客数据保存在浏览器 <code>localStorage</code> 中。登录用户可以把成就、闯关进度和纪录同步到 D1。密码不会以明文保存；生产环境必须配置 <code>PASSWORD_PEPPER</code>。
 
-## 贡献与安全
+英文词义与发音来自 Free Dictionary API 和 Datamuse，中文释义使用 MyMemory。词典来源、许可和回退策略见 [DICTIONARY_SOURCES.md](./DICTIONARY_SOURCES.md) 与 [THIRD_PARTY_NOTICES](./THIRD_PARTY_NOTICES/SCOWL-Copyright.txt)。
 
-提交代码前请阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)。安全问题请按 [SECURITY.md](./SECURITY.md) 使用 GitHub 私密漏洞报告，不要公开包含账户或会话数据的 Issue。
+## 参与开发
+
+提交 Pull Request 前请先阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)，并运行 <code>pnpm check</code>。修改已有闯关关卡时不要重排 ID：关卡编号已经写入玩家存档。
+
+安全问题请使用 GitHub 的私密漏洞报告，不要在公开 Issue 中粘贴账户、Cookie 或数据库信息。具体说明见 [SECURITY.md](./SECURITY.md)。
 
 ## 许可证
 
-项目代码采用 [MIT License](./LICENSE)。第三方词典材料不属于项目 MIT 授权范围，仍受各自通知文件约束。
+项目代码采用 [MIT License](./LICENSE)，版权所有 © 2026 [lin02go](https://github.com/lin02go)。
+
+第三方词典材料不包含在项目的 MIT 授权中，仍按各自的许可文件使用。

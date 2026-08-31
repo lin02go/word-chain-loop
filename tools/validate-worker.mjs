@@ -13,4 +13,11 @@ if (missing.status !== 404 || (await missing.json()).code !== 'NOT_FOUND') throw
 const account = await worker.fetch(new Request('https://example.test/api/auth/me'), { ASSETS: assets });
 if (account.status !== 503 || (await account.json()).code !== 'DB_UNAVAILABLE') throw new Error('Account API routing failed');
 
-console.log('Worker validation passed: static and API routes are reachable.');
+const feedback = await worker.fetch(new Request('https://example.test/api/word-feedback', {
+  method: 'POST',
+  headers: { origin: 'https://example.test', 'content-type': 'application/json' },
+  body: JSON.stringify({ word: 'apple', reason: 'other' }),
+}), { ASSETS: assets });
+if (feedback.status !== 503 || (await feedback.json()).code !== 'DB_UNAVAILABLE') throw new Error('Feedback API routing failed');
+
+console.log('Worker validation passed: static, account, and feedback routes are reachable.');

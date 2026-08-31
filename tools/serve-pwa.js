@@ -22,6 +22,7 @@ const server = http.createServer((request, response) => {
     return;
   }
 
+  if (pathname === '/word-chain-game') pathname = '/word-chain-game.html';
   if (pathname.endsWith('/')) pathname += 'index.html';
   const filePath = path.resolve(root, `.${pathname}`);
   if (filePath !== root && !filePath.startsWith(`${root}${path.sep}`)) {

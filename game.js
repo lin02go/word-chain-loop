@@ -179,6 +179,7 @@ function applyLanguage(language) {
   if (typeof game !== 'undefined' && game && game.refreshLocalizedUI) game.refreshLocalizedUI();
   if (window.campaignController && window.campaignController.refreshLanguage) window.campaignController.refreshLanguage();
   if (window.wordDefinitionController && window.wordDefinitionController.refreshLanguage) window.wordDefinitionController.refreshLanguage();
+  if (window.wordFeedbackController && window.wordFeedbackController.refreshLanguage) window.wordFeedbackController.refreshLanguage();
   if (window.achievementController && window.achievementController.refreshLanguage) window.achievementController.refreshLanguage();
   if (window.userSystemController && window.userSystemController.refreshLanguage) window.userSystemController.refreshLanguage();
   if (window.pwaController && window.pwaController.refreshLanguage) window.pwaController.refreshLanguage();
@@ -217,6 +218,7 @@ var WordChainGame = (function() {
     this.wordLemmaRoots = new Map();
     this.dictionary = [];
     this.graph = null;       // Map<string, Map<string, string[]>>
+    this.qualityGraph = null; // Featured canonical words used to rate puzzle difficulty.
     this.wordToEdge = null;  // Map<string, {from, to}>
     this.qualityClosersByTail = null; // Common canonical words grouped by final pair.
     this.startWord = null;
@@ -321,6 +323,7 @@ var WordChainGame = (function() {
 
   WordChainGame.prototype.buildGraph = function() {
     this.graph = new Map();
+    this.qualityGraph = new Map();
     this.wordToEdge = new Map();
     this.qualityClosersByTail = new Map();
     this.dictionary = [];
@@ -336,10 +339,13 @@ var WordChainGame = (function() {
 
       // Editorial visibility is independent from start eligibility: a word
       // can be a fair answer/hint without also being selected as an opening.
-      if (this.wordTiers.get(word) === 0 && this.wordIsLemma.get(word) &&
-          this.wordFeatured.get(word) && word.length <= 12) {
+      if (this.wordIsLemma.get(word) && this.wordFeatured.get(word) && word.length <= 12) {
         if (!this.qualityClosersByTail.has(tail)) this.qualityClosersByTail.set(tail, []);
         this.qualityClosersByTail.get(tail).push(word);
+        if (!this.qualityGraph.has(head)) this.qualityGraph.set(head, new Map());
+        var qualityEdges = this.qualityGraph.get(head);
+        if (!qualityEdges.has(tail)) qualityEdges.set(tail, []);
+        qualityEdges.get(tail).push(word);
       }
 
       if (!this.graph.has(head)) {
@@ -359,7 +365,8 @@ var WordChainGame = (function() {
       edgeCount += entry.value.size;
       entry = values.next();
     }
-    this.distances = this._buildDistances();
+    this.distances = this._buildDistances(this.graph);
+    this.qualityDistances = this._buildDistances(this.qualityGraph);
     this._startCandidates = null;
     console.log(
       MODE_CONFIG[this.difficulty].label + ' graph: ' + this.dictionary.length +
@@ -367,9 +374,9 @@ var WordChainGame = (function() {
     );
   };
 
-  WordChainGame.prototype._buildDistances = function() {
+  WordChainGame.prototype._buildDistances = function(graph) {
     var table = {};
-    var starts = this.graph.keys();
+    var starts = graph.keys();
     var startEntry = starts.next();
     while (!startEntry.done) {
       var start = startEntry.value;
@@ -378,7 +385,7 @@ var WordChainGame = (function() {
       var queue = [start];
       for (var q = 0; q < queue.length; q++) {
         var node = queue[q];
-        var edges = this.graph.get(node);
+        var edges = graph.get(node);
         if (!edges) continue;
         var nextNodes = edges.keys();
         var next = nextNodes.next();
@@ -439,18 +446,22 @@ var WordChainGame = (function() {
   };
 
 
-  WordChainGame.prototype._countShortestRoutes = function(node, goal, remaining, cap, memo) {
+  WordChainGame.prototype._countShortestRoutes = function(node, goal, remaining, cap, memo, graph, distances) {
     if (remaining === 0) return node === goal ? 1 : 0;
+    graph = graph || this.graph;
+    distances = distances || this.distances;
     var key = node + '|' + goal + '|' + remaining;
     if (memo[key] !== undefined) return memo[key];
     var total = 0;
-    var edges = this.graph.get(node);
+    var edges = graph.get(node);
     if (!edges) return 0;
     var self = this;
     edges.forEach(function(words, nextNode) {
       if (total >= cap) return;
-      if (!self.distances[nextNode] || self.distances[nextNode][goal] !== remaining - 1) return;
-      total += words.length * self._countShortestRoutes(nextNode, goal, remaining - 1, cap, memo);
+      if (!distances[nextNode] || distances[nextNode][goal] !== remaining - 1) return;
+      total += words.length * self._countShortestRoutes(
+        nextNode, goal, remaining - 1, cap, memo, graph, distances
+      );
       if (total > cap) total = cap;
     });
     memo[key] = total;
@@ -460,10 +471,10 @@ var WordChainGame = (function() {
   // Count distinct familiar closing words that are reachable on a shortest
   // route from this candidate. This prevents technically valid starts whose
   // opening pair can only be reached through obscure final words.
-  WordChainGame.prototype._countReachableQualityClosers = function(fromNode, goal, remaining, startLemma) {
+  WordChainGame.prototype._countReachableQualityClosers = function(fromNode, goal, remaining, startLemma, distances) {
     if (remaining < 1) return 0;
     var closers = this.qualityClosersByTail.get(goal) || [];
-    var distanceRow = this.distances[fromNode];
+    var distanceRow = (distances || this.distances)[fromNode];
     if (!distanceRow) return 0;
     var closerLemmas = new Set();
     for (var i = 0; i < closers.length; i++) {
@@ -494,7 +505,15 @@ var WordChainGame = (function() {
       if (head === tail) continue;
       var distance = this.distances[tail] && this.distances[tail][head];
       if (distance === undefined || distance < 1) continue;
-      if (!relaxed && (distance < config.minRoute || distance > config.maxRoute)) continue;
+      // The full Hard graph is deliberately dense, so its absolute shortest
+      // path is often two moves through obscure words. Rate Hard openings on
+      // the featured-word graph instead; rare shortcuts remain legal, but no
+      // longer make a rich puzzle look too easy to the picker.
+      var routeGraph = this.difficulty === 'hard' ? this.qualityGraph : this.graph;
+      var routeDistances = this.difficulty === 'hard' ? this.qualityDistances : this.distances;
+      var challengeDistance = routeDistances[tail] && routeDistances[tail][head];
+      if (challengeDistance === undefined || challengeDistance < 1) continue;
+      if (!relaxed && (challengeDistance < config.minRoute || challengeDistance > config.maxRoute)) continue;
 
       var outgoing = this.graph.get(tail);
       var branchWords = 0;
@@ -509,15 +528,17 @@ var WordChainGame = (function() {
       if (branchWords < minimumBranch) continue;
       if (commonBranchWords < 6) continue;
 
-      var routeCount = this._countShortestRoutes(tail, head, distance, 201, routeMemo);
+      var routeCount = this._countShortestRoutes(
+        tail, head, challengeDistance, 201, routeMemo, routeGraph, routeDistances
+      );
       if (routeCount < 2 || routeCount > 200) continue;
       var qualityCloserCount = this._countReachableQualityClosers(
-        tail, head, distance, this.wordLemmaRoots.get(word)
+        tail, head, challengeDistance, this.wordLemmaRoots.get(word), routeDistances
       );
       if (qualityCloserCount < minimumQualityClosers) continue;
       candidates.push({
         word: word, head: head, tail: tail,
-        pathLength: distance, totalLength: distance + 1,
+        pathLength: distance, totalLength: distance + 1, challengeLength: challengeDistance,
         routeCount: routeCount, qualityCloserCount: qualityCloserCount
       });
     }

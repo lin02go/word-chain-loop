@@ -1,1 +1,1 @@
-# word  # reason/source; adds to the SCOWL 35 featured baseline
+# word  # reason/source; adds to the canonical SCOWL 60 quality baseline

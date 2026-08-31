@@ -29,6 +29,14 @@ function overrideCount(filename) {
     .filter((line) => line.split('#', 1)[0].trim()).length;
 }
 
+function overrideWords(filename) {
+  const overridePath = path.join(root, 'dictionary-overrides', filename);
+  if (!fs.existsSync(overridePath)) return [];
+  return fs.readFileSync(overridePath, 'utf8').split(/\r?\n/)
+    .map((line) => line.split('#', 1)[0].trim().split(/\s+/)[0])
+    .filter(Boolean);
+}
+
 const source = fs.readFileSync(dictionaryPath, 'utf8');
 const context = {};
 vm.createContext(context);
@@ -38,7 +46,7 @@ const words = context.DICTIONARY;
 const tiers = context.WORD_TIERS;
 const forms = context.WORD_FORMS;
 const starts = context.WORD_STARTS;
-const featured = context.WORD_FEATURED || starts;
+let featured = context.WORD_FEATURED || starts;
 const lemmaIds = context.WORD_LEMMA_IDS;
 if (!Array.isArray(words) || !words.length) throw new Error('dictionary.js did not define DICTIONARY');
 for (const [name, value, multiplier] of [
@@ -52,6 +60,21 @@ for (const [name, value, multiplier] of [
     throw new Error(`${name} is not aligned with DICTIONARY`);
   }
 }
+
+const wordIndexes = new Map(words.map((word, index) => [word, index]));
+const featuredMarks = [...featured];
+for (const word of overrideWords('featured.txt')) {
+  const index = wordIndexes.get(word);
+  if (index === undefined) throw new Error(`Featured override is missing from dictionary: ${word}`);
+  if (forms[index] !== '0') throw new Error(`Featured override must be a canonical lemma: ${word}`);
+  featuredMarks[index] = '1';
+}
+for (const word of overrideWords('unfeatured.txt')) {
+  const index = wordIndexes.get(word);
+  if (index === undefined) throw new Error(`Unfeatured override is missing from dictionary: ${word}`);
+  featuredMarks[index] = '0';
+}
+featured = featuredMarks.join('');
 
 const records = words.map((word, index) => {
   const lemmaIndex = Number.parseInt(lemmaIds.slice(index * 4, index * 4 + 4), 36);

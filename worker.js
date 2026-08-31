@@ -4,6 +4,7 @@ import { onRequestGet as currentUser } from './functions/api/auth/me.js';
 import { onRequestPost as register } from './functions/api/auth/register.js';
 import { onRequestPatch as updateUser } from './functions/api/user.js';
 import { onRequestGet as getProgress, onRequestPut as putProgress } from './functions/api/user/progress.js';
+import { onRequestPost as submitWordFeedback } from './functions/api/word-feedback.js';
 
 const apiRoutes = new Map([
   ['POST /api/auth/login', login],
@@ -13,6 +14,7 @@ const apiRoutes = new Map([
   ['PATCH /api/user', updateUser],
   ['GET /api/user/progress', getProgress],
   ['PUT /api/user/progress', putProgress],
+  ['POST /api/word-feedback', submitWordFeedback],
 ]);
 
 export default {

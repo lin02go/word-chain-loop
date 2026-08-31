@@ -41,12 +41,12 @@ function overrideWords(filename) {
 const canonical = load('dictionary.js');
 const words = canonical.DICTIONARY;
 if (!Array.isArray(words) || !words.length) throw new Error('dictionary.js does not define DICTIONARY');
-const featured = canonical.WORD_FEATURED || canonical.WORD_STARTS;
+const canonicalFeatured = canonical.WORD_FEATURED || canonical.WORD_STARTS;
 checkAligned(words, [
   ['WORD_TIERS', canonical.WORD_TIERS, 1],
   ['WORD_FORMS', canonical.WORD_FORMS, 1],
   ['WORD_STARTS', canonical.WORD_STARTS, 1],
-  ['WORD_FEATURED', featured, 1],
+  ['WORD_FEATURED', canonicalFeatured, 1],
   ['WORD_LEMMA_IDS', canonical.WORD_LEMMA_IDS, 4],
 ]);
 
@@ -62,6 +62,16 @@ for (let index = 0; index < words.length; index++) {
 }
 
 const wordIndex = new Map(words.map((word, index) => [word, index]));
+const featuredMarks = [...canonicalFeatured];
+for (const word of overrideWords('featured.txt')) {
+  const index = wordIndex.get(word);
+  if (index !== undefined) featuredMarks[index] = '1';
+}
+for (const word of overrideWords('unfeatured.txt')) {
+  const index = wordIndex.get(word);
+  if (index !== undefined) featuredMarks[index] = '0';
+}
+const featured = featuredMarks.join('');
 for (const word of overrideWords('allow.txt')) {
   if (!wordSet.has(word)) failures.push(`Allowed override is missing from dictionary: ${word}`);
 }

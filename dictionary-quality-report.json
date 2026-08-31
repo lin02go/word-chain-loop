@@ -1,0 +1,2974 @@
+{
+  "schema_version": 1,
+  "dictionary_sha256": "0b659eeb73992617350ac28a8c62c2eddf408571f34330f62d4d38853f41099f",
+  "override_sha256": {
+    "allow.txt": "230e3be45cfe50420920ca3262ea463255e66c1a3c9443382031bb3796cc177e",
+    "deny.txt": "bcf24397bf84fb41305fff890a9bbc868a0036ad7ab2b5cb116a3e2950f2228d",
+    "featured.txt": "efdce89b9259055e59e0d384ef6bca9ac29e615ea920025fb46486d9b6786195",
+    "unfeatured.txt": "b7047b11e5fc97a3c1dabcbca241798459519c9089485a627fb71c935e86ec48"
+  },
+  "summary": {
+    "words": 250835,
+    "featured_words": 39932,
+    "manually_reviewed_words": 9,
+    "review_queue_total": 36820
+  },
+  "mode_quality": {
+    "easy": {
+      "candidate_count": 4096,
+      "distinct_opening_pairs": 141,
+      "challenge_distance_distribution": {
+        "1": 876,
+        "2": 3220
+      },
+      "examples": [
+        {
+          "word": "abate",
+          "head": "ab",
+          "tail": "te",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 24,
+          "familiarClosers": 7
+        },
+        {
+          "word": "abbreviate",
+          "head": "ab",
+          "tail": "te",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 24,
+          "familiarClosers": 7
+        },
+        {
+          "word": "abdicate",
+          "head": "ab",
+          "tail": "te",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 24,
+          "familiarClosers": 7
+        },
+        {
+          "word": "abdomen",
+          "head": "ab",
+          "tail": "en",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 22,
+          "familiarClosers": 4
+        },
+        {
+          "word": "abdominal",
+          "head": "ab",
+          "tail": "al",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 17,
+          "familiarClosers": 8
+        },
+        {
+          "word": "abet",
+          "head": "ab",
+          "tail": "et",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 5,
+          "familiarClosers": 3
+        },
+        {
+          "word": "abhor",
+          "head": "ab",
+          "tail": "or",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 10,
+          "familiarClosers": 3
+        },
+        {
+          "word": "abhorrence",
+          "head": "ab",
+          "tail": "ce",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 15,
+          "familiarClosers": 7
+        },
+        {
+          "word": "abide",
+          "head": "ab",
+          "tail": "de",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 40,
+          "familiarClosers": 6
+        },
+        {
+          "word": "ability",
+          "head": "ab",
+          "tail": "ty",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 6,
+          "familiarClosers": 4
+        },
+        {
+          "word": "ablaze",
+          "head": "ab",
+          "tail": "ze",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 5,
+          "familiarClosers": 3
+        },
+        {
+          "word": "able",
+          "head": "ab",
+          "tail": "le",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 18,
+          "familiarClosers": 4
+        },
+        {
+          "word": "abnormal",
+          "head": "ab",
+          "tail": "al",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 17,
+          "familiarClosers": 8
+        },
+        {
+          "word": "abolish",
+          "head": "ab",
+          "tail": "sh",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 36,
+          "familiarClosers": 5
+        },
+        {
+          "word": "abominable",
+          "head": "ab",
+          "tail": "le",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 18,
+          "familiarClosers": 4
+        },
+        {
+          "word": "aboriginal",
+          "head": "ab",
+          "tail": "al",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 17,
+          "familiarClosers": 8
+        },
+        {
+          "word": "aborigine",
+          "head": "ab",
+          "tail": "ne",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 17,
+          "familiarClosers": 3
+        },
+        {
+          "word": "abortive",
+          "head": "ab",
+          "tail": "ve",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 12,
+          "familiarClosers": 8
+        },
+        {
+          "word": "above",
+          "head": "ab",
+          "tail": "ve",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 12,
+          "familiarClosers": 8
+        },
+        {
+          "word": "abrasive",
+          "head": "ab",
+          "tail": "ve",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 12,
+          "familiarClosers": 8
+        }
+      ]
+    },
+    "medium": {
+      "candidate_count": 3411,
+      "distinct_opening_pairs": 149,
+      "challenge_distance_distribution": {
+        "2": 3255,
+        "3": 156
+      },
+      "examples": [
+        {
+          "word": "abandon",
+          "head": "ab",
+          "tail": "on",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 5,
+          "familiarClosers": 2
+        },
+        {
+          "word": "abate",
+          "head": "ab",
+          "tail": "te",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 57,
+          "familiarClosers": 8
+        },
+        {
+          "word": "abbot",
+          "head": "ab",
+          "tail": "ot",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 7,
+          "familiarClosers": 3
+        },
+        {
+          "word": "abbreviate",
+          "head": "ab",
+          "tail": "te",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 57,
+          "familiarClosers": 8
+        },
+        {
+          "word": "abdicate",
+          "head": "ab",
+          "tail": "te",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 57,
+          "familiarClosers": 8
+        },
+        {
+          "word": "abdication",
+          "head": "ab",
+          "tail": "on",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 5,
+          "familiarClosers": 2
+        },
+        {
+          "word": "abdomen",
+          "head": "ab",
+          "tail": "en",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 50,
+          "familiarClosers": 6
+        },
+        {
+          "word": "abdominal",
+          "head": "ab",
+          "tail": "al",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 49,
+          "familiarClosers": 15
+        },
+        {
+          "word": "aberration",
+          "head": "ab",
+          "tail": "on",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 5,
+          "familiarClosers": 2
+        },
+        {
+          "word": "abet",
+          "head": "ab",
+          "tail": "et",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 16,
+          "familiarClosers": 5
+        },
+        {
+          "word": "abhor",
+          "head": "ab",
+          "tail": "or",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 27,
+          "familiarClosers": 6
+        },
+        {
+          "word": "abhorrence",
+          "head": "ab",
+          "tail": "ce",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 42,
+          "familiarClosers": 9
+        },
+        {
+          "word": "abide",
+          "head": "ab",
+          "tail": "de",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 132,
+          "familiarClosers": 8
+        },
+        {
+          "word": "ability",
+          "head": "ab",
+          "tail": "ty",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 10,
+          "familiarClosers": 4
+        },
+        {
+          "word": "ablaze",
+          "head": "ab",
+          "tail": "ze",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 8,
+          "familiarClosers": 5
+        },
+        {
+          "word": "able",
+          "head": "ab",
+          "tail": "le",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 39,
+          "familiarClosers": 5
+        },
+        {
+          "word": "ably",
+          "head": "ab",
+          "tail": "ly",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 10,
+          "familiarClosers": 5
+        },
+        {
+          "word": "abnormal",
+          "head": "ab",
+          "tail": "al",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 49,
+          "familiarClosers": 15
+        },
+        {
+          "word": "abnormally",
+          "head": "ab",
+          "tail": "ly",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 10,
+          "familiarClosers": 5
+        },
+        {
+          "word": "abolish",
+          "head": "ab",
+          "tail": "sh",
+          "actualDistance": 2,
+          "challengeDistance": 2,
+          "routeCount": 52,
+          "familiarClosers": 5
+        }
+      ]
+    },
+    "hard": {
+      "candidate_count": 903,
+      "distinct_opening_pairs": 96,
+      "challenge_distance_distribution": {
+        "3": 868,
+        "4": 33,
+        "5": 2
+      },
+      "examples": [
+        {
+          "word": "abacus",
+          "head": "ab",
+          "tail": "us",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 127,
+          "familiarClosers": 14
+        },
+        {
+          "word": "abbot",
+          "head": "ab",
+          "tail": "ot",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 82,
+          "familiarClosers": 10
+        },
+        {
+          "word": "abrupt",
+          "head": "ab",
+          "tail": "pt",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 29,
+          "familiarClosers": 7
+        },
+        {
+          "word": "absentee",
+          "head": "ab",
+          "tail": "ee",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 11,
+          "familiarClosers": 5
+        },
+        {
+          "word": "adapt",
+          "head": "ad",
+          "tail": "pt",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 168,
+          "familiarClosers": 53
+        },
+        {
+          "word": "addressee",
+          "head": "ad",
+          "tail": "ee",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 50,
+          "familiarClosers": 27
+        },
+        {
+          "word": "adept",
+          "head": "ad",
+          "tail": "pt",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 168,
+          "familiarClosers": 53
+        },
+        {
+          "word": "adopt",
+          "head": "ad",
+          "tail": "pt",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 168,
+          "familiarClosers": 53
+        },
+        {
+          "word": "aerosol",
+          "head": "ae",
+          "tail": "ol",
+          "actualDistance": 1,
+          "challengeDistance": 3,
+          "routeCount": 55,
+          "familiarClosers": 5
+        },
+        {
+          "word": "aesthetic",
+          "head": "ae",
+          "tail": "ic",
+          "actualDistance": 1,
+          "challengeDistance": 3,
+          "routeCount": 51,
+          "familiarClosers": 4
+        },
+        {
+          "word": "affidavit",
+          "head": "af",
+          "tail": "it",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 132,
+          "familiarClosers": 5
+        },
+        {
+          "word": "afoot",
+          "head": "af",
+          "tail": "ot",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 80,
+          "familiarClosers": 5
+        },
+        {
+          "word": "agony",
+          "head": "ag",
+          "tail": "ny",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 68,
+          "familiarClosers": 16
+        },
+        {
+          "word": "agree",
+          "head": "ag",
+          "tail": "ee",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 23,
+          "familiarClosers": 7
+        },
+        {
+          "word": "aimlessly",
+          "head": "ai",
+          "tail": "ly",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 50,
+          "familiarClosers": 6
+        },
+        {
+          "word": "airmail",
+          "head": "ai",
+          "tail": "il",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 29,
+          "familiarClosers": 4
+        },
+        {
+          "word": "allay",
+          "head": "al",
+          "tail": "ay",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 107,
+          "familiarClosers": 83
+        },
+        {
+          "word": "ammonia",
+          "head": "am",
+          "tail": "ia",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 8,
+          "familiarClosers": 8
+        },
+        {
+          "word": "amnesia",
+          "head": "am",
+          "tail": "ia",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 8,
+          "familiarClosers": 8
+        },
+        {
+          "word": "appointee",
+          "head": "ap",
+          "tail": "ee",
+          "actualDistance": 2,
+          "challengeDistance": 3,
+          "routeCount": 46,
+          "familiarClosers": 20
+        }
+      ]
+    }
+  },
+  "review_queue": [
+    {
+      "word": "alfresco",
+      "tier": 0,
+      "length": 8,
+      "score": 2297,
+      "hintExposure": 307,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "stucco",
+      "tier": 0,
+      "length": 6,
+      "score": 2007,
+      "hintExposure": 162,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erasure",
+      "tier": 0,
+      "length": 7,
+      "score": 1972,
+      "hintExposure": 641,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lyre",
+      "tier": 0,
+      "length": 4,
+      "score": 1962,
+      "hintExposure": 636,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erotica",
+      "tier": 0,
+      "length": 7,
+      "score": 1930,
+      "hintExposure": 641,
+      "closerExposure": 216,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erythromycin",
+      "tier": 0,
+      "length": 12,
+      "score": 1843,
+      "hintExposure": 641,
+      "closerExposure": 187,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lymphoma",
+      "tier": 0,
+      "length": 8,
+      "score": 1836,
+      "hintExposure": 636,
+      "closerExposure": 188,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "medico",
+      "tier": 0,
+      "length": 6,
+      "score": 1803,
+      "hintExposure": 60,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onshore",
+      "tier": 0,
+      "length": 7,
+      "score": 1746,
+      "hintExposure": 528,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "tobacco",
+      "tier": 0,
+      "length": 7,
+      "score": 1727,
+      "hintExposure": 22,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "loco",
+      "tier": 0,
+      "length": 4,
+      "score": 1701,
+      "hintExposure": 9,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "taco",
+      "tier": 0,
+      "length": 4,
+      "score": 1697,
+      "hintExposure": 7,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erode",
+      "tier": 0,
+      "length": 5,
+      "score": 1693,
+      "hintExposure": 641,
+      "closerExposure": 137,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "rococo",
+      "tier": 0,
+      "length": 6,
+      "score": 1689,
+      "hintExposure": 3,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "disco",
+      "tier": 0,
+      "length": 5,
+      "score": 1687,
+      "hintExposure": 2,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "calico",
+      "tier": 0,
+      "length": 6,
+      "score": 1687,
+      "hintExposure": 2,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "coco",
+      "tier": 0,
+      "length": 4,
+      "score": 1685,
+      "hintExposure": 1,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "morocco",
+      "tier": 0,
+      "length": 7,
+      "score": 1685,
+      "hintExposure": 1,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "portico",
+      "tier": 0,
+      "length": 7,
+      "score": 1685,
+      "hintExposure": 1,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "politico",
+      "tier": 0,
+      "length": 8,
+      "score": 1685,
+      "hintExposure": 1,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "bunco",
+      "tier": 0,
+      "length": 5,
+      "score": 1683,
+      "hintExposure": 0,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "junco",
+      "tier": 0,
+      "length": 5,
+      "score": 1683,
+      "hintExposure": 0,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "bronco",
+      "tier": 0,
+      "length": 6,
+      "score": 1683,
+      "hintExposure": 0,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "fiasco",
+      "tier": 0,
+      "length": 6,
+      "score": 1683,
+      "hintExposure": 0,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "fresco",
+      "tier": 0,
+      "length": 6,
+      "score": 1683,
+      "hintExposure": 0,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "zydeco",
+      "tier": 0,
+      "length": 6,
+      "score": 1683,
+      "hintExposure": 0,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "sirocco",
+      "tier": 0,
+      "length": 7,
+      "score": 1683,
+      "hintExposure": 0,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "flamenco",
+      "tier": 0,
+      "length": 8,
+      "score": 1683,
+      "hintExposure": 0,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "simpatico",
+      "tier": 0,
+      "length": 9,
+      "score": 1683,
+      "hintExposure": 0,
+      "closerExposure": 561,
+      "reasons": [
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "era",
+      "tier": 0,
+      "length": 3,
+      "score": 1620,
+      "hintExposure": 641,
+      "closerExposure": 106,
+      "reasons": [
+        "short-featured-word",
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onionskin",
+      "tier": 0,
+      "length": 9,
+      "score": 1617,
+      "hintExposure": 528,
+      "closerExposure": 187,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erst",
+      "tier": 0,
+      "length": 4,
+      "score": 1612,
+      "hintExposure": 641,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lyricist",
+      "tier": 0,
+      "length": 8,
+      "score": 1602,
+      "hintExposure": 636,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lynch",
+      "tier": 0,
+      "length": 5,
+      "score": 1599,
+      "hintExposure": 636,
+      "closerExposure": 109,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lecture",
+      "tier": 0,
+      "length": 7,
+      "score": 1588,
+      "hintExposure": 449,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leisure",
+      "tier": 0,
+      "length": 7,
+      "score": 1588,
+      "hintExposure": 449,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legionnaire",
+      "tier": 0,
+      "length": 11,
+      "score": 1588,
+      "hintExposure": 449,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legislature",
+      "tier": 0,
+      "length": 11,
+      "score": 1588,
+      "hintExposure": 449,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leprechaun",
+      "tier": 0,
+      "length": 10,
+      "score": 1585,
+      "hintExposure": 449,
+      "closerExposure": 229,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erase",
+      "tier": 0,
+      "length": 5,
+      "score": 1546,
+      "hintExposure": 641,
+      "closerExposure": 88,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eremite",
+      "tier": 0,
+      "length": 7,
+      "score": 1471,
+      "hintExposure": 641,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erudite",
+      "tier": 0,
+      "length": 7,
+      "score": 1471,
+      "hintExposure": 641,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eradicate",
+      "tier": 0,
+      "length": 9,
+      "score": 1471,
+      "hintExposure": 641,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erythrocyte",
+      "tier": 0,
+      "length": 11,
+      "score": 1471,
+      "hintExposure": 641,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onside",
+      "tier": 0,
+      "length": 6,
+      "score": 1467,
+      "hintExposure": 528,
+      "closerExposure": 137,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lemma",
+      "tier": 0,
+      "length": 5,
+      "score": 1462,
+      "hintExposure": 449,
+      "closerExposure": 188,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lychgate",
+      "tier": 0,
+      "length": 8,
+      "score": 1461,
+      "hintExposure": 636,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lymphocyte",
+      "tier": 0,
+      "length": 10,
+      "score": 1461,
+      "hintExposure": 636,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leggin",
+      "tier": 0,
+      "length": 6,
+      "score": 1459,
+      "hintExposure": 449,
+      "closerExposure": 187,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lecithin",
+      "tier": 0,
+      "length": 8,
+      "score": 1459,
+      "hintExposure": 449,
+      "closerExposure": 187,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legerdemain",
+      "tier": 0,
+      "length": 11,
+      "score": 1459,
+      "hintExposure": 449,
+      "closerExposure": 187,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "tenure",
+      "tier": 0,
+      "length": 6,
+      "score": 1432,
+      "hintExposure": 371,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "texture",
+      "tier": 0,
+      "length": 7,
+      "score": 1432,
+      "hintExposure": 371,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "temperature",
+      "tier": 0,
+      "length": 11,
+      "score": 1432,
+      "hintExposure": 371,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lyrical",
+      "tier": 0,
+      "length": 7,
+      "score": 1416,
+      "hintExposure": 636,
+      "closerExposure": 48,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lysosomal",
+      "tier": 0,
+      "length": 9,
+      "score": 1416,
+      "hintExposure": 636,
+      "closerExposure": 48,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "ergo",
+      "tier": 0,
+      "length": 4,
+      "score": 1411,
+      "hintExposure": 641,
+      "closerExposure": 43,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "ermine",
+      "tier": 0,
+      "length": 6,
+      "score": 1411,
+      "hintExposure": 641,
+      "closerExposure": 43,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erasable",
+      "tier": 0,
+      "length": 8,
+      "score": 1411,
+      "hintExposure": 641,
+      "closerExposure": 43,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erectile",
+      "tier": 0,
+      "length": 8,
+      "score": 1411,
+      "hintExposure": 641,
+      "closerExposure": 43,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erodible",
+      "tier": 0,
+      "length": 8,
+      "score": 1411,
+      "hintExposure": 641,
+      "closerExposure": 43,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erstwhile",
+      "tier": 0,
+      "length": 9,
+      "score": 1411,
+      "hintExposure": 641,
+      "closerExposure": 43,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eradicable",
+      "tier": 0,
+      "length": 10,
+      "score": 1411,
+      "hintExposure": 641,
+      "closerExposure": 43,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erosive",
+      "tier": 0,
+      "length": 7,
+      "score": 1393,
+      "hintExposure": 641,
+      "closerExposure": 37,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eruptive",
+      "tier": 0,
+      "length": 8,
+      "score": 1393,
+      "hintExposure": 641,
+      "closerExposure": 37,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "oncologist",
+      "tier": 0,
+      "length": 10,
+      "score": 1386,
+      "hintExposure": 528,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onetime",
+      "tier": 0,
+      "length": 7,
+      "score": 1374,
+      "hintExposure": 528,
+      "closerExposure": 106,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lymph",
+      "tier": 0,
+      "length": 5,
+      "score": 1356,
+      "hintExposure": 636,
+      "closerExposure": 28,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "error",
+      "tier": 0,
+      "length": 5,
+      "score": 1351,
+      "hintExposure": 641,
+      "closerExposure": 23,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erector",
+      "tier": 0,
+      "length": 7,
+      "score": 1351,
+      "hintExposure": 641,
+      "closerExposure": 23,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eradicator",
+      "tier": 0,
+      "length": 10,
+      "score": 1351,
+      "hintExposure": 641,
+      "closerExposure": 23,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lymphoid",
+      "tier": 0,
+      "length": 8,
+      "score": 1329,
+      "hintExposure": 636,
+      "closerExposure": 19,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eraser",
+      "tier": 0,
+      "length": 6,
+      "score": 1309,
+      "hintExposure": 641,
+      "closerExposure": 9,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lemonade",
+      "tier": 0,
+      "length": 8,
+      "score": 1309,
+      "hintExposure": 449,
+      "closerExposure": 137,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lye",
+      "tier": 0,
+      "length": 3,
+      "score": 1307,
+      "hintExposure": 636,
+      "closerExposure": 5,
+      "reasons": [
+        "short-featured-word",
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "allure",
+      "tier": 0,
+      "length": 6,
+      "score": 1304,
+      "hintExposure": 307,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "albacore",
+      "tier": 0,
+      "length": 8,
+      "score": 1304,
+      "hintExposure": 307,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "alongshore",
+      "tier": 0,
+      "length": 10,
+      "score": 1304,
+      "hintExposure": 307,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "tenpin",
+      "tier": 0,
+      "length": 6,
+      "score": 1303,
+      "hintExposure": 371,
+      "closerExposure": 187,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "terrain",
+      "tier": 0,
+      "length": 7,
+      "score": 1303,
+      "hintExposure": 371,
+      "closerExposure": 187,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "terrapin",
+      "tier": 0,
+      "length": 8,
+      "score": 1303,
+      "hintExposure": 371,
+      "closerExposure": 187,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eroticism",
+      "tier": 0,
+      "length": 9,
+      "score": 1303,
+      "hintExposure": 641,
+      "closerExposure": 7,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "tenderloin",
+      "tier": 0,
+      "length": 10,
+      "score": 1303,
+      "hintExposure": 371,
+      "closerExposure": 187,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erg",
+      "tier": 0,
+      "length": 3,
+      "score": 1302,
+      "hintExposure": 641,
+      "closerExposure": 0,
+      "reasons": [
+        "short-featured-word",
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "err",
+      "tier": 0,
+      "length": 3,
+      "score": 1302,
+      "hintExposure": 641,
+      "closerExposure": 0,
+      "reasons": [
+        "short-featured-word",
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "erogenous",
+      "tier": 0,
+      "length": 9,
+      "score": 1300,
+      "hintExposure": 641,
+      "closerExposure": 6,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erroneous",
+      "tier": 0,
+      "length": 9,
+      "score": 1300,
+      "hintExposure": 641,
+      "closerExposure": 6,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erysipelas",
+      "tier": 0,
+      "length": 10,
+      "score": 1300,
+      "hintExposure": 641,
+      "closerExposure": 6,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lyncher",
+      "tier": 0,
+      "length": 7,
+      "score": 1299,
+      "hintExposure": 636,
+      "closerExposure": 9,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erectly",
+      "tier": 0,
+      "length": 7,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erosion",
+      "tier": 0,
+      "length": 7,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erection",
+      "tier": 0,
+      "length": 8,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eruption",
+      "tier": 0,
+      "length": 8,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eruditely",
+      "tier": 0,
+      "length": 9,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erudition",
+      "tier": 0,
+      "length": 9,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erotically",
+      "tier": 0,
+      "length": 10,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eructation",
+      "tier": 0,
+      "length": 10,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "eradication",
+      "tier": 0,
+      "length": 11,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erratically",
+      "tier": 0,
+      "length": 11,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erroneously",
+      "tier": 0,
+      "length": 11,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "ergonomically",
+      "tier": 0,
+      "length": 13,
+      "score": 1294,
+      "hintExposure": 641,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lyricism",
+      "tier": 0,
+      "length": 8,
+      "score": 1293,
+      "hintExposure": 636,
+      "closerExposure": 7,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onrush",
+      "tier": 0,
+      "length": 6,
+      "score": 1290,
+      "hintExposure": 528,
+      "closerExposure": 78,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erbium",
+      "tier": 0,
+      "length": 6,
+      "score": 1288,
+      "hintExposure": 641,
+      "closerExposure": 2,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erotic",
+      "tier": 0,
+      "length": 6,
+      "score": 1288,
+      "hintExposure": 641,
+      "closerExposure": 2,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "ersatz",
+      "tier": 0,
+      "length": 6,
+      "score": 1288,
+      "hintExposure": 641,
+      "closerExposure": 2,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erratic",
+      "tier": 0,
+      "length": 7,
+      "score": 1288,
+      "hintExposure": 641,
+      "closerExposure": 2,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erratum",
+      "tier": 0,
+      "length": 7,
+      "score": 1288,
+      "hintExposure": 641,
+      "closerExposure": 2,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "ergonomic",
+      "tier": 0,
+      "length": 9,
+      "score": 1288,
+      "hintExposure": 641,
+      "closerExposure": 2,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "ergosterol",
+      "tier": 0,
+      "length": 10,
+      "score": 1285,
+      "hintExposure": 641,
+      "closerExposure": 1,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onto",
+      "tier": 0,
+      "length": 4,
+      "score": 1284,
+      "hintExposure": 528,
+      "closerExposure": 76,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lyrically",
+      "tier": 0,
+      "length": 9,
+      "score": 1284,
+      "hintExposure": 636,
+      "closerExposure": 4,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "erect",
+      "tier": 0,
+      "length": 5,
+      "score": 1282,
+      "hintExposure": 641,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "ergot",
+      "tier": 0,
+      "length": 5,
+      "score": 1282,
+      "hintExposure": 641,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "eruct",
+      "tier": 0,
+      "length": 5,
+      "score": 1282,
+      "hintExposure": 641,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "erupt",
+      "tier": 0,
+      "length": 5,
+      "score": 1282,
+      "hintExposure": 641,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "errand",
+      "tier": 0,
+      "length": 6,
+      "score": 1282,
+      "hintExposure": 641,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "errant",
+      "tier": 0,
+      "length": 6,
+      "score": 1282,
+      "hintExposure": 641,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "erelong",
+      "tier": 0,
+      "length": 7,
+      "score": 1282,
+      "hintExposure": 641,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "erectness",
+      "tier": 0,
+      "length": 9,
+      "score": 1282,
+      "hintExposure": 641,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "lyric",
+      "tier": 0,
+      "length": 5,
+      "score": 1278,
+      "hintExposure": 636,
+      "closerExposure": 2,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lyceum",
+      "tier": 0,
+      "length": 6,
+      "score": 1278,
+      "hintExposure": 636,
+      "closerExposure": 2,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lymphatic",
+      "tier": 0,
+      "length": 9,
+      "score": 1278,
+      "hintExposure": 636,
+      "closerExposure": 2,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lynx",
+      "tier": 0,
+      "length": 4,
+      "score": 1272,
+      "hintExposure": 636,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "lychee",
+      "tier": 0,
+      "length": 6,
+      "score": 1272,
+      "hintExposure": 636,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "lyrebird",
+      "tier": 0,
+      "length": 8,
+      "score": 1272,
+      "hintExposure": 636,
+      "closerExposure": 0,
+      "reasons": [
+        "potential-hint"
+      ]
+    },
+    {
+      "word": "tempo",
+      "tier": 0,
+      "length": 5,
+      "score": 1267,
+      "hintExposure": 371,
+      "closerExposure": 175,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "alpaca",
+      "tier": 0,
+      "length": 6,
+      "score": 1262,
+      "hintExposure": 307,
+      "closerExposure": 216,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onsite",
+      "tier": 0,
+      "length": 6,
+      "score": 1245,
+      "hintExposure": 528,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lest",
+      "tier": 0,
+      "length": 4,
+      "score": 1228,
+      "hintExposure": 449,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leftist",
+      "tier": 0,
+      "length": 7,
+      "score": 1228,
+      "hintExposure": 449,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leftmost",
+      "tier": 0,
+      "length": 8,
+      "score": 1228,
+      "hintExposure": 449,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lech",
+      "tier": 0,
+      "length": 4,
+      "score": 1225,
+      "hintExposure": 449,
+      "closerExposure": 109,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leach",
+      "tier": 0,
+      "length": 5,
+      "score": 1225,
+      "hintExposure": 449,
+      "closerExposure": 109,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leech",
+      "tier": 0,
+      "length": 5,
+      "score": 1225,
+      "hintExposure": 449,
+      "closerExposure": 109,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onscreen",
+      "tier": 0,
+      "length": 8,
+      "score": 1224,
+      "hintExposure": 528,
+      "closerExposure": 56,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "tyre",
+      "tier": 0,
+      "length": 4,
+      "score": 1218,
+      "hintExposure": 264,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legume",
+      "tier": 0,
+      "length": 6,
+      "score": 1216,
+      "hintExposure": 449,
+      "closerExposure": 106,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "one",
+      "tier": 0,
+      "length": 3,
+      "score": 1205,
+      "hintExposure": 528,
+      "closerExposure": 43,
+      "reasons": [
+        "short-featured-word",
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "ontological",
+      "tier": 0,
+      "length": 11,
+      "score": 1200,
+      "hintExposure": 528,
+      "closerExposure": 48,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "length",
+      "tier": 0,
+      "length": 6,
+      "score": 1189,
+      "hintExposure": 449,
+      "closerExposure": 97,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "sere",
+      "tier": 0,
+      "length": 4,
+      "score": 1186,
+      "hintExposure": 248,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "secure",
+      "tier": 0,
+      "length": 6,
+      "score": 1186,
+      "hintExposure": 248,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "severe",
+      "tier": 0,
+      "length": 6,
+      "score": 1186,
+      "hintExposure": 248,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "seizure",
+      "tier": 0,
+      "length": 7,
+      "score": 1186,
+      "hintExposure": 248,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "seashore",
+      "tier": 0,
+      "length": 8,
+      "score": 1186,
+      "hintExposure": 248,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "semaphore",
+      "tier": 0,
+      "length": 9,
+      "score": 1186,
+      "hintExposure": 248,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "sepulchre",
+      "tier": 0,
+      "length": 9,
+      "score": 1186,
+      "hintExposure": 248,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "setsquare",
+      "tier": 0,
+      "length": 9,
+      "score": 1186,
+      "hintExposure": 248,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "online",
+      "tier": 0,
+      "length": 6,
+      "score": 1185,
+      "hintExposure": 528,
+      "closerExposure": 43,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "oncogene",
+      "tier": 0,
+      "length": 8,
+      "score": 1185,
+      "hintExposure": 528,
+      "closerExposure": 43,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "albumin",
+      "tier": 0,
+      "length": 7,
+      "score": 1175,
+      "hintExposure": 307,
+      "closerExposure": 187,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "centre",
+      "tier": 0,
+      "length": 6,
+      "score": 1168,
+      "hintExposure": 239,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "censure",
+      "tier": 0,
+      "length": 7,
+      "score": 1168,
+      "hintExposure": 239,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "ceasefire",
+      "tier": 0,
+      "length": 9,
+      "score": 1168,
+      "hintExposure": 239,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "centilitre",
+      "tier": 0,
+      "length": 10,
+      "score": 1168,
+      "hintExposure": 239,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "centimetre",
+      "tier": 0,
+      "length": 10,
+      "score": 1168,
+      "hintExposure": 239,
+      "closerExposure": 230,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onstage",
+      "tier": 0,
+      "length": 7,
+      "score": 1164,
+      "hintExposure": 528,
+      "closerExposure": 36,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lease",
+      "tier": 0,
+      "length": 5,
+      "score": 1162,
+      "hintExposure": 449,
+      "closerExposure": 88,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legalese",
+      "tier": 0,
+      "length": 8,
+      "score": 1162,
+      "hintExposure": 449,
+      "closerExposure": 88,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legalise",
+      "tier": 0,
+      "length": 8,
+      "score": 1162,
+      "hintExposure": 449,
+      "closerExposure": 88,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leastwise",
+      "tier": 0,
+      "length": 9,
+      "score": 1162,
+      "hintExposure": 449,
+      "closerExposure": 88,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legitimise",
+      "tier": 0,
+      "length": 10,
+      "score": 1162,
+      "hintExposure": 449,
+      "closerExposure": 88,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lengthwise",
+      "tier": 0,
+      "length": 10,
+      "score": 1162,
+      "hintExposure": 449,
+      "closerExposure": 88,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legitimatise",
+      "tier": 0,
+      "length": 12,
+      "score": 1162,
+      "hintExposure": 449,
+      "closerExposure": 88,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lead",
+      "tier": 0,
+      "length": 4,
+      "score": 1156,
+      "hintExposure": 449,
+      "closerExposure": 86,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "letterhead",
+      "tier": 0,
+      "length": 10,
+      "score": 1156,
+      "hintExposure": 449,
+      "closerExposure": 86,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lean",
+      "tier": 0,
+      "length": 4,
+      "score": 1141,
+      "hintExposure": 449,
+      "closerExposure": 81,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legman",
+      "tier": 0,
+      "length": 6,
+      "score": 1141,
+      "hintExposure": 449,
+      "closerExposure": 81,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lesbian",
+      "tier": 0,
+      "length": 7,
+      "score": 1141,
+      "hintExposure": 449,
+      "closerExposure": 81,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leviathan",
+      "tier": 0,
+      "length": 9,
+      "score": 1141,
+      "hintExposure": 449,
+      "closerExposure": 81,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "once",
+      "tier": 0,
+      "length": 4,
+      "score": 1140,
+      "hintExposure": 528,
+      "closerExposure": 28,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leash",
+      "tier": 0,
+      "length": 5,
+      "score": 1132,
+      "hintExposure": 449,
+      "closerExposure": 78,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "lento",
+      "tier": 0,
+      "length": 5,
+      "score": 1126,
+      "hintExposure": 449,
+      "closerExposure": 76,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legato",
+      "tier": 0,
+      "length": 6,
+      "score": 1126,
+      "hintExposure": 449,
+      "closerExposure": 76,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "telex",
+      "tier": 0,
+      "length": 5,
+      "score": 1123,
+      "hintExposure": 371,
+      "closerExposure": 127,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "technophobe",
+      "tier": 0,
+      "length": 11,
+      "score": 1120,
+      "hintExposure": 371,
+      "closerExposure": 126,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onset",
+      "tier": 0,
+      "length": 5,
+      "score": 1095,
+      "hintExposure": 528,
+      "closerExposure": 13,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leap",
+      "tier": 0,
+      "length": 4,
+      "score": 1093,
+      "hintExposure": 449,
+      "closerExposure": 65,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "teethe",
+      "tier": 0,
+      "length": 6,
+      "score": 1093,
+      "hintExposure": 371,
+      "closerExposure": 117,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legate",
+      "tier": 0,
+      "length": 6,
+      "score": 1087,
+      "hintExposure": 449,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "levitate",
+      "tier": 0,
+      "length": 8,
+      "score": 1087,
+      "hintExposure": 449,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "teletype",
+      "tier": 0,
+      "length": 8,
+      "score": 1087,
+      "hintExposure": 371,
+      "closerExposure": 115,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legislate",
+      "tier": 0,
+      "length": 9,
+      "score": 1087,
+      "hintExposure": 449,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leukocyte",
+      "tier": 0,
+      "length": 9,
+      "score": 1087,
+      "hintExposure": 449,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "telescope",
+      "tier": 0,
+      "length": 9,
+      "score": 1087,
+      "hintExposure": 371,
+      "closerExposure": 115,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "legitimate",
+      "tier": 0,
+      "length": 10,
+      "score": 1087,
+      "hintExposure": 449,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "leatherette",
+      "tier": 0,
+      "length": 11,
+      "score": 1087,
+      "hintExposure": 449,
+      "closerExposure": 63,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onlooker",
+      "tier": 0,
+      "length": 8,
+      "score": 1083,
+      "hintExposure": 528,
+      "closerExposure": 9,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onus",
+      "tier": 0,
+      "length": 4,
+      "score": 1074,
+      "hintExposure": 528,
+      "closerExposure": 6,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "onerous",
+      "tier": 0,
+      "length": 7,
+      "score": 1074,
+      "hintExposure": 528,
+      "closerExposure": 6,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "test",
+      "tier": 0,
+      "length": 4,
+      "score": 1072,
+      "hintExposure": 371,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "telecast",
+      "tier": 0,
+      "length": 8,
+      "score": 1072,
+      "hintExposure": 371,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "terrorist",
+      "tier": 0,
+      "length": 9,
+      "score": 1072,
+      "hintExposure": 371,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "telephonist",
+      "tier": 0,
+      "length": 11,
+      "score": 1072,
+      "hintExposure": 371,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "technologist",
+      "tier": 0,
+      "length": 12,
+      "score": 1072,
+      "hintExposure": 371,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "telegraphist",
+      "tier": 0,
+      "length": 12,
+      "score": 1072,
+      "hintExposure": 371,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "televangelist",
+      "tier": 0,
+      "length": 13,
+      "score": 1072,
+      "hintExposure": 371,
+      "closerExposure": 110,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "oncology",
+      "tier": 0,
+      "length": 8,
+      "score": 1071,
+      "hintExposure": 528,
+      "closerExposure": 5,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    },
+    {
+      "word": "ontology",
+      "tier": 0,
+      "length": 8,
+      "score": 1071,
+      "hintExposure": 528,
+      "closerExposure": 5,
+      "reasons": [
+        "potential-hint",
+        "potential-closer"
+      ]
+    }
+  ]
+}

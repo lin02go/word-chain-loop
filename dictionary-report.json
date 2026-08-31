@@ -22,12 +22,12 @@
   "source_repository": "https://github.com/engramtech/scowl",
   "source_revision": "unrecorded-existing-artifact",
   "dictionary_sha256": "0b659eeb73992617350ac28a8c62c2eddf408571f34330f62d4d38853f41099f",
-  "featured_vocabulary_count": 39940,
+  "featured_vocabulary_count": 39932,
   "runtime_packs": {
     "dictionary-core.js": {
       "word_count": 133866,
       "bytes": 2667930,
-      "sha256": "c4fccff7672b5025ed9966979926b8e9796e8c16ac5624cb457cf5205720a335"
+      "sha256": "02c668592e2a4924fdfb0e4db03c54a4d2a1d7131f26ae887b7c609cc3556c5b"
     },
     "dictionary-extended.js": {
       "word_count": 116969,

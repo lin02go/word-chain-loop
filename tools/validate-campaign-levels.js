@@ -14,8 +14,24 @@ const words = dictionary.DICTIONARY;
 const tiers = dictionary.WORD_TIERS;
 const forms = dictionary.WORD_FORMS;
 const starts = dictionary.WORD_STARTS;
-const featured = dictionary.WORD_FEATURED || starts;
+let featured = dictionary.WORD_FEATURED || starts;
 const lemmaIds = dictionary.WORD_LEMMA_IDS;
+
+function applyFeaturedOverrides(value) {
+  const marks = [...value];
+  const indexes = new Map(words.map((word, index) => [word, index]));
+  for (const [filename, mark] of [['featured.txt', '1'], ['unfeatured.txt', '0']]) {
+    const file = `dictionary-overrides/${filename}`;
+    if (!fs.existsSync(file)) continue;
+    for (const line of fs.readFileSync(file, 'utf8').split(/\r?\n/)) {
+      const word = line.split('#', 1)[0].trim().split(/\s+/)[0];
+      if (word && indexes.has(word)) marks[indexes.get(word)] = mark;
+    }
+  }
+  return marks.join('');
+}
+
+featured = applyFeaturedOverrides(featured);
 
 const configs = {
   easy: { maxTier: 0, minRoute: 1, maxRoute: 2, minimumBranch: 12, minimumClosers: 3 },

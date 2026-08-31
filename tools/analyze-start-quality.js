@@ -10,7 +10,18 @@ const words = context.DICTIONARY;
 const tiers = context.WORD_TIERS;
 const forms = context.WORD_FORMS;
 const starts = context.WORD_STARTS;
-const featured = context.WORD_FEATURED || starts;
+let featured = context.WORD_FEATURED || starts;
+const featuredMarks = [...featured];
+const wordIndexes = new Map(words.map((word, index) => [word, index]));
+for (const [filename, mark] of [['featured.txt', '1'], ['unfeatured.txt', '0']]) {
+  const file = `dictionary-overrides/${filename}`;
+  if (!fs.existsSync(file)) continue;
+  for (const line of fs.readFileSync(file, 'utf8').split(/\r?\n/)) {
+    const word = line.split('#', 1)[0].trim().split(/\s+/)[0];
+    if (word && wordIndexes.has(word)) featuredMarks[wordIndexes.get(word)] = mark;
+  }
+}
+featured = featuredMarks.join('');
 const modeWords = [];
 const graph = new Map();
 

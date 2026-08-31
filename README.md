@@ -44,6 +44,7 @@ embrace → cede → deem
 - 休闲模式、闯关模式、提示、撤销、最短路线和个人最佳纪录。
 - 9 项成就，包括闭环次数、不同起始词、最短通关和百关全通。
 - 中文与英文界面，可查询音标、发音、英文解释和中文释义。
+- 登录玩家可以报告生僻词、误收词、缺词或释义问题，报告进入人工复核队列。
 - 可安装的 PWA；核心游戏资源支持离线访问。
 - 游客进度保存在本机，登录后可通过 Cloudflare D1 跨设备同步。
 
@@ -93,7 +94,7 @@ pnpm dev:cloudflare
 pnpm check
 ~~~
 
-这条命令会检查项目文件、PWA 缓存、100 个关卡的可解性、旧存档迁移、认证逻辑、请求体限制、静态路由、D1 类型以及 Pages Functions 编译。
+这条命令会检查项目文件、词库质量报告、PWA 缓存、100 个关卡的可解性、旧存档迁移、认证与词条反馈逻辑、请求体限制、静态路由、D1 类型以及 Pages Functions 编译。
 
 只验证关卡：
 
@@ -163,7 +164,7 @@ wrangler.jsonc           Pages 与 D1 配置
 
 游客数据保存在浏览器 <code>localStorage</code> 中。登录用户可以把成就、闯关进度和纪录同步到 D1。密码不会以明文保存；生产环境必须配置 <code>PASSWORD_PEPPER</code>。
 
-英文词义与发音来自 Free Dictionary API 和 Datamuse，中文释义使用 MyMemory。词典来源、许可和回退策略见 [DICTIONARY_SOURCES.md](./DICTIONARY_SOURCES.md) 与 [THIRD_PARTY_NOTICES](./THIRD_PARTY_NOTICES/SCOWL-Copyright.txt)。
+英文词义与发音来自 Free Dictionary API 和 Datamuse，中文释义使用 MyMemory。词典来源、许可和回退策略见 [DICTIONARY_SOURCES.md](./DICTIONARY_SOURCES.md) 与 [THIRD_PARTY_NOTICES](./THIRD_PARTY_NOTICES/SCOWL-Copyright.txt)。玩家报告如何转成可追踪的词库改动，见 [WORD_FEEDBACK.md](./WORD_FEEDBACK.md)。
 
 ## 参与开发
 

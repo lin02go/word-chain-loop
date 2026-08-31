@@ -1,1 +1,11 @@
-# word  # remains playable, but is not selected or preferred by the game
+# First review batch: valid entries retained for player input, but excluded
+# from automatic hints/closers after surfacing in route-quality QA.
+aba   # rare cloth term; opaque as an automatic answer
+abbe  # specialist French ecclesiastical title
+deb   # shortened social term; reads like an abbreviation
+dob   # regional/dialectal verb with low cross-region recognition
+ecu   # obsolete European currency unit
+ell   # historical measure/letter-name sense
+ere   # archaic conjunction/preposition
+obi   # specialist garment term
+rec   # abbreviation-like informal form

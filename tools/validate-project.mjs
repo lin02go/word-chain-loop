@@ -4,12 +4,13 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const required = [
-  'README.md', 'LICENSE', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md', '.editorconfig',
+  'README.md', 'WORD_FEEDBACK.md', 'LICENSE', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md', '.editorconfig',
   '.gitattributes', '.gitignore', '.github/workflows/ci.yml', '.dev.vars.example',
-  'wrangler.jsonc', 'worker-configuration.d.ts', 'migrations/0001_email_accounts.sql',
+  'wrangler.jsonc', 'worker-configuration.d.ts', 'migrations/0001_email_accounts.sql', 'migrations/0002_word_feedback.sql',
+  'functions/api/word-feedback.js', 'functions/_lib/feedback.js',
   'THIRD_PARTY_NOTICES/SCOWL-Copyright.txt',
   'DICTIONARY_SOURCES.md', 'dictionary.js', 'dictionary-core.js', 'dictionary-extended.js',
-  'dictionary-report.json', 'dictionary-overrides/README.md', 'dictionary-overrides/allow.txt',
+  'dictionary-report.json', 'dictionary-quality-report.json', 'dictionary-overrides/README.md', 'dictionary-overrides/allow.txt',
   'dictionary-overrides/deny.txt', 'dictionary-overrides/featured.txt', 'dictionary-overrides/unfeatured.txt',
 ];
 const failures = required.filter((file) => !fs.existsSync(path.join(root, file)))

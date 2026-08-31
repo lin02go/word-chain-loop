@@ -58,6 +58,7 @@ const requiredOutputs = [
   'server/index.js',
   '.openai/hosting.json',
   '.openai/drizzle/0001_email_accounts.sql',
+  '.openai/drizzle/0002_word_feedback.sql',
   ...staticFiles.map((relativePath) => `client/${relativePath}`)
 ];
 

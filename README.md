@@ -173,7 +173,7 @@ wrangler.jsonc           Pages 与 D1 配置
 
 ## 数据和词典
 
-游客进度存在浏览器 <code>localStorage</code> 中。登录玩家可以把成就、闯关进度和纪录同步到 D1。密码不会明文保存，生产环境必须设置 <code>PASSWORD_PEPPER</code>。
+游客进度存在浏览器 <code>localStorage</code> 中。登录玩家可以把成就、闯关进度和纪录同步到 D1。密码不会明文保存，生产环境必须设置 <code>PASSWORD_PEPPER</code>。忘记密码时，管理员可以签发限时、一次性的重置链接；重置完成后，旧登录会话会全部注销。
 
 英文词义与发音来自 Free Dictionary API 和 Datamuse，中文释义使用 MyMemory。词库的来源、许可和回退方式写在 [DICTIONARY_SOURCES.md](./DICTIONARY_SOURCES.md) 与 [THIRD_PARTY_NOTICES](./THIRD_PARTY_NOTICES/SCOWL-Copyright.txt) 中。玩家提交的词条问题如何进入词库维护流程，见 [WORD_FEEDBACK.md](./WORD_FEEDBACK.md)。
 

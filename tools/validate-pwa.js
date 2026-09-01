@@ -65,11 +65,13 @@ const pwaText = read('pwa.js');
 const gameText = read('game.js');
 const userSystemText = read('user-system.js');
 const workshopText = read('workshop.js');
+const resetPasswordText = read('reset-password.js');
 try { new vm.Script(workerText, { filename: 'service-worker.js' }); } catch (error) { fail(error.message); }
 try { new vm.Script(pwaText, { filename: 'pwa.js' }); } catch (error) { fail(error.message); }
 try { new vm.Script(gameText, { filename: 'game.js' }); } catch (error) { fail(error.message); }
 try { new vm.Script(userSystemText, { filename: 'user-system.js' }); } catch (error) { fail(error.message); }
 try { new vm.Script(workshopText, { filename: 'workshop.js' }); } catch (error) { fail(error.message); }
+try { new vm.Script(resetPasswordText, { filename: 'reset-password.js' }); } catch (error) { fail(error.message); }
 if (!/!self\.hasSyncedVersion\(result\.progressUpdatedAt\)/.test(userSystemText)) fail('Automatic cloud restore must guard against repeated versions');
 if (!/if \(changed\) setTimeout\(function\(\) \{ window\.location\.reload\(\); \}/.test(userSystemText)) fail('Cloud restore must reload only after progress changes');
 if (!/if \(!refreshRequested \|\| refreshing\) return;/.test(pwaText)) fail('Service Worker reload must require a user-requested update');
@@ -87,10 +89,15 @@ if (!shellMatch) {
 }
 
 const html = read('word-chain-game.html');
+const resetPasswordHtml = read('reset-password.html');
 if (!/rel="manifest" href="manifest\.webmanifest"/.test(html)) fail('Game page does not link the manifest');
 if (!/navigator\.serviceWorker\.register\('\.\/service-worker\.js'/.test(pwaText)) fail('PWA script does not register the Service Worker');
 if (/\son[a-z]+\s*=/i.test(html)) fail('Game page contains inline event handlers');
 if (!/<script src="dictionary-core\.js\?[^">]+" defer><\/script>/.test(html)) fail('Core dictionary script must load with defer');
+if (!/name="referrer" content="no-referrer"/.test(resetPasswordHtml)) fail('Password-reset page must suppress referrer data');
+if (!/history\.replaceState\(null, '', window\.location\.pathname\)/.test(resetPasswordText)) {
+  fail('Password-reset script must remove the token from the address bar');
+}
 
 const inlineScripts = Array.from(html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi), (match) => match[1]);
 if (inlineScripts.length) fail('Game page should not contain inline scripts');
@@ -104,6 +111,9 @@ if (shellMatch) {
   const pageAssets = Array.from(html.matchAll(/<(?:script|link)\b[^>]*(?:src|href)="([^"?#]+)(?:[?#][^"]*)?"/gi), (match) => match[1]);
   pageAssets.forEach((asset) => {
     if (!/^https?:/.test(asset) && !cached.has(asset)) fail(`Page asset is missing from the offline shell: ${asset}`);
+  });
+  ['reset-password.html', 'reset-password.css', 'reset-password.js'].forEach((asset) => {
+    if (!cached.has(asset)) fail(`Password-reset asset is missing from the offline shell: ${asset}`);
   });
 }
 

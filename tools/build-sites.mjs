@@ -60,6 +60,7 @@ const requiredOutputs = [
   '.openai/drizzle/0001_email_accounts.sql',
   '.openai/drizzle/0002_word_feedback.sql',
   '.openai/drizzle/0003_custom_level_workshop.sql',
+  '.openai/drizzle/0004_password_reset_tokens.sql',
   ...staticFiles.map((relativePath) => `client/${relativePath}`)
 ];
 

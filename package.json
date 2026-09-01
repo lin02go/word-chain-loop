@@ -1,6 +1,6 @@
 {
   "name": "word-chain-loop",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "private": true,
   "license": "MIT",
   "description": "词环 · Word Loop progressive web app",

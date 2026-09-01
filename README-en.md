@@ -6,177 +6,183 @@
 
 Pick up the last two letters, keep the chain moving, and find your way back to the start.
 
-[中文](./README.md) · [English](./README-en.md)
-
-[Play online](https://word-chain-loop.pages.dev/word-chain-game) · [How to play](#how-to-play) · [Run locally](#run-locally) · [Deploy to Cloudflare Pages](#deploy-to-cloudflare-pages)
-
+[中文](./README.md) · [English](./README-en.md)  
+[Play online](https://word-chain-loop.pages.dev/word-chain-game) · [How to play](#how-to-play) · [Run locally](#run-locally) · [Deploy to Cloudflare Pages](#deploy-to-cloudflare-pages)  
 [![CI](https://github.com/lin02go/word-chain-loop/actions/workflows/ci.yml/badge.svg)](https://github.com/lin02go/word-chain-loop/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2f6f55.svg)](./LICENSE)
 
-</div>
+I came up with this word chain game back in high school, when it was still played only on paper. The rules are simple, but as a loop nears closure, you can often get stuck on the final two letters. Later, with the help of AI tools, I turned it into a web game.
 
-Word Loop is a bilingual word-chain game built around two-letter connections. Watch the end of the current word, enter a new word that begins with those letters, and keep going until the chain closes. Word length can change along the way, and most rounds have more than one solution.
-
-The front end uses plain HTML, CSS, and JavaScript with no runtime framework. Cloudflare Pages Functions and D1 provide optional accounts, cross-device progress sync, and player level submissions.
+The project is built without any frontend frameworks. The game interface is written in vanilla HTML, CSS and JavaScript, while accounts, cloud saves and player submissions are handled by Cloudflare Pages Functions and D1.
 
 ## How to play
 
 Each new word must begin with the final two letters of the previous word:
 
-~~~text
+```
 embrace → cede → deem
    ce       de      em
-~~~
+```
 
-<code>embrace</code> begins with <code>em</code>, and <code>deem</code> ends with <code>em</code>, so the loop is complete.
+`embrace` begins with `em`, and the final word `deem` ends with `em` — that completes the loop.
 
 A valid round follows a few rules:
 
-- Words must contain at least three letters and exist in the game dictionary.
-- A word cannot be reused in the same round. Reusing a different form of the same word is also rejected.
-- Shorter solutions score better. Using a hint or revealing the answer marks the round as practice.
+- Words must be at least 3 letters long.
+- A word cannot be used twice in the same round, not even in a different inflected form.
+- Using a hint or revealing the answer will mark the round as practice, and it will not count toward your best record.
 
-Casual mode generates games by difficulty. Campaign mode contains 100 fixed levels with move limits and three-star targets. Completing all of them unlocks the Hundred-Loop Chronicle achievement.
+Casual mode picks a random starting word based on difficulty. Campaign mode features 100 fixed levels, each with a move limit and a three-star target.
 
-The Workshop lets signed-in players choose a starting word, complete a test loop, and submit the level for review. A starting word does not need to be pre-listed in the bundled game dictionary, but every word in the submitted route must pass an online English dictionary check. Approved submissions appear in the community collection.
+## Workshop
 
-## What is included
+Signed-in players can create their own levels. Enter a starting word, and the system will calculate the closed loop route and the minimum number of steps required. You must complete the level yourself in a test run before you can submit it for review.
 
-- 100 solver-verified campaign levels: 30 easy, 35 standard, and 35 hard.
-- Casual and campaign modes, hints, undo, shortest-path answers, and personal records.
-- A player Workshop with test runs, submissions, human moderation, and community levels.
-- Nine achievements covering completed loops, unique starting pairs, optimal solutions, and full campaign completion.
-- Chinese and English interfaces with pronunciation, phonetics, English definitions, and Chinese translations.
-- An installable PWA whose core game assets remain available offline.
-- Local guest progress and optional Cloudflare D1 sync for signed-in players.
+The starting word does not need to be in the built-in game dictionary beforehand, as long as it passes the online English dictionary check. Upon submission, the server will re-verify every word in your test run route. Approved levels will appear in the community level list; rejected submissions will keep the reviewer's feedback.
+
+The moderation dashboard is only accessible to admin accounts. For how to set up an admin account after first deployment, see [Cloudflare Account Setup](./CLOUDFLARE_AUTH_SETUP.md).
+
+## What's included
+
+- Casual mode and 100-level campaign mode
+- Hints, undo, shortest path solution and personal best records
+- Level creation, test runs, submissions, moderation and community levels
+- 9 achievements, plus Chinese and English interface support
+- Word phonetics, pronunciation, English definitions and Chinese translations
+- Word issue feedback, PWA installation and offline caching of core resources
+- Local guest save data, and cross-device sync via D1 for signed-in players
 
 ## Run locally
 
-You will need Node.js 22 or newer and pnpm 11.
+You will need Node.js 22 or newer, and pnpm 11.
 
-~~~bash
+```
 git clone https://github.com/lin02go/word-chain-loop.git
 cd word-chain-loop
 pnpm install --frozen-lockfile
 pnpm serve
-~~~
+```
 
-Open <http://127.0.0.1:4173/word-chain-game>.
+Open [http://127.0.0.1:4173/word-chain-game](http://127.0.0.1:4173/word-chain-game) in your browser.
 
-This static preview is enough for game, campaign, and PWA work. It does not start the account or cloud-save APIs.
+This static preview is sufficient for debugging the game, levels and PWA, but does not include login, cloud save or submission APIs.
 
 ### Run the full Cloudflare stack
 
-Create a local environment file:
+First copy the local environment variable example file:
 
-~~~bash
+```
 cp .dev.vars.example .dev.vars
-~~~
+```
 
 On Windows PowerShell:
 
-~~~powershell
+```
 Copy-Item .dev.vars.example .dev.vars
-~~~
+```
 
-Replace <code>PASSWORD_PEPPER</code> in <code>.dev.vars</code> with a random value of at least 32 characters. The file is ignored by Git and must not be committed.
+Replace `PASSWORD_PEPPER` in `.dev.vars` with a random string of at least 32 characters. This file is ignored by Git and must not be committed.
 
-Initialize the local D1 database and start Pages:
+Initialize the local D1 database, then start Pages:
 
-~~~bash
+```
 pnpm exec wrangler d1 migrations apply DB --local
 pnpm dev:cloudflare
-~~~
+```
 
-The local database is separate from production. Account endpoints are served under <code>/api/*</code>.
+The local database is completely separate from the production database. Account and submission endpoints are served under `/api/*`.
 
 ## Checks
 
-~~~bash
+Run this before submitting code:
+
+```
 pnpm check
-~~~
+```
 
-The full check covers project files, PWA caching, solvability of all 100 campaign levels, Workshop catalog and submission rules, legacy save migration, authentication, request-size limits, static routing, D1 types, and Pages Functions compilation.
+It validates project files and README links, dictionary reports, offline cache, all 100 campaign levels, workshop catalog, submission rules, authentication logic, request body size limits, D1 types and Pages Functions compilation.
 
-Run only the campaign validator:
+To validate only the campaign levels:
 
-~~~bash
+```
 pnpm validate:campaign
-~~~
+```
 
-Generate candidate starting words for future levels:
+To generate candidate starting words for new levels:
 
-~~~bash
+```
 node tools/validate-campaign-levels.js --suggest --suggest-only
-~~~
+```
 
 ## Deploy to Cloudflare Pages
 
-Forks should use their own D1 database:
+After forking this project, create your own D1 database:
 
-~~~bash
+```
 pnpm exec wrangler d1 create word-chain-loop
-~~~
+```
 
-Copy the database name and ID returned by Wrangler into [wrangler.jsonc](./wrangler.jsonc), then apply the production migration:
+Copy the returned database name and ID into [wrangler.jsonc](./wrangler.jsonc), then run the remote migration:
 
-~~~bash
+```
 pnpm exec wrangler d1 migrations apply DB --remote
-~~~
+```
 
-Add the password pepper as a Pages secret:
+Set the password pepper as a Pages secret:
 
-~~~bash
+```
 pnpm exec wrangler pages secret put PASSWORD_PEPPER --project-name word-chain-loop
-~~~
+```
 
-Deploy the project:
+Deploy the production build:
 
-~~~bash
+```
 pnpm deploy:cloudflare
-~~~
+```
 
-For a Git-connected Cloudflare Pages project, use these settings:
+If Pages is connected directly to GitHub, use these build settings:
 
 | Setting | Value |
 | --- | --- |
-| Build command | <code>pnpm build:cloudflare</code> |
-| Output directory | <code>cloudflare-dist</code> |
-| D1 binding | <code>DB</code> |
+| Build command | `pnpm build:cloudflare` |
+| Output directory | `cloudflare-dist` |
+| D1 binding | `DB` |
 
-Database changes belong in [migrations](./migrations). Back up production data before applying a new remote migration.
+Database schema changes should only be made through [migrations](./migrations). Always export a D1 backup before running a new migration on production.
 
-## Project layout
+## File map
 
-~~~text
+```
 assets/                  Icons and images
 functions/               Cloudflare Pages Functions
 migrations/              D1 database migrations
-tools/                   Build, validation, and preview scripts
-campaign-levels.js       Configuration for 100 campaign levels
+tools/                   Build, validation and local preview scripts
+campaign-levels.js       100 campaign level configurations
 campaign.js              Campaign flow and progress
-achievements.js          Achievement definitions and tracking
-workshop.js               Level creation, test runs, submission, and review UI
+achievements.js          Achievements and statistics
+workshop.js              Level creation, test runs, submissions and moderation
 game.js                  Word graph and core game logic
-service-worker.js        Offline cache and update handling
+service-worker.js        Offline cache and version updates
 word-chain-game.html     Main game page
 wrangler.jsonc           Pages and D1 configuration
-~~~
+```
 
-## Data and third-party services
+## Data and dictionaries
 
-Guest progress stays in browser <code>localStorage</code>. Signed-in players can sync achievements, campaign progress, and records to D1. Passwords are never stored in plain text, and production deployments must define <code>PASSWORD_PEPPER</code>.
+Guest progress is stored in the browser's `localStorage`. Signed-in players can sync their achievements, campaign progress and records to D1. Passwords are never stored in plain text, and production deployments must have `PASSWORD_PEPPER` set.
 
-Definitions and pronunciation come from Free Dictionary API and Datamuse. Chinese translations use MyMemory. See [DICTIONARY_SOURCES.md](./DICTIONARY_SOURCES.md) and [THIRD_PARTY_NOTICES](./THIRD_PARTY_NOTICES/SCOWL-Copyright.txt) for dictionary provenance, licensing, and fallback behavior.
+English definitions and pronunciation are provided by Free Dictionary API and Datamuse. Chinese translations use MyMemory. The source, licensing and fallback behavior of the word list are documented in [DICTIONARY_SOURCES.md](./DICTIONARY_SOURCES.md) and [THIRD_PARTY_NOTICES](./THIRD_PARTY_NOTICES/SCOWL-Copyright.txt).
+
+For how submitted word issues enter the dictionary maintenance process, see [WORD_FEEDBACK.md](./WORD_FEEDBACK.md).
 
 ## Contributing
 
-Read [CONTRIBUTING.md](./CONTRIBUTING.md) and run <code>pnpm check</code> before opening a pull request. Do not reorder existing campaign IDs: they are already stored in player save data.
+Before submitting a pull request, please read [CONTRIBUTING.md](./CONTRIBUTING.md) and run `pnpm check`. Do not reorder existing campaign IDs — they are already saved in player save data.
 
-Report security issues through GitHub private vulnerability reporting. Do not place account details, cookies, or database data in a public issue. See [SECURITY.md](./SECURITY.md) for details.
+For security issues, please use GitHub's private vulnerability reporting. Do not post account details, cookies or database information in public issues. See [SECURITY.md](./SECURITY.md) for details.
 
 ## License
 
-Project code is available under the [MIT License](./LICENSE). Copyright © 2026 [lin02go](https://github.com/lin02go).
+The project code is released under the [MIT License](./LICENSE). Copyright © 2026 [lin02go](https://github.com/lin02go).
 
-Third-party dictionary material is not covered by the project MIT license and remains subject to its own notices.
+Third-party dictionary materials remain under their respective licenses and are not covered by this project's MIT license.

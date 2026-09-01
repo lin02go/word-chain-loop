@@ -4,52 +4,57 @@
 
 # 词环 · Word Loop
 
-接住前一个单词最后两个字母，把词链接下去，最后绕回起点。
+看住词尾的两个字母，把单词一节一节接回起点。
 
 [中文](./README.md) · [English](./README-en.md)
 
-[在线试玩](https://word-chain-loop.pages.dev/word-chain-game) · [游戏规则](#怎么玩) · [本地运行](#本地运行) · [部署到 Cloudflare Pages](#部署到-cloudflare-pages)
+[在线试玩](https://word-chain-loop.pages.dev/word-chain-game) · [游戏规则](#怎么玩) · [本地运行](#本地运行) · [部署](#部署到-cloudflare-pages)
 
 [![CI](https://github.com/lin02go/word-chain-loop/actions/workflows/ci.yml/badge.svg)](https://github.com/lin02go/word-chain-loop/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2f6f55.svg)](./LICENSE)
 
 </div>
 
-词环是一个中英双语的英文接龙游戏。玩法只盯住两个字母：看词尾，找一个能接上的新单词，直到整条词链闭合。单词长度可以变化，也没有唯一的标准答案。
+作者高中时想出了这个接龙游戏，那时它还只写在纸上。规则很简单，但一条链快要闭合时，常常会卡在最后两个字母上。后来借助 AI 工具，我把它做成了网页游戏。
 
-项目没有使用前端运行时框架。游戏、关卡、成就、关卡工坊和离线功能都由原生 HTML、CSS 与 JavaScript 完成；账户、云存档和玩家投稿运行在 Cloudflare Pages Functions 与 D1 上。
+项目没有前端框架。游戏界面用原生 HTML、CSS 和 JavaScript 编写，账户、云存档和玩家投稿放在 Cloudflare Pages Functions 与 D1 上。
 
 ## 怎么玩
 
-每个新单词必须以前一个单词的最后两个字母开头。例如：
+新单词必须以前一个单词的最后两个字母开头：
 
 ~~~text
 embrace → cede → deem
    ce       de      em
 ~~~
 
-<code>embrace</code> 以 <code>em</code> 开头，<code>deem</code> 也以 <code>em</code> 结尾，这条词链就闭合了。
+<code>embrace</code> 以 <code>em</code> 开头，最后一个词 <code>deem</code> 又以 <code>em</code> 结尾，词环就闭合了。
 
-游戏中还要遵守几条规则：
+一局里还有几条限制：
 
-- 单词至少有 3 个字母，并且必须存在于游戏词典中。
-- 同一局不能重复使用单词，也不能换个词形重复提交。
-- 步数越少，成绩越好；使用提示或查看答案后，该局记为练习。
+- 单词至少有 3 个字母。
+- 同一个词不能用两次，换成它的其他词形也不行。
+- 使用提示或查看答案后，本局会记为练习，不计最佳纪录。
 
-休闲模式会根据难度随机出题。闯关模式有 100 个固定关卡、最大步数和三星目标，通关后会解锁“百关成书”成就。
+休闲模式会按难度随机挑选起始词。闯关模式有 100 个固定关卡，每关都有步数上限和三星目标。
 
-关卡工坊允许登录玩家填写起始词、亲自完成一次闭环并提交审核。起始词不要求预先收录在游戏词库中，但提交路线中的每个词都必须能通过在线英文词典验证；审核通过后，关卡会出现在社区列表。
+## 关卡工坊
 
-## 游戏内容
+登录后可以自己做关卡。填写起始词，系统会算出闭环路线和最短步数；亲自玩通一次，才能送去审核。
 
-- 100 个经过自动求解验证的关卡：30 个简单、35 个标准、35 个困难。
-- 休闲模式、闯关模式、提示、撤销、最短路线和个人最佳纪录。
-- 玩家关卡工坊，包含试玩验证、投稿、人工审核和社区关卡。
-- 9 项成就，包括闭环次数、不同起始词、最短通关和百关全通。
-- 中文与英文界面，可查询音标、发音、英文解释和中文释义。
-- 登录玩家可以报告生僻词、误收词、缺词或释义问题，报告进入人工复核队列。
-- 可安装的 PWA；核心游戏资源支持离线访问。
-- 游客进度保存在本机，登录后可通过 Cloudflare D1 跨设备同步。
+起始词不必预先收录在内置词库中，只要能通过在线英文词典检查即可。提交时，服务器还会重新检查试玩路线里的每个单词。审核通过的关卡会出现在社区列表，未通过的投稿会保留审核意见。
+
+审核台只对管理员账户开放。首次部署后如何设置管理员，见 [Cloudflare 账户配置](./CLOUDFLARE_AUTH_SETUP.md)。
+
+## 现在有哪些内容
+
+- 休闲模式和 100 关闯关模式。
+- 提示、撤销、最短路线与个人最佳纪录。
+- 关卡制作、试玩、投稿、审核和社区关卡。
+- 9 项成就，以及中英文界面。
+- 单词音标、发音、英文解释和中文释义。
+- 词条问题反馈、PWA 安装与核心资源离线缓存。
+- 游客本地存档，以及登录后的 D1 跨设备同步。
 
 ## 本地运行
 
@@ -62,13 +67,13 @@ pnpm install --frozen-lockfile
 pnpm serve
 ~~~
 
-打开 <http://127.0.0.1:4173/word-chain-game>。
+浏览器打开 <http://127.0.0.1:4173/word-chain-game>。
 
-这个启动方式适合调试游戏界面、关卡和 PWA，不会启动登录与云存档 API。
+这个静态预览可以调试游戏、关卡和 PWA，但不包含登录、云存档和投稿 API。
 
-### 运行完整 Cloudflare 环境
+### 运行完整的 Cloudflare 环境
 
-先创建本地环境变量文件：
+先复制本地环境变量示例：
 
 ~~~bash
 cp .dev.vars.example .dev.vars
@@ -82,30 +87,32 @@ Copy-Item .dev.vars.example .dev.vars
 
 把 <code>.dev.vars</code> 中的 <code>PASSWORD_PEPPER</code> 换成至少 32 个随机字符。这个文件已被 Git 忽略，不要提交。
 
-初始化本地 D1 并启动 Pages：
+初始化本地 D1，再启动 Pages：
 
 ~~~bash
 pnpm exec wrangler d1 migrations apply DB --local
 pnpm dev:cloudflare
 ~~~
 
-本地 D1 与线上数据库互不影响。账户接口位于 <code>/api/*</code>。
+本地数据库和线上数据库互不相通。账户及投稿接口都在 <code>/api/*</code> 下。
 
 ## 检查
+
+提交代码前运行：
 
 ~~~bash
 pnpm check
 ~~~
 
-这条命令会检查项目文件、词库质量报告、PWA 缓存、100 个关卡的可解性、工坊目录与投稿规则、旧存档迁移、认证与词条反馈逻辑、请求体限制、静态路由、D1 类型以及 Pages Functions 编译。
+它会检查项目文件和 README 链接、词库报告、离线缓存、100 个固定关卡、工坊目录、投稿规则、认证逻辑、请求体限制、D1 类型与 Pages Functions 编译。
 
-只验证关卡：
+只检查固定关卡：
 
 ~~~bash
 pnpm validate:campaign
 ~~~
 
-生成可用于新关卡的候选起始词：
+生成新关卡的候选起始词：
 
 ~~~bash
 node tools/validate-campaign-levels.js --suggest --suggest-only
@@ -113,13 +120,13 @@ node tools/validate-campaign-levels.js --suggest --suggest-only
 
 ## 部署到 Cloudflare Pages
 
-如果你 Fork 了这个项目，需要先创建自己的 D1 数据库：
+Fork 本项目后，请创建自己的 D1 数据库：
 
 ~~~bash
 pnpm exec wrangler d1 create word-chain-loop
 ~~~
 
-把命令返回的数据库名称和 ID 写入 [wrangler.jsonc](./wrangler.jsonc)，然后执行远程 migration：
+把返回的数据库名称和 ID 写入 [wrangler.jsonc](./wrangler.jsonc)，然后执行远程 migration：
 
 ~~~bash
 pnpm exec wrangler d1 migrations apply DB --remote
@@ -131,13 +138,13 @@ pnpm exec wrangler d1 migrations apply DB --remote
 pnpm exec wrangler pages secret put PASSWORD_PEPPER --project-name word-chain-loop
 ~~~
 
-最后部署：
+部署生产版本：
 
 ~~~bash
 pnpm deploy:cloudflare
 ~~~
 
-也可以在 Cloudflare Pages 中连接 GitHub 仓库：
+如果 Pages 直接连接 GitHub，构建设置如下：
 
 | 设置 | 值 |
 | --- | --- |
@@ -145,39 +152,39 @@ pnpm deploy:cloudflare
 | 输出目录 | <code>cloudflare-dist</code> |
 | D1 binding | <code>DB</code> |
 
-数据库结构只通过 [migrations](./migrations) 管理。新增 migration 时，先备份线上数据，再执行远程迁移。
+数据库结构只通过 [migrations](./migrations) 修改。线上执行新 migration 前，先导出一份 D1 备份。
 
-## 项目结构
+## 文件地图
 
 ~~~text
 assets/                  图标与图片
 functions/               Cloudflare Pages Functions
 migrations/              D1 数据库迁移
 tools/                   构建、检查和本地预览脚本
-campaign-levels.js       100 个关卡的配置
+campaign-levels.js       100 个固定关卡
 campaign.js              闯关流程与进度
-achievements.js          成就定义与统计
-workshop.js               关卡制作、试玩、投稿与审核界面
-game.js                  词图和核心游戏逻辑
+achievements.js          成就与统计
+workshop.js              关卡制作、试玩、投稿和审核
+game.js                  词图与核心游戏逻辑
 service-worker.js        离线缓存与版本更新
-word-chain-game.html     游戏页面
+word-chain-game.html     游戏主页面
 wrangler.jsonc           Pages 与 D1 配置
 ~~~
 
-## 数据与第三方服务
+## 数据和词典
 
-游客数据保存在浏览器 <code>localStorage</code> 中。登录用户可以把成就、闯关进度和纪录同步到 D1。密码不会以明文保存；生产环境必须配置 <code>PASSWORD_PEPPER</code>。
+游客进度存在浏览器 <code>localStorage</code> 中。登录玩家可以把成就、闯关进度和纪录同步到 D1。密码不会明文保存，生产环境必须设置 <code>PASSWORD_PEPPER</code>。
 
-英文词义与发音来自 Free Dictionary API 和 Datamuse，中文释义使用 MyMemory。词典来源、许可和回退策略见 [DICTIONARY_SOURCES.md](./DICTIONARY_SOURCES.md) 与 [THIRD_PARTY_NOTICES](./THIRD_PARTY_NOTICES/SCOWL-Copyright.txt)。玩家报告如何转成可追踪的词库改动，见 [WORD_FEEDBACK.md](./WORD_FEEDBACK.md)。
+英文词义与发音来自 Free Dictionary API 和 Datamuse，中文释义使用 MyMemory。词库的来源、许可和回退方式写在 [DICTIONARY_SOURCES.md](./DICTIONARY_SOURCES.md) 与 [THIRD_PARTY_NOTICES](./THIRD_PARTY_NOTICES/SCOWL-Copyright.txt) 中。玩家提交的词条问题如何进入词库维护流程，见 [WORD_FEEDBACK.md](./WORD_FEEDBACK.md)。
 
 ## 参与开发
 
-提交 Pull Request 前请先阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)，并运行 <code>pnpm check</code>。修改已有闯关关卡时不要重排 ID：关卡编号已经写入玩家存档。
+提交 Pull Request 前，请先读 [CONTRIBUTING.md](./CONTRIBUTING.md) 并运行 <code>pnpm check</code>。不要重排已有的闯关 ID，它们已经写进玩家存档。
 
-安全问题请使用 GitHub 的私密漏洞报告，不要在公开 Issue 中粘贴账户、Cookie 或数据库信息。具体说明见 [SECURITY.md](./SECURITY.md)。
+安全问题请使用 GitHub 的私密漏洞报告，不要在公开 Issue 中粘贴账户、Cookie 或数据库信息。细节见 [SECURITY.md](./SECURITY.md)。
 
 ## 许可证
 
-项目代码采用 [MIT License](./LICENSE)，版权所有 © 2026 [lin02go](https://github.com/lin02go)。
+项目代码使用 [MIT License](./LICENSE)，版权所有 © 2026 [lin02go](https://github.com/lin02go)。
 
-第三方词典材料不包含在项目的 MIT 授权中，仍按各自的许可文件使用。
+第三方词典材料仍按各自的许可文件使用，不包含在项目的 MIT 授权中。

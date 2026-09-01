@@ -20,4 +20,10 @@ const feedback = await worker.fetch(new Request('https://example.test/api/word-f
 }), { ASSETS: assets });
 if (feedback.status !== 503 || (await feedback.json()).code !== 'DB_UNAVAILABLE') throw new Error('Feedback API routing failed');
 
-console.log('Worker validation passed: static, account, and feedback routes are reachable.');
+const customLevels = await worker.fetch(new Request('https://example.test/api/custom-levels'), { ASSETS: assets });
+if (customLevels.status !== 503 || (await customLevels.json()).code !== 'DB_UNAVAILABLE') throw new Error('Custom-level API routing failed');
+
+const community = await worker.fetch(new Request('https://example.test/api/community-levels'), { ASSETS: assets });
+if (community.status !== 503 || (await community.json()).code !== 'DB_UNAVAILABLE') throw new Error('Community-level API routing failed');
+
+console.log('Worker validation passed: static, account, feedback, and workshop routes are reachable.');

@@ -266,6 +266,7 @@ for (const level of campaign.CAMPAIGN_LEVELS) {
   const distance = info && mode.distances[info.tail] && mode.distances[info.tail][info.head];
   if (distance === undefined) failures.push('no route back to the opening pair');
   else if (distance < mode.config.minRoute || distance > mode.config.maxRoute) failures.push('route length is outside difficulty range');
+  else if (level.minimumIntermediateWords !== distance) failures.push('stored minimum intermediate word count is stale');
 
   let branchWords = 0;
   let commonBranchWords = 0;

@@ -21,6 +21,7 @@
   display: grid;
   place-items: center;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 22px;
   background: rgb(23 23 21 / .8);
 }
@@ -63,8 +64,8 @@
 }
 
 .word-feedback-close {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   flex: 0 0 auto;
   border: 1px solid var(--rule-strong);
   color: var(--ink);

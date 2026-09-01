@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#171715">
+<meta name="theme-color" content="#f3f0e7">
 <meta name="description" content="接住单词末尾的两个字母，把词链绕回最初的开头。">
 <meta property="og:title" content="词环 · Word Loop">
 <meta property="og:description" content="接住词尾，绕回词首。可安装、可离线游玩的英文词环游戏。">
@@ -25,24 +25,26 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icons/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
-  <link rel="stylesheet" href="game.css?v=1">
-  <link rel="stylesheet" href="campaign.css?v=3">
+  <link rel="stylesheet" href="game.css?v=5">
+  <link rel="stylesheet" href="campaign.css?v=6">
   <link rel="stylesheet" href="word-definitions.css?v=2">
   <link rel="stylesheet" href="achievements.css?v=1">
   <link rel="stylesheet" href="user-system.css?v=2">
   <link rel="stylesheet" href="word-feedback.css?v=1">
-  <link rel="stylesheet" href="start-screen.css?v=1">
+  <link rel="stylesheet" href="workshop.css?v=1">
+  <link rel="stylesheet" href="start-screen.css?v=3">
   <link rel="stylesheet" href="motion.css?v=3">
   <link rel="stylesheet" href="pwa.css?v=1">
   <script src="dictionary-core.js?v=1" defer></script>
 </head>
 <body>
 
+<a class="skip-link" href="#gameContent" data-i18n="skipToGame">跳到游戏内容</a>
 <section class="start-screen" id="startScreen" aria-labelledby="startTitle">
   <div class="start-shell">
     <header class="start-header">
       <div class="start-brandline">
-        <strong data-i18n="startBrand">词环 · WORD LOOP</strong>
+        <strong><span lang="en" translate="no">WORD LOOP</span><span aria-hidden="true">｜</span><span>词环</span></strong>
         <span data-i18n="startEdition">双字母接龙游戏</span>
       </div>
       <div class="start-header-actions">
@@ -57,22 +59,19 @@
     <main class="start-main">
       <section class="start-hero">
         <p class="start-kicker" data-i18n="startWelcomeKicker">欢迎来到文字的环路</p>
-        <h1 class="start-title" id="startTitle" data-i18n="gameName">词环</h1>
+        <h1 class="start-title" id="startTitle"><span lang="en" translate="no">WORD LOOP</span><span class="start-title-divider" aria-hidden="true">｜</span><span class="start-title-zh">词环</span></h1>
         <p class="start-welcome" data-i18n="startWelcomeCopy">接住一个单词的最后两个字母，找到下一个词，最终绕回最初的两位。</p>
         <div class="start-chain-sample" aria-hidden="true">
-          <span class="sample-word sample-word-start">embrace</span>
+          <span class="sample-word sample-word-start"><span>embra</span><span class="sample-pair sample-pair-head">ce</span></span>
           <span class="sample-arrow">→</span>
-          <span class="sample-word">cede</span>
+          <span class="sample-word"><span class="sample-pair sample-pair-head">ce</span><span class="sample-pair sample-pair-tail">de</span></span>
           <span class="sample-arrow">→</span>
-          <span class="sample-word sample-word-end">deem</span>
+          <span class="sample-word sample-word-end"><span class="sample-pair sample-pair-tail">de</span><span>em</span></span>
         </div>
       </section>
 
       <aside class="start-decision" aria-live="polite">
         <div class="start-decision-inner start-welcome-panel" id="startWelcomePanel">
-          <p class="start-panel-kicker" data-i18n="startIntroKicker">游戏简介</p>
-          <h2 data-i18n="startIntroTitle">让词尾成为下一步的开头。</h2>
-          <p class="start-decision-copy" data-i18n="startIntroCopy">每次输入一个有效英文词，沿着末两位继续前进。用更少的词闭合环路，也可以在百关挑战中争取三星。</p>
           <div class="start-actions">
             <button class="start-action start-action-primary" id="startGameBtn" type="button" data-i18n="startGame">开始游戏</button>
             <button class="start-action" id="startAboutBtn" type="button" data-i18n="aboutUs">关于作者</button>
@@ -92,6 +91,10 @@
             </button>
             <button class="start-mode-option" type="button" data-start-mode="campaign">
               <span><strong class="start-mode-name" data-i18n="campaignMode">闯关</strong><small class="start-mode-copy" data-i18n="startCampaignCopy">挑战固定关卡、最大步数和三星目标。</small></span>
+              <span class="start-mode-arrow" aria-hidden="true">→</span>
+            </button>
+            <button class="start-mode-option" type="button" data-start-mode="workshop">
+              <span><strong class="start-mode-name" data-i18n="workshopMode">工坊</strong><small class="start-mode-copy" data-i18n="startWorkshopCopy">设计、试玩并提交你自己的词环关卡。</small></span>
               <span class="start-mode-arrow" aria-hidden="true">→</span>
             </button>
           </div>
@@ -197,14 +200,112 @@
   </div>
 </div>
 
+<div class="workshop-overlay" id="workshopOverlay" role="dialog" aria-modal="true" aria-labelledby="workshopTitle" hidden>
+  <div class="workshop-shell">
+    <header class="workshop-head">
+      <div>
+        <p class="workshop-kicker" id="workshopKicker">COMMUNITY LEVEL LAB</p>
+        <h2 id="workshopTitle">关卡工坊</h2>
+        <p id="workshopIntro">从一个起始词出发，让系统验证路线，再把你的设计交给其他玩家。</p>
+      </div>
+      <button class="workshop-close" id="workshopCloseBtn" type="button" aria-label="关闭关卡工坊">×</button>
+    </header>
+
+    <nav class="workshop-tabs" role="tablist" aria-label="关卡工坊栏目">
+      <button class="is-active" id="workshopCreateTab" type="button" role="tab" aria-selected="true" data-workshop-tab="create">制作关卡</button>
+      <button id="workshopMineTab" type="button" role="tab" aria-selected="false" data-workshop-tab="mine">我的投稿</button>
+      <button id="workshopCommunityTab" type="button" role="tab" aria-selected="false" data-workshop-tab="community">社区关卡</button>
+      <button id="workshopReviewTab" type="button" role="tab" aria-selected="false" data-workshop-tab="review" hidden>审核台</button>
+    </nav>
+
+    <div class="workshop-body">
+      <section class="workshop-panel is-active" id="workshopCreatePanel" role="tabpanel">
+        <form class="workshop-create-grid" id="workshopForm">
+          <div class="workshop-editor">
+            <div class="workshop-step-label"><span>01</span><strong id="workshopDesignLabel">定义关卡</strong></div>
+            <label for="workshopLevelTitle" id="workshopTitleLabel">关卡名称</label>
+            <input id="workshopLevelTitle" name="title" type="text" maxlength="60" placeholder="给这条词环起个名字" required>
+
+            <div class="workshop-field-pair">
+              <div>
+                <label for="workshopStartWord" id="workshopStartLabel">起始词</label>
+                <input id="workshopStartWord" name="startWord" type="text" minlength="3" maxlength="45" pattern="[A-Za-z]+" autocomplete="off" spellcheck="false" placeholder="例如：remarkable" required>
+              </div>
+              <fieldset>
+                <legend id="workshopDifficultyLabel">难度</legend>
+                <div class="workshop-difficulties">
+                  <label><input type="radio" name="workshopDifficulty" value="easy"><span id="workshopEasyLabel">简单</span></label>
+                  <label><input type="radio" name="workshopDifficulty" value="medium" checked><span id="workshopMediumLabel">标准</span></label>
+                  <label><input type="radio" name="workshopDifficulty" value="hard"><span id="workshopHardLabel">困难</span></label>
+                </div>
+              </fieldset>
+            </div>
+
+            <label for="workshopDescription" id="workshopDescriptionLabel">设计说明（选填）</label>
+            <textarea id="workshopDescription" name="description" maxlength="400" rows="4" placeholder="说说这关有趣在哪里，或给审核者留一句话。"></textarea>
+            <label class="workshop-check"><input id="workshopShowCreator" type="checkbox" checked><span id="workshopCreatorLabel">发布后显示我的玩家昵称</span></label>
+          </div>
+
+          <aside class="workshop-analysis" aria-live="polite">
+            <div class="workshop-step-label"><span>02</span><strong id="workshopVerifyLabel">验证词环</strong></div>
+            <div class="workshop-loop-rail" id="workshopLoopRail" data-state="idle">
+              <span class="workshop-rail-word" id="workshopRailWord">start word</span>
+              <span class="workshop-rail-pair workshop-rail-tail" id="workshopTailPair">--</span>
+              <span class="workshop-rail-arrow" aria-hidden="true">→</span>
+              <span class="workshop-rail-pair workshop-rail-head" id="workshopHeadPair">--</span>
+              <span class="workshop-rail-return" aria-hidden="true"></span>
+            </div>
+            <p class="workshop-analysis-status" id="workshopAnalysisStatus">输入起始词后，系统会检查它是否适合成为一关。</p>
+            <dl class="workshop-metrics" id="workshopMetrics" hidden>
+              <div><dt id="workshopMetricShortestLabel">最少追加</dt><dd id="workshopMetricShortest">--</dd></div>
+              <div><dt id="workshopMetricRoutesLabel">最短解数</dt><dd id="workshopMetricRoutes">--</dd></div>
+              <div><dt id="workshopMetricBranchesLabel">首步选择</dt><dd id="workshopMetricBranches">--</dd></div>
+              <div><dt id="workshopMetricClosersLabel">优质收尾</dt><dd id="workshopMetricClosers">--</dd></div>
+            </dl>
+            <div class="workshop-route" id="workshopRoute" hidden>
+              <span id="workshopRouteLabel">系统最短路径</span>
+              <div id="workshopRouteWords"></div>
+            </div>
+            <div class="workshop-submit-gate">
+              <div><span>03</span><strong id="workshopTestLabel">亲自试玩后提交</strong></div>
+              <p id="workshopTestStatus">先通过系统验证，再完成一次试玩。</p>
+            </div>
+            <div class="workshop-actions">
+              <button class="btn btn-secondary" id="workshopTestBtn" type="button" disabled>试玩这一关</button>
+              <button class="btn btn-primary" id="workshopSubmitBtn" type="submit" disabled>提交审核</button>
+            </div>
+            <p class="workshop-message" id="workshopMessage" role="status"></p>
+          </aside>
+        </form>
+      </section>
+
+      <section class="workshop-panel" id="workshopMinePanel" role="tabpanel" hidden>
+        <header class="workshop-section-head"><div><p id="workshopMineKicker">YOUR SUBMISSIONS</p><h3 id="workshopMineTitle">我的投稿</h3></div><button id="workshopMineRefresh" type="button">刷新</button></header>
+        <div class="workshop-list" id="workshopMineList"></div>
+      </section>
+
+      <section class="workshop-panel" id="workshopCommunityPanel" role="tabpanel" hidden>
+        <header class="workshop-section-head"><div><p id="workshopCommunityKicker">CURATED BY PLAYERS</p><h3 id="workshopCommunityTitle">社区关卡</h3></div><button id="workshopCommunityRefresh" type="button">刷新</button></header>
+        <div class="workshop-list workshop-community-list" id="workshopCommunityList"></div>
+      </section>
+
+      <section class="workshop-panel" id="workshopReviewPanel" role="tabpanel" hidden>
+        <header class="workshop-section-head"><div><p id="workshopReviewKicker">EDITORIAL DESK</p><h3 id="workshopReviewTitle">待审核关卡</h3></div><button id="workshopReviewRefresh" type="button">刷新</button></header>
+        <div class="workshop-list" id="workshopReviewList"></div>
+      </section>
+    </div>
+  </div>
+</div>
+
 <div class="page">
-  <div class="container">
+  <div class="container" id="gameContent">
     <header class="header">
       <div class="utility-bar" data-i18n-aria="puzzleMetadata">
-        <span data-i18n="utilityLabel">文字游戏 · 单人</span>
+        <span data-i18n="utilityLabel">词环 · 单人</span>
         <div class="utility-actions">
           <button class="start-home-link" id="returnHomeBtn" type="button" data-i18n="home">首页</button>
           <button class="account-menu-btn" id="accountMenuBtn" type="button" aria-label="登录或查看玩家档案"><span class="account-menu-dot" aria-hidden="true"></span><span id="accountMenuLabel">登录</span></button>
+          <button class="workshop-open-btn" id="workshopOpenBtn" type="button">关卡工坊</button>
           <button class="pwa-install-btn" type="button" data-pwa-install data-i18n="installApp" hidden>安装应用</button>
           <span class="utility-copy" data-i18n="utilityCopy">接住词尾，绕回词首</span>
           <div class="language-switch" data-i18n-aria="languageLabel">
@@ -214,19 +315,19 @@
         </div>
       </div>
       <div class="masthead">
-        <p class="edition-note" data-i18n="editionNote">把一个词的最后两个字母，交给下一个词。</p>
-        <h1 data-i18n="gameName">词环</h1>
+        <p class="edition-note" aria-hidden="true"></p>
+        <h1 class="brand-lockup"><span lang="en" translate="no">WORD LOOP</span><span class="brand-divider" aria-hidden="true">｜</span><span class="brand-zh">词环</span></h1>
         <div class="mode-control">
           <div class="game-mode-select" data-i18n-aria="gameModeLabel">
             <button class="game-mode-btn active" type="button" data-game-mode="casual" data-i18n="casualMode">休闲</button>
             <button class="game-mode-btn" type="button" data-game-mode="campaign" data-i18n="campaignMode">闯关</button>
           </div>
           <div class="diff-select" id="diffSelect" data-i18n-aria="difficultyLabel">
-            <button class="diff-btn" data-diff="easy" data-i18n="difficultyEasy">简单</button>
-            <button class="diff-btn active" data-diff="medium" data-i18n="difficultyMedium">标准</button>
-            <button class="diff-btn" data-diff="hard" data-i18n="difficultyHard">困难</button>
+            <button class="diff-btn" type="button" data-diff="easy" data-i18n="difficultyEasy" aria-pressed="false">简单</button>
+            <button class="diff-btn active" type="button" data-diff="medium" data-i18n="difficultyMedium" aria-pressed="true">标准</button>
+            <button class="diff-btn" type="button" data-diff="hard" data-i18n="difficultyHard" aria-pressed="false">困难</button>
           </div>
-          <p class="mode-description" id="modeDescription">常用词 + 标准词 · 1 次提示 · 较长词环</p>
+          <p class="mode-description" id="modeDescription" hidden></p>
         </div>
       </div>
     </header>
@@ -235,27 +336,61 @@
       <div class="campaign-home-head">
         <div>
           <p class="section-kicker" id="campaignKicker">CAMPAIGN · 100 LEVELS</p>
-          <h2 id="campaignHomeTitle">100 关词环挑战</h2>
-          <p class="campaign-home-copy" id="campaignHomeCopy">逐关闭合词环，在最大步数内完成，并尝试拿到三星。</p>
+          <h2 id="campaignHomeTitle">百关词链挑战</h2>
+          <p class="campaign-home-copy" id="campaignHomeCopy" hidden></p>
         </div>
-        <div class="campaign-progress-block">
-          <div class="campaign-progress-value" id="campaignProgressValue">0 / 100</div>
-          <div class="campaign-progress-label" id="campaignProgressLabel">已完成关卡</div>
-        </div>
-      </div>
-      <div class="campaign-toolbar">
-        <span class="campaign-total-stars" id="campaignTotalStars">☆☆☆ · 0 / 300</span>
-        <div class="campaign-toolbar-actions">
-          <button class="btn btn-primary" id="campaignContinueBtn" type="button">继续闯关</button>
-          <button class="campaign-reset" id="achievementCampaignOpenBtn" type="button">成就档案</button>
-          <button class="campaign-reset" id="campaignResetBtn" type="button">重置闯关进度</button>
+        <div class="campaign-overview" aria-label="闯关进度">
+          <div class="campaign-progress-block">
+            <div class="campaign-progress-value" id="campaignProgressValue">0 / 100</div>
+            <div class="campaign-progress-label" id="campaignProgressLabel">已完成关卡</div>
+          </div>
+          <div class="campaign-stars-block">
+            <div class="campaign-stars-value" id="campaignTotalStars">0</div>
+            <div class="campaign-progress-label" id="campaignStarsLabel">累计星数</div>
+          </div>
         </div>
       </div>
-      <div class="level-grid" id="campaignLevelGrid"></div>
+
+      <div class="campaign-proofbook">
+        <nav class="campaign-groups" aria-labelledby="campaignGroupsTitle">
+          <h3 id="campaignGroupsTitle">关卡分组</h3>
+          <div class="campaign-group-list" id="campaignGroupList"></div>
+        </nav>
+
+        <section class="campaign-sheet" aria-labelledby="campaignGroupTitle">
+          <header class="campaign-sheet-head">
+            <h3 id="campaignGroupTitle">第 1 组 · 01–10 关</h3>
+            <span id="campaignGroupProgress">本组 0 / 10</span>
+          </header>
+          <div class="level-grid" id="campaignLevelGrid"></div>
+        </section>
+
+        <aside class="campaign-detail" aria-labelledby="campaignDetailLevel" aria-live="polite">
+          <p class="campaign-detail-kicker" id="campaignDetailKicker">当前关卡</p>
+          <h3 id="campaignDetailLevel">第 01 关</h3>
+          <div class="campaign-detail-word" id="campaignDetailWord" translate="no">remarkable</div>
+          <dl class="campaign-detail-list">
+            <div><dt id="campaignDetailMinimumLabel">最短中间词数</dt><dd id="campaignDetailMinimum">1</dd></div>
+            <div><dt id="campaignDetailTargetLabel">词环目标</dt><dd id="campaignDetailTarget" translate="no">le → re</dd></div>
+            <div><dt id="campaignDetailDifficultyLabel">难度</dt><dd id="campaignDetailDifficulty">简单</dd></div>
+            <div><dt id="campaignDetailStatusLabel">关卡记录</dt><dd id="campaignDetailStatus">尚未完成</dd></div>
+          </dl>
+          <button class="btn btn-primary campaign-continue" id="campaignContinueBtn" type="button">继续第 01 关</button>
+          <div class="campaign-detail-actions">
+            <button class="campaign-reset" id="achievementCampaignOpenBtn" type="button">成就档案</button>
+            <button class="campaign-reset" id="campaignResetBtn" type="button">重置闯关进度</button>
+          </div>
+        </aside>
+      </div>
     </section>
 
     <main class="layout">
       <div class="main-column">
+        <section class="workshop-test-hud" id="workshopTestHud" hidden aria-label="自制关卡试玩">
+          <button id="workshopTestBackBtn" type="button">← 返回工坊</button>
+          <span><strong id="workshopTestHudTitle">自制关卡试玩</strong><small id="workshopTestHudWord"></small></span>
+          <span id="workshopTestHudTarget">-- → --</span>
+        </section>
         <section class="campaign-hud" id="campaignHud" hidden aria-label="闯关状态">
           <button id="campaignBackBtn" type="button">← 选关</button>
           <strong class="campaign-level-label" id="campaignLevelLabel">第 01 关</strong>
@@ -263,10 +398,10 @@
           <span class="campaign-par-count" id="campaignParCount">三星目标 0 步</span>
           <button id="campaignUndoBtn" type="button" disabled>撤销</button>
         </section>
-        <section class="target-card" id="targetCard" style="display:none;" aria-labelledby="loopHeading">
-          <p class="section-kicker" data-i18n="currentLoop">本局目标</p>
+        <section class="target-card" id="targetCard" style="display:none;" aria-labelledby="loopSectionHeading">
+          <p class="section-kicker" id="loopSectionHeading" data-i18n="currentLoop">本局目标</p>
           <div class="target-inner">
-            <div class="loop-copy">
+            <div class="loop-copy" hidden>
               <h2 id="loopHeading" data-i18n="loopHeading">从两个字母出发，再回到同一处。</h2>
               <p data-i18n="loopExplain">每个新词，都要以前一个词的最后两个字母开头。</p>
             </div>
@@ -294,8 +429,8 @@
             </div>
           </div>
           <div class="input-area">
-            <input type="text" id="wordInput" data-i18n-aria="nextWordLabel" data-i18n-placeholder="wordPlaceholder" aria-label="下一个单词" placeholder="输入英文单词…" autocomplete="off" spellcheck="false" disabled>
-            <button class="btn btn-primary" id="submitBtn" data-i18n="submit" disabled>提交</button>
+            <input type="text" id="wordInput" name="word" data-i18n-aria="nextWordLabel" data-i18n-placeholder="wordPlaceholder" aria-label="下一个单词" placeholder="输入英文单词…" autocomplete="off" spellcheck="false" disabled>
+            <button class="btn btn-primary" id="submitBtn" type="button" data-i18n="submit" disabled>提交</button>
           </div>
           <div class="message" id="message" role="status" aria-live="polite"></div>
           <div class="hints-panel" id="hintsPanel">
@@ -307,7 +442,7 @@
         <section class="solve-section" id="solveSection" style="display:none;" aria-labelledby="solveHeading">
           <div class="solve-heading">
             <h2 id="solveHeading" data-i18n="shortestSolutions">最短解法</h2>
-            <button class="btn btn-hint" id="solveBtn">显示答案 · 练习模式</button>
+            <button class="btn btn-hint" id="solveBtn" type="button">显示答案 · 练习模式</button>
           </div>
           <div class="solve-panel" id="solvePanel" style="display:none;"></div>
         </section>
@@ -331,8 +466,8 @@
         </div>
 
         <div class="side-actions" data-i18n-aria="secondaryActions">
-          <button class="btn btn-hint" id="hintBtn" disabled>提示</button>
-          <button class="btn btn-secondary" id="newGameBtn" data-i18n="newGame">新游戏</button>
+          <button class="btn btn-hint" id="hintBtn" type="button" disabled>提示</button>
+          <button class="btn btn-secondary" id="newGameBtn" type="button" data-i18n="newGame">新游戏</button>
           <button class="btn btn-secondary word-feedback-open" id="wordFeedbackBtn" type="button">词条反馈</button>
         </div>
 
@@ -355,7 +490,7 @@
         </section>
 
         <section class="note-block" aria-labelledby="rulesHeading">
-          <h3 id="rulesHeading" data-i18n="howToPlay">玩法很简单</h3>
+          <h3 id="rulesHeading" data-i18n="howToPlay">玩法介绍</h3>
           <ol class="rules-list">
             <li data-i18n="rule1">输入至少 3 个字母的有效英文词。</li>
             <li data-i18n="rule2">新词要接住上一个词的最后两个字母。</li>
@@ -424,7 +559,7 @@
     </select>
 
     <label for="wordFeedbackNote" id="wordFeedbackNoteLabel">补充说明（可选）</label>
-    <textarea id="wordFeedbackNote" name="note" rows="4" maxlength="280" placeholder="例如：这个词只在专业医学语境中使用。"></textarea>
+    <textarea id="wordFeedbackNote" name="note" rows="4" maxlength="280" placeholder="例如：这个词只在专业医学语境中使用…"></textarea>
 
     <p class="word-feedback-status" id="wordFeedbackStatus" role="status" aria-live="polite"></p>
     <div class="word-feedback-actions">
@@ -441,8 +576,9 @@
     <h2 data-i18n="youWin">你赢了！</h2>
     <div class="chain-summary" id="winSummary"></div>
     <div class="overlay-actions">
-      <button class="btn btn-primary" id="playAgainBtn" data-i18n="playAgain">再玩一次</button>
-      <button class="btn btn-secondary" id="winNewGameBtn" data-i18n="newGame">新游戏</button>
+      <button class="btn btn-primary" id="playAgainBtn" type="button" data-i18n="playAgain">再玩一次</button>
+      <button class="btn btn-secondary" id="winNewGameBtn" type="button" data-i18n="newGame">新游戏</button>
+      <button class="btn btn-secondary" id="workshopReturnFromWinBtn" type="button" hidden>返回工坊</button>
     </div>
   </div>
 </div>
@@ -487,14 +623,15 @@
   <button class="pwa-refresh-btn" id="pwaRefreshBtn" type="button" data-i18n="refreshApp" hidden>刷新</button>
 </div>
 
-<script src="game.js?v=4" defer></script>
-<script src="campaign-levels.js?v=3" defer></script>
-<script src="campaign.js?v=6" defer></script>
-<script src="start-screen.js?v=1" defer></script>
+<script src="game.js?v=6" defer></script>
+<script src="campaign-levels.js?v=4" defer></script>
+<script src="campaign.js?v=7" defer></script>
+<script src="start-screen.js?v=2" defer></script>
 <script src="achievements.js?v=2" defer></script>
 <script src="user-system.js?v=4" defer></script>
 <script src="word-definitions.js?v=6" defer></script>
 <script src="word-feedback.js?v=1" defer></script>
+<script src="workshop.js?v=2" defer></script>
 <script src="motion.js?v=3" defer></script>
 <script src="pwa.js?v=2" defer></script>
 </body>

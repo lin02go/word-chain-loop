@@ -1,6 +1,6 @@
 <div align="center">
 
-![Word Loop](./og-en.png)
+![Word Loop](./og.png)
 
 # Word Loop
 
@@ -17,7 +17,7 @@ Pick up the last two letters, keep the chain moving, and find your way back to t
 
 Word Loop is a bilingual word-chain game built around two-letter connections. Watch the end of the current word, enter a new word that begins with those letters, and keep going until the chain closes. Word length can change along the way, and most rounds have more than one solution.
 
-The front end uses plain HTML, CSS, and JavaScript with no runtime framework. Cloudflare Pages Functions and D1 provide optional accounts and cross-device progress sync.
+The front end uses plain HTML, CSS, and JavaScript with no runtime framework. Cloudflare Pages Functions and D1 provide optional accounts, cross-device progress sync, and player level submissions.
 
 ## How to play
 
@@ -38,10 +38,13 @@ A valid round follows a few rules:
 
 Casual mode generates games by difficulty. Campaign mode contains 100 fixed levels with move limits and three-star targets. Completing all of them unlocks the Hundred-Loop Chronicle achievement.
 
+The Workshop lets signed-in players choose a starting word, complete a test loop, and submit the level for review. A starting word does not need to be pre-listed in the bundled game dictionary, but every word in the submitted route must pass an online English dictionary check. Approved submissions appear in the community collection.
+
 ## What is included
 
 - 100 solver-verified campaign levels: 30 easy, 35 standard, and 35 hard.
 - Casual and campaign modes, hints, undo, shortest-path answers, and personal records.
+- A player Workshop with test runs, submissions, human moderation, and community levels.
 - Nine achievements covering completed loops, unique starting pairs, optimal solutions, and full campaign completion.
 - Chinese and English interfaces with pronunciation, phonetics, English definitions, and Chinese translations.
 - An installable PWA whose core game assets remain available offline.
@@ -93,7 +96,7 @@ The local database is separate from production. Account endpoints are served und
 pnpm check
 ~~~
 
-The full check covers project files, PWA caching, solvability of all 100 campaign levels, legacy save migration, authentication, request-size limits, static routing, D1 types, and Pages Functions compilation.
+The full check covers project files, PWA caching, solvability of all 100 campaign levels, Workshop catalog and submission rules, legacy save migration, authentication, request-size limits, static routing, D1 types, and Pages Functions compilation.
 
 Run only the campaign validator:
 
@@ -153,6 +156,7 @@ tools/                   Build, validation, and preview scripts
 campaign-levels.js       Configuration for 100 campaign levels
 campaign.js              Campaign flow and progress
 achievements.js          Achievement definitions and tracking
+workshop.js               Level creation, test runs, submission, and review UI
 game.js                  Word graph and core game logic
 service-worker.js        Offline cache and update handling
 word-chain-game.html     Main game page

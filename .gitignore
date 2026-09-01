@@ -2,6 +2,7 @@ node_modules/
 .pnpm-store/
 dist/
 cloudflare-dist/
+.wrangler/
 .dev.vars
 .dev.vars.*
 !.dev.vars.example

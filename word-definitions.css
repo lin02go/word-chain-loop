@@ -23,6 +23,7 @@
   width: min(430px, calc(100vw - 24px));
   max-height: min(560px, calc(100vh - 24px));
   overflow: auto;
+  overscroll-behavior: contain;
   padding: 20px 24px 22px;
   color: var(--definition-paper);
   background: #191a1c;
@@ -54,8 +55,8 @@
 .word-definition-close {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   color: #c7c8ca;
   background: transparent;
@@ -68,6 +69,7 @@
 .word-definition-close:focus-visible {
   color: #fff;
   border-color: #777a7e;
+  box-shadow: 0 0 0 3px rgb(128 174 227 / .28);
   outline: none;
 }
 
@@ -103,8 +105,8 @@
 .word-definition-audio {
   display: inline-grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   color: #d8d9da;
   background: transparent;
@@ -118,6 +120,7 @@
 .word-definition-audio:focus-visible {
   color: #fff;
   border-color: #fff;
+  box-shadow: 0 0 0 3px rgb(128 174 227 / .28);
   outline: none;
 }
 

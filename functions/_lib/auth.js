@@ -207,14 +207,14 @@ export async function getSession(request, db) {
   const token = cookies(request)[COOKIE_NAME];
   if (!token) return null;
   const tokenHash = await sha256(token);
-  const row = await db.prepare(`SELECT u.id, u.email, u.nickname, s.expires_at AS expiresAt
+  const row = await db.prepare(`SELECT u.id, u.email, u.nickname, u.role, s.expires_at AS expiresAt
     FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ?`).bind(tokenHash).first();
   const now = Math.floor(Date.now() / 1000);
   if (!row || Number(row.expiresAt) <= now) {
     if (row) await db.prepare('DELETE FROM sessions WHERE token_hash = ?').bind(tokenHash).run();
     return null;
   }
-  return { tokenHash, user: { id: row.id, email: row.email, nickname: row.nickname } };
+  return { tokenHash, user: { id: row.id, email: row.email, nickname: row.nickname, role: row.role || 'player' } };
 }
 
 export async function requireSession(request, db) {
@@ -223,11 +223,18 @@ export async function requireSession(request, db) {
   return session;
 }
 
+export async function requireAdmin(request, db) {
+  const session = await requireSession(request, db);
+  if (session.user.role !== 'admin') throw new HttpError(403, 'ADMIN_REQUIRED', 'Administrator access required.');
+  return session;
+}
+
 export async function accountPayload(db, user) {
   const progress = await db.prepare('SELECT updated_at AS updatedAt FROM player_progress WHERE user_id = ?').bind(user.id).first();
   return {
     authenticated: true,
     email: user.email,
+    isAdmin: user.role === 'admin',
     profile: { nickname: user.nickname, displayName: user.nickname },
     hasCloudProgress: Boolean(progress),
     progressUpdatedAt: progress?.updatedAt || null,

@@ -9,3 +9,11 @@
 5. 重新部署 Pages 项目。Pages 会从仓库根目录识别 `functions`，`_routes.json` 只把 `/api/*` 交给 Functions。
 
 账户采用邮箱与密码登录。密码先使用服务器端 `PASSWORD_PEPPER` 处理，再经 PBKDF2-SHA-256 加盐派生后保存；登录会话使用 `HttpOnly`、`Secure`、`SameSite=Lax` Cookie，有效期 30 天。连续失败登录会按邮箱与来源地址限流。
+
+关卡工坊的审核台只对 `users.role = 'admin'` 的账户显示。首次部署 migration 后，可以把已注册的站内账户提升为管理员：
+
+~~~bash
+pnpm exec wrangler d1 execute DB --remote --command "UPDATE users SET role = 'admin' WHERE email = 'your-account@example.com'"
+~~~
+
+请替换为真实的站内登录邮箱；不要在仓库中保存账户信息。

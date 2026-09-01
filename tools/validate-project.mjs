@@ -7,7 +7,10 @@ const required = [
   'README.md', 'WORD_FEEDBACK.md', 'LICENSE', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md', '.editorconfig',
   '.gitattributes', '.gitignore', '.github/workflows/ci.yml', '.dev.vars.example',
   'wrangler.jsonc', 'worker-configuration.d.ts', 'migrations/0001_email_accounts.sql', 'migrations/0002_word_feedback.sql',
+  'migrations/0003_custom_level_workshop.sql', 'workshop.js', 'workshop.css',
   'functions/api/word-feedback.js', 'functions/_lib/feedback.js',
+  'functions/api/custom-levels.js', 'functions/api/community-levels.js', 'functions/api/admin/custom-levels.js',
+  'functions/_lib/custom-levels.js', 'functions/_generated/custom-level-catalog.js',
   'THIRD_PARTY_NOTICES/SCOWL-Copyright.txt',
   'DICTIONARY_SOURCES.md', 'dictionary.js', 'dictionary-core.js', 'dictionary-extended.js',
   'dictionary-report.json', 'dictionary-quality-report.json', 'dictionary-overrides/README.md', 'dictionary-overrides/allow.txt',
@@ -17,7 +20,7 @@ const failures = required.filter((file) => !fs.existsSync(path.join(root, file))
   .map((file) => `Missing project file: ${file}`);
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-if (packageJson.version !== '2.0.0') failures.push('package.json must identify the 100-level release as 2.0.0');
+if (packageJson.version !== '2.1.0') failures.push('package.json must identify the Workshop release as 2.1.0');
 if (packageJson.license !== 'MIT') failures.push('package.json must declare the MIT license');
 if (!String(packageJson.packageManager || '').startsWith('pnpm@')) failures.push('packageManager must pin pnpm');
 if (!packageJson.scripts?.check?.includes('validate:project')) failures.push('check must include validate:project');

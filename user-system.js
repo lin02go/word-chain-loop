@@ -105,6 +105,7 @@
     return api('/api/auth/me').then(function(result) {
       self.user = result;
       self.render();
+      window.dispatchEvent(new CustomEvent('wordloop:auth-changed', { detail: result }));
       if (!result.authenticated) return;
       if (result.hasCloudProgress) {
         self.updateCloudStatus(result.progressUpdatedAt);
@@ -114,6 +115,7 @@
     }).catch(function() {
       self.user = { authenticated: false, serviceUnavailable: true };
       self.render();
+      window.dispatchEvent(new CustomEvent('wordloop:auth-changed', { detail: self.user }));
     });
   };
 
@@ -179,6 +181,7 @@
       self.user = result;
       passwordInput.value = '';
       self.render();
+      window.dispatchEvent(new CustomEvent('wordloop:auth-changed', { detail: result }));
       self.renderStats();
       self.showMessage(text(self.authMode === 'register' ? 'registered' : 'loggedIn'));
       if (result.hasCloudProgress && !self.hasMeaningfulLocalProgress() && !self.hasSyncedVersion(result.progressUpdatedAt)) self.restoreProgress(true);
@@ -195,6 +198,7 @@
       self.user = { authenticated: false };
       self.setAuthMode('login');
       self.render();
+      window.dispatchEvent(new CustomEvent('wordloop:auth-changed', { detail: self.user }));
       self.close();
     });
   };

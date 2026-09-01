@@ -5,6 +5,9 @@ import { onRequestPost as register } from './functions/api/auth/register.js';
 import { onRequestPatch as updateUser } from './functions/api/user.js';
 import { onRequestGet as getProgress, onRequestPut as putProgress } from './functions/api/user/progress.js';
 import { onRequestPost as submitWordFeedback } from './functions/api/word-feedback.js';
+import { onRequestGet as getCustomLevels, onRequestPost as submitCustomLevel } from './functions/api/custom-levels.js';
+import { onRequestGet as getCommunityLevels } from './functions/api/community-levels.js';
+import { onRequestGet as getAdminCustomLevels, onRequestPatch as reviewCustomLevel } from './functions/api/admin/custom-levels.js';
 
 const apiRoutes = new Map([
   ['POST /api/auth/login', login],
@@ -15,6 +18,11 @@ const apiRoutes = new Map([
   ['GET /api/user/progress', getProgress],
   ['PUT /api/user/progress', putProgress],
   ['POST /api/word-feedback', submitWordFeedback],
+  ['GET /api/custom-levels', getCustomLevels],
+  ['POST /api/custom-levels', submitCustomLevel],
+  ['GET /api/community-levels', getCommunityLevels],
+  ['GET /api/admin/custom-levels', getAdminCustomLevels],
+  ['PATCH /api/admin/custom-levels', reviewCustomLevel],
 ]);
 
 export default {

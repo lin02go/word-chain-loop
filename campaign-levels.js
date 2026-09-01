@@ -52,3 +52,12 @@ var CAMPAIGN_LEVELS = [
     hintLimit: difficulty === 'easy' ? 2 : (difficulty === 'medium' ? 1 : 0)
   };
 }));
+
+// Derived from the validated shortest route for each fixed level. Most levels
+// need two intermediate words; exceptions stay explicit so validation can flag
+// stale values after a dictionary update.
+var CAMPAIGN_MINIMUM_INTERMEDIATE_EXCEPTIONS = { 1: 1, 9: 3, 21: 1, 36: 1, 37: 1, 38: 1 };
+for (var campaignIndex = 0; campaignIndex < CAMPAIGN_LEVELS.length; campaignIndex++) {
+  var campaignLevel = CAMPAIGN_LEVELS[campaignIndex];
+  campaignLevel.minimumIntermediateWords = CAMPAIGN_MINIMUM_INTERMEDIATE_EXCEPTIONS[campaignLevel.id] || 2;
+}

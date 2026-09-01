@@ -10,10 +10,10 @@ var LANGUAGE_STORAGE_KEY = 'word-chain-loop:language:v1';
 var UI_TEXT = {
   zh: {
     pageTitle: '词环 · Word Loop',
-    puzzleMetadata: '游戏信息', languageLabel: '语言', difficultyLabel: '难度', gameModeLabel: '游戏模式', loopTarget: '词环目标', secondaryActions: '其他游戏操作',
+    puzzleMetadata: '游戏信息', languageLabel: '语言', difficultyLabel: '难度', gameModeLabel: '游戏模式', loopTarget: '词环目标', secondaryActions: '其他游戏操作', skipToGame: '跳到游戏内容',
     installApp: '安装应用', installComplete: '词环已经安装，可以像普通应用一样打开。', offlineReady: '离线资源准备完毕。',
     offlineStatus: '当前离线，游戏仍可继续；在线词义暂不可用。', onlineStatus: '网络已恢复。', updateReady: '新版本已经准备好。', refreshApp: '刷新',
-    utilityLabel: '文字游戏 · 单人', utilityCopy: '接住词尾，绕回词首',
+    utilityLabel: '词环 · 单人', utilityCopy: '接住词尾，绕回词首',
     startBrand: '词环 · WORD LOOP', startEdition: '双字母接龙游戏', startWelcomeKicker: '欢迎来到文字的环路',
     startWelcomeCopy: '接住一个单词的最后两个字母，找到下一个词，最终绕回最初的两位。',
     startIntroKicker: '游戏简介', startIntroTitle: '让词尾成为下一步的开头。',
@@ -21,7 +21,8 @@ var UI_TEXT = {
     startGame: '开始游戏', aboutUs: '关于作者', login: '登录', comingSoon: '暂未开放',
     chooseModeKicker: '选择游戏方式', chooseModeTitle: '今天想怎样玩？',
     startCasualCopy: '自由选择难度，随时开始一个新词环。', startCampaignCopy: '挑战固定关卡、最大步数和三星目标。',
-    backToWelcome: '← 返回', startFooterLeft: '文字游戏 · 单人', startFooterRight: '从词尾出发，回到词首', home: '首页',
+    workshopMode: '工坊', startWorkshopCopy: '设计、试玩并提交你自己的词环关卡。',
+    backToWelcome: '← 返回', startFooterLeft: '词环 · 单人', startFooterRight: '从词尾出发，回到词首', home: '首页',
     aboutTitle: '关于作者', authorIntroTitle: '作者介绍',
     authorCopy: '一名 XJTU 统计专业的大二学生，喜欢英语。', aboutWhyTitle: '为什么做「词环」',
     aboutCopy: '高中时，我发明了词环这个游戏，那时只能在纸上玩。如今有了 AI 工具的帮助，我终于能把它搬到线上，与大家分享，也希望更多人能从游戏中感受到英语的趣味。',
@@ -36,11 +37,11 @@ var UI_TEXT = {
     loopExplain: '每个新词，都要以前一个词的最后两个字母开头。',
     currentChain: '当前词链', starting: '正在开始…', enterNext: '接下一个词',
     mustBeginWith: '必须以', nextWordLabel: '下一个单词', wordPlaceholder: '输入英文单词…',
-    submit: '提交', availableWords: '本次提示 · 点击即可填入', shortestSolutions: '最短解法',
+    submit: '接上这个词', availableWords: '本次提示 · 点击即可填入', shortestSolutions: '最短解法',
     showSolutions: '显示答案 · 练习模式', hideSolutions: '收起答案',
     puzzleNotes: '游戏手记', chainLength: '已用单词', minStepsLeft: '最少还需',
     minimumHidden: '最短步数已隐藏', bestRecord: '最佳纪录', newGame: '新游戏',
-    howToPlay: '玩法很简单',
+    howToPlay: '玩法介绍',
     rule1: '输入至少 3 个字母的有效英文词。',
     rule2: '新词要接住上一个词的最后两个字母。',
     rule3: '不能重复单词，也不能换个词形重复使用。',
@@ -74,10 +75,10 @@ var UI_TEXT = {
   },
   en: {
     pageTitle: 'Word Loop',
-    puzzleMetadata: 'Puzzle metadata', languageLabel: 'Language', difficultyLabel: 'Difficulty', gameModeLabel: 'Game mode', loopTarget: 'Loop target', secondaryActions: 'Secondary game actions',
+    puzzleMetadata: 'Puzzle metadata', languageLabel: 'Language', difficultyLabel: 'Difficulty', gameModeLabel: 'Game mode', loopTarget: 'Loop target', secondaryActions: 'Secondary game actions', skipToGame: 'Skip to game content',
     installApp: 'Install app', installComplete: 'Word Loop is installed and ready to launch like an app.', offlineReady: 'Offline play is ready.',
     offlineStatus: 'You are offline. The game still works; online definitions are unavailable.', onlineStatus: 'You are back online.', updateReady: 'A new version is ready.', refreshApp: 'Refresh',
-    utilityLabel: 'Word puzzle · Single player', utilityCopy: 'Connect the ending pair to the opening pair',
+    utilityLabel: 'Word Loop · Single player', utilityCopy: 'Connect the ending pair to the opening pair',
     startBrand: 'WORD LOOP', startEdition: 'A TWO-LETTER WORD CHAIN', startWelcomeKicker: 'Welcome to the circle of words',
     startWelcomeCopy: 'Catch the final two letters of one word, find the next, and make your way back to the opening pair.',
     startIntroKicker: 'About the game', startIntroTitle: 'Let every ending begin the next move.',
@@ -85,7 +86,8 @@ var UI_TEXT = {
     startGame: 'Start game', aboutUs: 'About the author', login: 'Log in', comingSoon: 'Coming soon',
     chooseModeKicker: 'Choose how to play', chooseModeTitle: 'How would you like to play today?',
     startCasualCopy: 'Choose a difficulty and begin a fresh loop whenever you like.', startCampaignCopy: 'Take on fixed levels, move limits, and three-star targets.',
-    backToWelcome: '← Back', startFooterLeft: 'WORD PUZZLE · SINGLE PLAYER', startFooterRight: 'Follow the ending. Return to the beginning.', home: 'Home',
+    workshopMode: 'Workshop', startWorkshopCopy: 'Design, test, and submit your own Word Loop level.',
+    backToWelcome: '← Back', startFooterLeft: 'WORD LOOP · SINGLE PLAYER', startFooterRight: 'Follow the ending. Return to the beginning.', home: 'Home',
     aboutTitle: 'About the author', authorIntroTitle: 'Author introduction',
     authorCopy: 'A second-year Statistics student at XJTU who loves English.', aboutWhyTitle: 'Why I made Word Loop',
     aboutCopy: 'I invented Word Loop in high school, when it could only be played on paper. With the help of AI tools, I can now bring it online, share it with everyone, and let more people discover how much fun English can be.',
@@ -100,7 +102,7 @@ var UI_TEXT = {
     loopExplain: 'Each word must begin with the final two letters of the word before it.',
     currentChain: 'Current chain', starting: 'Starting…', enterNext: 'Enter the next word',
     mustBeginWith: 'Must begin with', nextWordLabel: 'Next word', wordPlaceholder: 'Type a word…',
-    submit: 'Submit', availableWords: 'Hint word · click to select', shortestSolutions: 'Shortest solutions',
+    submit: 'Add to chain', availableWords: 'Hint word · click to select', shortestSolutions: 'Shortest solutions',
     showSolutions: 'Show Solutions · practice', hideSolutions: 'Hide Solutions',
     puzzleNotes: 'Puzzle notes', chainLength: 'Chain Length', minStepsLeft: 'Min Steps Left',
     minimumHidden: 'Minimum Hidden', bestRecord: 'Best Record', newGame: 'New Game',
@@ -183,6 +185,7 @@ function applyLanguage(language) {
   if (window.achievementController && window.achievementController.refreshLanguage) window.achievementController.refreshLanguage();
   if (window.userSystemController && window.userSystemController.refreshLanguage) window.userSystemController.refreshLanguage();
   if (window.pwaController && window.pwaController.refreshLanguage) window.pwaController.refreshLanguage();
+  if (window.workshopController && window.workshopController.refreshLanguage) window.workshopController.refreshLanguage();
 }
 
 // ============================================================
@@ -241,6 +244,8 @@ var WordChainGame = (function() {
     this._completionEmittedForRound = null;
     this._processedDictionaryLength = 0;
     this._extendedDictionaryPromise = null;
+    this.completionModeOverride = null;
+    this.customLevelId = null;
 
     this.initDictionary();
     this.buildGraph();
@@ -570,10 +575,19 @@ var WordChainGame = (function() {
       this.usedLemmas = new Set();
       if (!this._usedStarts) this._usedStarts = [];
 
+      var customPick = this.customStartOverride;
       var replayWord = this._replayWord;
       this._replayWord = null;
       var pick;
-      if (replayWord && this.wordToEdge.has(replayWord)) {
+      if (customPick && customPick.word) {
+        pick = {
+          word: customPick.word,
+          head: customPick.head || customPick.word.slice(0, 2),
+          tail: customPick.tail || customPick.word.slice(-2),
+          pathLength: Number(customPick.pathLength),
+          totalLength: 1 + Number(customPick.pathLength)
+        };
+      } else if (replayWord && this.wordToEdge.has(replayWord)) {
         var replayEdge = this.wordToEdge.get(replayWord);
         pick = {
           word: replayWord,
@@ -606,7 +620,7 @@ var WordChainGame = (function() {
       this._completionEmittedForRound = null;
       this.chain.push(pick.word);
       this.usedWords.add(pick.word);
-      this.usedLemmas.add(this.wordLemmaRoots.get(pick.word));
+      this.usedLemmas.add(this.wordLemmaRoots.get(pick.word) || pick.word);
       this.hintsVisible = false;
       this.assisted = false;
       this.hintUses = 0;
@@ -770,10 +784,11 @@ var WordChainGame = (function() {
     document.getElementById('winOverlay').classList.add('show');
     this.showMessageKey('victory', 'success', { count: len });
     this.emitCompletion({
-      mode: 'casual',
+      mode: this.completionModeOverride || 'casual',
       moves: Math.max(0, len - 1),
       minimumMoves: this.minimumMoves,
-      assisted: this.assisted
+      assisted: this.assisted,
+      customLevelId: this.customLevelId
     });
   };
 
@@ -788,7 +803,8 @@ var WordChainGame = (function() {
       moves: Number(result.moves) || 0,
       minimumMoves: Number(result.minimumMoves) || 0,
       assisted: !!result.assisted,
-      campaignLevelId: result.campaignLevelId || null
+      campaignLevelId: result.campaignLevelId || null,
+      customLevelId: result.customLevelId || null
     }}));
   };
 
@@ -1048,6 +1064,17 @@ var WordChainGame = (function() {
   };
 
   // UI rendering
+  WordChainGame.prototype._formatChainWord = function(word, isFirst, isLast) {
+    if (!word || word.length < 4) return word;
+    var head = word.slice(0, 2);
+    var middle = word.slice(2, -2);
+    var tail = word.slice(-2);
+    var html = isFirst ? '<span class="chain-origin">' + head + '</span>' : head;
+    html += middle;
+    html += isLast ? '<span class="chain-handoff">' + tail + '</span>' : tail;
+    return html;
+  };
+
   WordChainGame.prototype.render = function() {
     document.getElementById('targetCard').style.display = 'block';
     document.getElementById('targetStart').textContent = this.currentRequired;
@@ -1057,13 +1084,14 @@ var WordChainGame = (function() {
     var html = '';
     for (var i = 0; i < this.chain.length; i++) {
       var cls = i === 0 ? 'chain-word first' : 'chain-word';
-      html += '<span class="' + cls + ' lookup-word" data-word="' + this.chain[i] + '" tabindex="0" role="button" aria-label="' + t('wordLookupLabel', { word: this.chain[i] }) + '">' + this.chain[i] + '</span>';
+      html += '<span class="' + cls + ' lookup-word" data-word="' + this.chain[i] + '" tabindex="0" role="button" aria-label="' + t('wordLookupLabel', { word: this.chain[i] }) + '">' +
+        this._formatChainWord(this.chain[i], i === 0, i === this.chain.length - 1) + '</span>';
       if (i < this.chain.length - 1) {
         html += '<span class="chain-arrow">&rarr;</span>';
       }
     }
     if (this.currentRequired !== this.targetGoal || this.chain.length === 1) {
-      html += '<span class="chain-arrow">&rarr;</span><span style="color:var(--accent);font-weight:600;">?</span>';
+      html += '<span class="chain-arrow">&rarr;</span><span class="chain-question">?</span>';
     }
     chainDiv.innerHTML = html;
 
@@ -1222,6 +1250,7 @@ try {
   // Difficulty selector
   var diffBtns = document.querySelectorAll('.diff-btn');
   for (var i = 0; i < diffBtns.length; i++) {
+    diffBtns[i].setAttribute('aria-pressed', diffBtns[i].classList.contains('active') ? 'true' : 'false');
     diffBtns[i].addEventListener('click', function() {
       var requestedDifficulty = this.dataset.diff;
       var all = document.querySelectorAll('.diff-btn');
@@ -1230,6 +1259,7 @@ try {
         if (!changed) return;
         for (var k = 0; k < all.length; k++) {
           all[k].classList.toggle('active', all[k].dataset.diff === requestedDifficulty);
+          all[k].setAttribute('aria-pressed', all[k].dataset.diff === requestedDifficulty ? 'true' : 'false');
         }
       }).catch(function(error) {
         console.error(error);

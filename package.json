@@ -1,6 +1,6 @@
 {
   "name": "word-chain-loop",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "license": "MIT",
   "description": "词环 · Word Loop progressive web app",
@@ -22,10 +22,12 @@
     "validate:campaign": "node tools/validate-campaign-levels.js",
     "validate:auth": "node tools/validate-auth.mjs",
     "validate:feedback": "node tools/validate-feedback.mjs",
+    "build:workshop-catalog": "node tools/build-custom-level-catalog.mjs",
+    "validate:workshop": "node tools/validate-workshop.mjs",
     "validate:worker": "node tools/validate-worker.mjs",
     "types:cloudflare": "wrangler types worker-configuration.d.ts --include-runtime false --check",
     "validate:cloudflare": "npm run build:cloudflare && wrangler pages functions build functions --outdir cloudflare-dist/functions-build --project-directory .",
-    "check": "npm run validate:project && npm run validate:dictionary && npm run validate:quality && npm run validate:pwa && npm run validate:campaign && npm run validate:auth && npm run validate:feedback && npm run build && npm run validate:worker && npm run types:cloudflare && npm run validate:cloudflare",
+    "check": "npm run validate:project && npm run validate:dictionary && npm run validate:quality && npm run validate:pwa && npm run validate:campaign && npm run validate:auth && npm run validate:feedback && npm run validate:workshop && npm run build && npm run validate:worker && npm run types:cloudflare && npm run validate:cloudflare",
     "test": "npm run check"
   },
   "devDependencies": {

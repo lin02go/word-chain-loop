@@ -15,7 +15,7 @@ export async function onRequestPost(context) {
     const password = validatePassword(body.password);
     const key = await rateLimitKey(context.request, email);
     const attempts = await assertNotRateLimited(db, key);
-    const row = await db.prepare(`SELECT id, email, nickname, password_salt AS passwordSalt,
+    const row = await db.prepare(`SELECT id, email, nickname, role, password_salt AS passwordSalt,
       password_hash AS passwordHash, password_iterations AS passwordIterations FROM users WHERE email = ?`)
       .bind(email).first();
     if (!(await verifyPassword(password, row, pepper))) {

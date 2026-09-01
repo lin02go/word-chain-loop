@@ -17,7 +17,7 @@ export async function onRequestPost(context) {
     if (existing) throw new HttpError(409, 'EMAIL_EXISTS', 'Email is already registered.');
 
     const passwordRecord = await createPasswordRecord(password, pepper);
-    const user = { id: crypto.randomUUID(), email, nickname };
+    const user = { id: crypto.randomUUID(), email, nickname, role: 'player' };
     const session = await newSessionRecord(user.id);
     const now = new Date().toISOString();
     await db.batch([

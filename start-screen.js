@@ -93,9 +93,9 @@
   };
 
   StartScreenController.prototype.enterGame = function(mode) {
-    var nextMode = mode === 'campaign' ? 'campaign' : 'casual';
+    var nextMode = mode === 'campaign' ? 'campaign' : (mode === 'workshop' ? 'workshop' : 'casual');
     if (window.campaignController && window.campaignController.setMode) {
-      window.campaignController.setMode(nextMode);
+      window.campaignController.setMode(nextMode === 'workshop' ? 'casual' : nextMode);
     }
     this.screen.classList.add('is-leaving');
     document.body.classList.remove('start-screen-open');
@@ -103,10 +103,14 @@
     setTimeout(function() {
       self.screen.hidden = true;
       self.screen.classList.remove('is-leaving');
+      if (nextMode === 'workshop' && window.workshopController) {
+        window.workshopController.open('create');
+        return;
+      }
       var focusTarget = nextMode === 'campaign' ?
         document.getElementById('campaignContinueBtn') : document.getElementById('wordInput');
       if (focusTarget && focusTarget.focus) focusTarget.focus({ preventScroll: true });
-    }, 380);
+    }, 520);
   };
 
   window.StartScreenController = StartScreenController;

@@ -6,11 +6,15 @@
 
   var CAMPAIGN_TEXT = {
     zh: {
-      homeKicker: '闯关模式 · {levels} 关', homeTitle: '{levels} 关词环挑战',
+      homeKicker: '闯关模式 · {levels} 关', homeTitle: '百关词链挑战',
       homeCopy: '逐关闭合词环，在最大步数内完成，并尝试拿到三星。',
       completed: '已完成关卡', reset: '重置闯关进度', resetConfirm: '确定清除全部闯关进度吗？此操作无法撤销。',
       continueLevel: '继续第 {id} 关',
       totalStars: '总星数 {stars} / {maxStars}', level: '第 {id} 关', locked: '尚未解锁',
+      starsLabel: '累计星数', groups: '关卡分组', groupLabel: '第 {group} 组',
+      groupTitle: '第 {group} 组 · {start}–{end} 关', groupProgress: '本组 {completed} / {count}',
+      currentLevel: '当前关卡', startWord: '起始单词', minimumIntermediateWords: '最短中间词数', loopTarget: '词环目标',
+      difficultyLabel: '难度', levelRecord: '关卡记录', closed: '已闭环',
       difficultyEasy: '简单', difficultyMedium: '标准', difficultyHard: '困难',
       best: '最佳 {moves} 步', bestOne: '最佳 1 步', notCompleted: '尚未完成',
       homeModeDescription: '固定关卡 · 三星评价 · 最大步数限制',
@@ -27,11 +31,15 @@
       campaignReady: '闯关模式已准备：{levels} 个关卡'
     },
     en: {
-      homeKicker: 'CAMPAIGN · {levels} LEVELS', homeTitle: '{levels} Word Loops',
+      homeKicker: 'CAMPAIGN · {levels} LEVELS', homeTitle: '100 Word-Chain Challenges',
       homeCopy: 'Close each loop within the move limit and try to earn three stars.',
       completed: 'Levels completed', reset: 'Reset campaign progress', resetConfirm: 'Clear all campaign progress? This cannot be undone.',
       continueLevel: 'Continue Level {id}',
       totalStars: 'Total stars {stars} / {maxStars}', level: 'Level {id}', locked: 'Locked',
+      starsLabel: 'Stars earned', groups: 'Level groups', groupLabel: 'Group {group}',
+      groupTitle: 'Group {group} · Levels {start}–{end}', groupProgress: '{completed} / {count} in this group',
+      currentLevel: 'Current level', startWord: 'Starting word', minimumIntermediateWords: 'Minimum intermediate words', loopTarget: 'Loop target',
+      difficultyLabel: 'Difficulty', levelRecord: 'Level record', closed: 'Loop closed',
       difficultyEasy: 'Easy', difficultyMedium: 'Medium', difficultyHard: 'Hard',
       best: 'Best: {moves} moves', bestOne: 'Best: 1 move', notCompleted: 'Not completed',
       homeModeDescription: 'Fixed levels · three-star ratings · move limits',
@@ -72,6 +80,8 @@
     this.overlayState = null;
     this.lastResult = null;
     this.progress = this.loadProgress();
+    this.selectedLevelId = null;
+    this.selectedGroupIndex = 0;
 
     this.originalNewGame = gameInstance.newGame.bind(gameInstance);
     this.originalOnWin = gameInstance.onWin.bind(gameInstance);
@@ -143,7 +153,9 @@
     }
     document.getElementById('campaignBackBtn').addEventListener('click', function() { self.showHome(); });
     document.getElementById('campaignUndoBtn').addEventListener('click', function() { self.undo(); });
-    document.getElementById('campaignContinueBtn').addEventListener('click', function() { self.startLevel(self.continueLevelId()); });
+    document.getElementById('campaignContinueBtn').addEventListener('click', function() {
+      self.startLevel(self.selectedLevelId || self.continueLevelId());
+    });
     document.getElementById('campaignResetBtn').addEventListener('click', function() { self.resetProgress(); });
     document.getElementById('campaignOverlayPrimary').addEventListener('click', function() {
       if (self.overlayState === 'failed') self.undo();
@@ -216,37 +228,138 @@
     document.getElementById('campaignHomeCopy').textContent = campaignText('homeCopy');
     document.getElementById('campaignProgressValue').textContent = completed + ' / ' + this.levels.length;
     document.getElementById('campaignProgressLabel').textContent = campaignText('completed');
-    document.getElementById('campaignTotalStars').textContent = campaignText('totalStars', {
-      stars: totalStars, maxStars: this.levels.length * 3
-    });
+    document.getElementById('campaignTotalStars').textContent = String(totalStars);
+    document.getElementById('campaignStarsLabel').textContent = campaignText('starsLabel');
+    document.getElementById('campaignGroupsTitle').textContent = campaignText('groups');
+    document.querySelector('.campaign-overview').setAttribute('aria-label', campaignText('homeTitle'));
     document.getElementById('campaignResetBtn').textContent = campaignText('reset');
-    document.getElementById('campaignContinueBtn').textContent = campaignText('continueLevel', {
-      id: String(this.continueLevelId()).padStart(2, '0')
-    });
+    var fallbackLevel = this.continueLevelId();
+    if (!this.selectedLevelId || this.selectedLevelId > this.progress.unlockedLevel) {
+      this.selectedLevelId = fallbackLevel;
+    }
+    this.selectedGroupIndex = Math.floor((this.selectedLevelId - 1) / 10);
+    this.renderGroupList();
+    this.renderLevelGrid();
+    this.renderCampaignDetail();
+  };
 
-    var grid = document.getElementById('campaignLevelGrid');
-    grid.innerHTML = '';
+  CampaignController.prototype.levelPair = function(level) {
+    var word = level && level.startWord ? level.startWord.toLowerCase() : '--';
+    return word.slice(-2) + ' → ' + word.slice(0, 2);
+  };
+
+  CampaignController.prototype.renderGroupList = function() {
+    var list = document.getElementById('campaignGroupList');
+    var groupCount = Math.ceil(this.levels.length / 10);
     var self = this;
-    for (var i = 0; i < this.levels.length; i++) {
-      var level = this.levels[i];
+    list.innerHTML = '';
+
+    for (var groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+      var startId = groupIndex * 10 + 1;
+      var endId = Math.min(startId + 9, this.levels.length);
+      var groupCompleted = 0;
+      for (var levelId = startId; levelId <= endId; levelId++) {
+        var result = this.progress.levels[String(levelId)];
+        if (result && result.completed) groupCompleted++;
+      }
+      var locked = startId > this.progress.unlockedLevel;
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'campaign-group-button' + (groupIndex === this.selectedGroupIndex ? ' is-active' : '') +
+        (groupCompleted === endId - startId + 1 ? ' is-complete' : '');
+      button.disabled = locked;
+      button.setAttribute('data-group-index', String(groupIndex));
+      button.setAttribute('aria-pressed', groupIndex === this.selectedGroupIndex ? 'true' : 'false');
+      button.innerHTML = '<span>' + String(startId).padStart(2, '0') + '–' + String(endId).padStart(2, '0') + '</span>' +
+        '<small>' + (locked ? campaignText('locked') : groupCompleted + ' / ' + (endId - startId + 1)) + '</small>';
+      button.addEventListener('click', function() {
+        var nextGroup = Number(this.getAttribute('data-group-index'));
+        var groupStart = nextGroup * 10 + 1;
+        var groupEnd = Math.min(groupStart + 9, self.levels.length);
+        self.selectedGroupIndex = nextGroup;
+        self.selectedLevelId = self.progress.lastPlayedLevel >= groupStart && self.progress.lastPlayedLevel <= groupEnd ?
+          self.progress.lastPlayedLevel : Math.min(groupEnd, self.progress.unlockedLevel);
+        self.renderHome();
+        var selectedGroup = document.querySelector('[data-group-index="' + nextGroup + '"]');
+        if (selectedGroup) selectedGroup.focus({ preventScroll: true });
+      });
+      list.appendChild(button);
+    }
+  };
+
+  CampaignController.prototype.renderLevelGrid = function() {
+    var startId = this.selectedGroupIndex * 10 + 1;
+    var endId = Math.min(startId + 9, this.levels.length);
+    var completed = 0;
+    var grid = document.getElementById('campaignLevelGrid');
+    var self = this;
+    grid.innerHTML = '';
+
+    for (var levelId = startId; levelId <= endId; levelId++) {
+      var level = this.levels[levelId - 1];
       var result = this.progress.levels[String(level.id)] || null;
       var locked = level.id > this.progress.unlockedLevel;
+      if (result && result.completed) completed++;
+      var selected = level.id === this.selectedLevelId && !locked;
       var button = document.createElement('button');
       button.type = 'button';
       button.className = 'level-card' + (result && result.completed ? ' completed' : '') +
-        (level.id === this.progress.lastPlayedLevel && !locked ? ' current' : '');
+        (selected ? ' current' : '');
       button.disabled = locked;
       button.setAttribute('data-level-id', String(level.id));
+      button.setAttribute('aria-pressed', selected ? 'true' : 'false');
       var meta = locked ? campaignText('locked') :
         (result && result.completed ? campaignText(result.bestMoves === 1 ? 'bestOne' : 'best', { moves: result.bestMoves }) : campaignText('notCompleted'));
       var stars = result && result.stars ? '★'.repeat(result.stars) + '☆'.repeat(3 - result.stars) : '☆☆☆';
-      button.innerHTML = '<span class="level-number">' + campaignText('level', { id: String(level.id).padStart(2, '0') }) + '</span>' +
-        '<span class="level-word">' + level.startWord + '</span>' +
+      button.setAttribute('aria-label', campaignText('level', { id: String(level.id).padStart(2, '0') }) + ' · ' + level.startWord + ' · ' + meta);
+      button.innerHTML = '<span class="level-number">' + String(level.id).padStart(2, '0') + '</span>' +
+        (result && result.completed ? '<span class="level-complete-stamp">' + campaignText('closed') + '</span>' : '') +
+        '<span class="level-word" translate="no">' + level.startWord + '</span>' +
+        '<span class="level-pair" translate="no">' + this.levelPair(level) + '</span>' +
         '<span class="level-meta">' + this.difficultyName(level.difficulty) + ' · ' + meta + '</span>' +
-        '<span class="level-stars">' + stars + '</span>';
-      button.addEventListener('click', function() { self.startLevel(Number(this.getAttribute('data-level-id'))); });
+        '<span class="level-stars" aria-hidden="true">' + stars + '</span>';
+      button.addEventListener('click', function() {
+        var nextLevelId = Number(this.getAttribute('data-level-id'));
+        self.selectedLevelId = nextLevelId;
+        self.renderLevelGrid();
+        self.renderCampaignDetail();
+        var selectedCard = document.querySelector('[data-level-id="' + nextLevelId + '"]');
+        if (selectedCard) selectedCard.focus({ preventScroll: true });
+      });
       grid.appendChild(button);
     }
+
+    document.getElementById('campaignGroupTitle').textContent = campaignText('groupTitle', {
+      group: this.selectedGroupIndex + 1,
+      start: String(startId).padStart(2, '0'),
+      end: String(endId).padStart(2, '0')
+    });
+    document.getElementById('campaignGroupProgress').textContent = campaignText('groupProgress', {
+      completed: completed,
+      count: endId - startId + 1
+    });
+  };
+
+  CampaignController.prototype.renderCampaignDetail = function() {
+    var level = this.levels[(this.selectedLevelId || this.continueLevelId()) - 1];
+    if (!level) return;
+    var result = this.progress.levels[String(level.id)] || null;
+    var status = result && result.completed ?
+      campaignText(result.bestMoves === 1 ? 'bestOne' : 'best', { moves: result.bestMoves }) : campaignText('notCompleted');
+    document.getElementById('campaignDetailKicker').textContent = campaignText('currentLevel');
+    document.getElementById('campaignDetailLevel').textContent = campaignText('level', { id: String(level.id).padStart(2, '0') });
+    document.getElementById('campaignDetailWord').textContent = level.startWord;
+    document.getElementById('campaignDetailMinimumLabel').textContent = campaignText('minimumIntermediateWords');
+    document.getElementById('campaignDetailMinimum').textContent = String(level.minimumIntermediateWords || '--');
+    document.getElementById('campaignDetailTargetLabel').textContent = campaignText('loopTarget');
+    document.getElementById('campaignDetailTarget').textContent = this.levelPair(level);
+    document.getElementById('campaignDetailDifficultyLabel').textContent = campaignText('difficultyLabel');
+    document.getElementById('campaignDetailDifficulty').textContent = this.difficultyName(level.difficulty);
+    document.getElementById('campaignDetailStatusLabel').textContent = campaignText('levelRecord');
+    document.getElementById('campaignDetailStatus').textContent = status;
+    document.getElementById('campaignContinueBtn').textContent = campaignText('continueLevel', {
+      id: String(level.id).padStart(2, '0')
+    });
   };
 
   CampaignController.prototype.difficultyName = function(difficulty) {
@@ -329,6 +442,7 @@
     var buttons = document.querySelectorAll('.diff-btn');
     for (var i = 0; i < buttons.length; i++) {
       buttons[i].classList.toggle('active', buttons[i].getAttribute('data-diff') === this.game.difficulty);
+      buttons[i].setAttribute('aria-pressed', buttons[i].getAttribute('data-diff') === this.game.difficulty ? 'true' : 'false');
     }
   };
 

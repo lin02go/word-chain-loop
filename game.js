@@ -20,6 +20,7 @@ var UI_TEXT = {
     startIntroCopy: '每次输入一个有效英文词，沿着末两位继续前进。用更少的词闭合环路，也可以在百关挑战中争取三星。',
     startGame: '开始游戏', aboutUs: '关于作者', login: '登录', comingSoon: '暂未开放',
     chooseModeKicker: '选择游戏方式', chooseModeTitle: '今天想怎样玩？',
+    dailyMode: '每日', startDailyCopy: '所有人同题，完成后向好友发起挑战。',
     startCasualCopy: '自由选择难度，随时开始一个新词环。', startCampaignCopy: '挑战固定关卡、最大步数和三星目标。',
     workshopMode: '工坊', startWorkshopCopy: '设计、试玩并提交你自己的词环关卡。',
     backToWelcome: '← 返回', startFooterLeft: '词环 · 单人', startFooterRight: '从词尾出发，回到词首', home: '首页',
@@ -85,6 +86,7 @@ var UI_TEXT = {
     startIntroCopy: 'Enter a valid English word and continue from its final pair. Close the loop in fewer words, or chase three stars across one hundred fixed challenges.',
     startGame: 'Start game', aboutUs: 'About the author', login: 'Log in', comingSoon: 'Coming soon',
     chooseModeKicker: 'Choose how to play', chooseModeTitle: 'How would you like to play today?',
+    dailyMode: 'Daily', startDailyCopy: 'Play the same puzzle, then challenge a friend to beat your score.',
     startCasualCopy: 'Choose a difficulty and begin a fresh loop whenever you like.', startCampaignCopy: 'Take on fixed levels, move limits, and three-star targets.',
     workshopMode: 'Workshop', startWorkshopCopy: 'Design, test, and submit your own Word Loop level.',
     backToWelcome: '← Back', startFooterLeft: 'WORD LOOP · SINGLE PLAYER', startFooterRight: 'Follow the ending. Return to the beginning.', home: 'Home',
@@ -180,6 +182,7 @@ function applyLanguage(language) {
   try { localStorage.setItem(LANGUAGE_STORAGE_KEY, currentLanguage); } catch (languageSaveError) { /* storage may be unavailable */ }
   if (typeof game !== 'undefined' && game && game.refreshLocalizedUI) game.refreshLocalizedUI();
   if (window.campaignController && window.campaignController.refreshLanguage) window.campaignController.refreshLanguage();
+  if (window.dailyChallengeController && window.dailyChallengeController.refreshLanguage) window.dailyChallengeController.refreshLanguage();
   if (window.wordDefinitionController && window.wordDefinitionController.refreshLanguage) window.wordDefinitionController.refreshLanguage();
   if (window.wordFeedbackController && window.wordFeedbackController.refreshLanguage) window.wordFeedbackController.refreshLanguage();
   if (window.achievementController && window.achievementController.refreshLanguage) window.achievementController.refreshLanguage();
@@ -232,7 +235,6 @@ var WordChainGame = (function() {
     this.targetGoal = null;
     this.difficulty = 'medium';
     this.record = 0;
-    this.hintsVisible = false;
     this.assisted = false;
     this.hintUses = 0;
     this.hintHistoryByState = new Map();
@@ -621,7 +623,6 @@ var WordChainGame = (function() {
       this.chain.push(pick.word);
       this.usedWords.add(pick.word);
       this.usedLemmas.add(this.wordLemmaRoots.get(pick.word) || pick.word);
-      this.hintsVisible = false;
       this.assisted = false;
       this.hintUses = 0;
       this.hintHistoryByState = new Map();
@@ -644,20 +645,16 @@ var WordChainGame = (function() {
       // Stats update deferred — avoid counting paths on newGame
       this.updateStats();
 
-      document.getElementById('wordInput').disabled = false;
+      var wordInput = document.getElementById('wordInput');
+      wordInput.disabled = false;
       document.getElementById('submitBtn').disabled = false;
       this._updateHintButton();
-      document.getElementById('wordInput').value = this.currentRequired;
-      var ni = document.getElementById('wordInput');
-      ni.focus();
-      ni.setSelectionRange(2, ni.value.length);
+      wordInput.value = this.currentRequired;
+      wordInput.focus();
+      wordInput.setSelectionRange(2, wordInput.value.length);
       document.getElementById('winOverlay').classList.remove('show');
       this.hideMessage();
       this.hideHints();
-      // Reset solution panel
-      this._solution = null;
-      document.getElementById('solveSection').style.display = 'block';
-      document.getElementById('solvePanel').style.display = 'none';
       document.getElementById('solveBtn').textContent = t('showSolutions');
     } catch (err) {
       if (console && console.error) console.error('newGame error:', err);
@@ -749,7 +746,7 @@ var WordChainGame = (function() {
     }
 
     this.render();
-    // Also use quick stats on win (no heavy path counting needed)
+    // Refresh the visible counters after accepting a move.
     this.updateStats();
     this.hideMessage();
     this.hideHints();
@@ -772,7 +769,7 @@ var WordChainGame = (function() {
     }
 
     this.render();
-    // Also use quick stats on win (no heavy path counting needed)
+    // Refresh the visible counters before showing the result.
     this.updateStats();
     document.getElementById('wordInput').disabled = true;
     document.getElementById('submitBtn').disabled = true;
@@ -907,7 +904,6 @@ var WordChainGame = (function() {
       return;
     }
 
-    this.hintsVisible = true;
     this.hintUses++;
     this.assisted = true;
     shown.add(nextHint);
@@ -935,7 +931,6 @@ var WordChainGame = (function() {
   };
 
   WordChainGame.prototype.hideHints = function() {
-    this.hintsVisible = false;
     document.getElementById('hintsPanel').classList.remove('show');
     if (this.startWord) this._updateHintButton();
   };
@@ -1199,7 +1194,6 @@ var WordChainGame = (function() {
 // Initialize
 // ============================================================
 try {
-  applyLanguage(currentLanguage);
   var game = new WordChainGame();
   applyLanguage(currentLanguage);
 

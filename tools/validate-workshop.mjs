@@ -73,7 +73,10 @@ for (const marker of ['requireAdmin', 'validateReview', "status === 'published'"
 for (const marker of ['CREATE TABLE IF NOT EXISTS custom_level_submissions', "role IN ('player', 'admin')", 'idx_custom_levels_published']) {
   if (!sources.migration.includes(marker)) throw new Error(`Workshop migration is missing: ${marker}`);
 }
-for (const marker of ['wordloop:completed', 'game.findShortestPath', 'submittedRoute', 'textContent']) {
+for (const marker of [
+  'wordloop:completed', 'game.findShortestPath', 'submittedRoute', 'textContent',
+  'WorkshopController.prototype.resetDraft', "getElementById('workshopForm').reset()", 'self.resetDraft();',
+]) {
   if (!sources.client.includes(marker)) throw new Error(`Workshop client is missing: ${marker}`);
 }
 if (!sources.community.includes("status = 'published'")) throw new Error('Community endpoint must expose published levels only.');

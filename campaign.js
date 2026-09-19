@@ -148,7 +148,15 @@
     var modeButtons = document.querySelectorAll('.game-mode-btn');
     for (var i = 0; i < modeButtons.length; i++) {
       modeButtons[i].addEventListener('click', function() {
-        self.setMode(this.getAttribute('data-game-mode'));
+        var requestedMode = this.getAttribute('data-game-mode');
+        if (requestedMode === 'daily' && window.dailyChallengeController) {
+          window.dailyChallengeController.enter();
+          return;
+        }
+        if (window.dailyChallengeController && window.dailyChallengeController.leave) {
+          window.dailyChallengeController.leave();
+        }
+        self.setMode(requestedMode);
       });
     }
     document.getElementById('campaignBackBtn').addEventListener('click', function() { self.showHome(); });
@@ -491,7 +499,6 @@
     var lastWord = this.game.chain[this.game.chain.length - 1];
     this.game.currentRequired = lastWord.substring(lastWord.length - 2);
     this.game.render();
-    this.game._updateStatsQuick();
     this.game.hideHints();
     this.game.hideMessage();
     document.getElementById('wordInput').disabled = false;
@@ -506,7 +513,6 @@
   CampaignController.prototype.handleWin = function() {
     this.roundEnded = true;
     this.game.render();
-    this.game._updateStatsQuick();
     document.getElementById('wordInput').disabled = true;
     document.getElementById('submitBtn').disabled = true;
     document.getElementById('hintBtn').disabled = true;

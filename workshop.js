@@ -194,6 +194,28 @@
     document.getElementById('workshopTestStatus').textContent = message || text('testPending');
   };
 
+  WorkshopController.prototype.resetDraft = function() {
+    window.clearTimeout(this.analysisTimer);
+    this.analysisRequest += 1;
+    document.getElementById('workshopForm').reset();
+    this.analysis = null;
+    this.analysisKey = '';
+    this.resetTest();
+    document.getElementById('workshopLoopRail').dataset.state = 'idle';
+    document.getElementById('workshopRailWord').textContent = 'start word';
+    document.getElementById('workshopTailPair').textContent = '--';
+    document.getElementById('workshopHeadPair').textContent = '--';
+    document.getElementById('workshopAnalysisStatus').textContent = text('idle');
+    document.getElementById('workshopAnalysisStatus').className = 'workshop-analysis-status';
+    document.getElementById('workshopMetrics').hidden = true;
+    ['Shortest', 'Routes', 'Branches', 'Closers'].forEach(function(metric) {
+      document.getElementById('workshopMetric' + metric).textContent = '--';
+    });
+    document.getElementById('workshopRouteWords').textContent = '';
+    document.getElementById('workshopRoute').hidden = true;
+    document.getElementById('workshopTestBtn').disabled = true;
+  };
+
   WorkshopController.prototype.analysisFailure = function(key) {
     this.analysis = null;
     this.analysisKey = '';
@@ -382,8 +404,8 @@
         submittedRoute: this.testRoute
       })
     }).then(function() {
+      self.resetDraft();
       self.showMessage(text('submitted'));
-      self.testRoute = null;
       self.selectTab('mine');
     }).catch(function(error) {
       var key = error.code === 'DUPLICATE_LEVEL' ? 'duplicate' :

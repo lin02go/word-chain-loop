@@ -84,7 +84,8 @@ for (const word of overrideWords('featured.txt')) {
 }
 for (const word of overrideWords('unfeatured.txt')) {
   const index = wordIndex.get(word);
-  if (index !== undefined && featured[index] !== '0') failures.push(`Unfeatured override remains featured: ${word}`);
+  if (index === undefined) failures.push(`Unfeatured override is missing from dictionary: ${word}`);
+  else if (featured[index] !== '0') failures.push(`Unfeatured override remains featured: ${word}`);
 }
 
 const core = load('dictionary-core.js');
@@ -137,6 +138,27 @@ if (!report.source_repository || !report.source_revision || !report.provenance_s
 }
 if (report.word_count !== words.length) failures.push('Dictionary report word_count is stale');
 if (report.dictionary_sha256 !== sha256('dictionary.js')) failures.push('Dictionary report hash is stale');
+const expectedOverrideCounts = {
+  allowed: overrideWords('allow.txt').length,
+  denied: overrideWords('deny.txt').length,
+  featured_additions: overrideWords('featured.txt').length,
+  featured_removals: overrideWords('unfeatured.txt').length,
+};
+for (const [name, count] of Object.entries(expectedOverrideCounts)) {
+  if (report.override_counts?.[name] !== count) failures.push(`Dictionary report override_counts.${name} is stale`);
+}
+const expectedTierCounts = {
+  common: [...canonical.WORD_TIERS].filter((mark) => mark === '0').length,
+  standard: [...canonical.WORD_TIERS].filter((mark) => mark === '1').length,
+  extended: [...canonical.WORD_TIERS].filter((mark) => mark === '2').length,
+};
+for (const [name, count] of Object.entries(expectedTierCounts)) {
+  if (report.tier_counts?.[name] !== count) failures.push(`Dictionary report tier_counts.${name} is stale`);
+}
+const featuredVocabularyCount = [...featured].filter((mark) => mark === '1').length;
+if (report.featured_vocabulary_count !== featuredVocabularyCount) {
+  failures.push('Dictionary report featured_vocabulary_count is stale');
+}
 for (const filename of ['dictionary-core.js', 'dictionary-extended.js']) {
   const packReport = report.runtime_packs?.[filename];
   if (!packReport || packReport.sha256 !== sha256(filename)) failures.push(`Dictionary report hash is stale for ${filename}`);

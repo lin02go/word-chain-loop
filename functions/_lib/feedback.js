@@ -8,7 +8,7 @@ export const FEEDBACK_REASONS = Object.freeze([
 
 export const FEEDBACK_SOURCES = Object.freeze(['manual', 'definition', 'rejected_input']);
 export const FEEDBACK_DIFFICULTIES = Object.freeze(['', 'easy', 'medium', 'hard']);
-export const FEEDBACK_GAME_MODES = Object.freeze(['', 'casual', 'campaign']);
+export const FEEDBACK_GAME_MODES = Object.freeze(['', 'casual', 'campaign', 'daily']);
 
 export class FeedbackValidationError extends Error {}
 

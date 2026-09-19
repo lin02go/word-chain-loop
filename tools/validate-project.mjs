@@ -8,11 +8,16 @@ const required = [
   '.gitattributes', '.gitignore', '.github/workflows/ci.yml', '.dev.vars.example',
   'wrangler.jsonc', 'worker-configuration.d.ts', 'migrations/0001_email_accounts.sql', 'migrations/0002_word_feedback.sql',
   'migrations/0003_custom_level_workshop.sql', 'migrations/0004_password_reset_tokens.sql',
+  'migrations/0005_daily_challenge.sql', 'DAILY_CHALLENGE_PRODUCT_SPEC.md',
+  'daily-challenges.js', 'daily-challenge.js', 'daily-challenge.css',
   'workshop.js', 'workshop.css', 'reset-password.html', 'reset-password.css', 'reset-password.js',
   'functions/api/auth/reset-password.js',
   'functions/api/word-feedback.js', 'functions/_lib/feedback.js',
   'functions/api/custom-levels.js', 'functions/api/community-levels.js', 'functions/api/admin/custom-levels.js',
   'functions/_lib/custom-levels.js', 'functions/_generated/custom-level-catalog.js',
+  'functions/_lib/daily-challenge.js', 'functions/api/daily-challenge/index.js',
+  'functions/api/daily-challenge/complete.js', 'functions/api/daily-challenge/referral.js',
+  'functions/api/daily-challenge/share/index.js', 'functions/api/daily-challenge/share/[code].js',
   'THIRD_PARTY_NOTICES/SCOWL-Copyright.txt',
   'DICTIONARY_SOURCES.md', 'dictionary.js', 'dictionary-core.js', 'dictionary-extended.js',
   'dictionary-report.json', 'dictionary-quality-report.json', 'dictionary-overrides/README.md', 'dictionary-overrides/allow.txt',
@@ -27,10 +32,12 @@ if (packageJson.license !== 'MIT') failures.push('package.json must declare the 
 if (!String(packageJson.packageManager || '').startsWith('pnpm@')) failures.push('packageManager must pin pnpm');
 if (!packageJson.scripts?.check?.includes('validate:project')) failures.push('check must include validate:project');
 
-const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
-for (const match of readme.matchAll(/\]\((\.\/[^)#]+)(?:#[^)]+)?\)/g)) {
-  const relative = decodeURIComponent(match[1].slice(2));
-  if (!fs.existsSync(path.join(root, relative))) failures.push(`README link is missing: ${relative}`);
+for (const filename of ['README.md', 'README-en.md']) {
+  const readme = fs.readFileSync(path.join(root, filename), 'utf8');
+  for (const match of readme.matchAll(/\]\((\.\/[^)#]+)(?:#[^)]+)?\)/g)) {
+    const relative = decodeURIComponent(match[1].slice(2));
+    if (!fs.existsSync(path.join(root, relative))) failures.push(`${filename} link is missing: ${relative}`);
+  }
 }
 
 const config = JSON.parse(fs.readFileSync(path.join(root, 'wrangler.jsonc'), 'utf8'));

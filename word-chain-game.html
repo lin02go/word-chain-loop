@@ -27,6 +27,7 @@
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
   <link rel="stylesheet" href="game.css?v=5">
   <link rel="stylesheet" href="campaign.css?v=6">
+  <link rel="stylesheet" href="daily-challenge.css?v=1">
   <link rel="stylesheet" href="word-definitions.css?v=2">
   <link rel="stylesheet" href="achievements.css?v=1">
   <link rel="stylesheet" href="user-system.css?v=2">
@@ -85,6 +86,10 @@
           <p class="start-panel-kicker" data-i18n="chooseModeKicker">选择游戏方式</p>
           <h2 data-i18n="chooseModeTitle">今天想怎样玩？</h2>
           <div class="start-mode-list">
+            <button class="start-mode-option start-mode-option-daily" type="button" data-start-mode="daily">
+              <span><strong class="start-mode-name" data-i18n="dailyMode">每日</strong><small class="start-mode-copy" data-i18n="startDailyCopy">所有人同题，完成后向好友发起挑战。</small></span>
+              <span class="start-mode-arrow" aria-hidden="true">→</span>
+            </button>
             <button class="start-mode-option" type="button" data-start-mode="casual">
               <span><strong class="start-mode-name" data-i18n="casualMode">休闲</strong><small class="start-mode-copy" data-i18n="startCasualCopy">自由选择难度，随时开始一个新词环。</small></span>
               <span class="start-mode-arrow" aria-hidden="true">→</span>
@@ -319,6 +324,7 @@
         <h1 class="brand-lockup"><span lang="en" translate="no">WORD LOOP</span><span class="brand-divider" aria-hidden="true">｜</span><span class="brand-zh">词环</span></h1>
         <div class="mode-control">
           <div class="game-mode-select" data-i18n-aria="gameModeLabel">
+            <button class="game-mode-btn" type="button" data-game-mode="daily" data-i18n="dailyMode">每日</button>
             <button class="game-mode-btn active" type="button" data-game-mode="casual" data-i18n="casualMode">休闲</button>
             <button class="game-mode-btn" type="button" data-game-mode="campaign" data-i18n="campaignMode">闯关</button>
           </div>
@@ -331,6 +337,29 @@
         </div>
       </div>
     </header>
+
+    <section class="daily-home" id="dailyHome" hidden aria-labelledby="dailyHomeTitle">
+      <div class="daily-stamp" aria-hidden="true">
+        <span id="dailyDateLabel">TODAY</span>
+        <strong id="dailyStampNumber">#001</strong>
+      </div>
+      <div class="daily-home-main">
+        <p class="section-kicker" id="dailyKicker">DAILY LOOP · SAME PUZZLE</p>
+        <h2 id="dailyHomeTitle">今日一环</h2>
+        <p class="daily-home-copy" id="dailyHomeCopy">所有人挑战同一个起始词。用更少的词闭环，再把成绩发给好友。</p>
+        <div class="daily-word-lockup">
+          <span id="dailyStartWord" translate="no">——</span>
+          <small id="dailyTarget">-- → --</small>
+        </div>
+        <button class="btn btn-primary daily-start" id="dailyStartBtn" type="button">开始今日挑战</button>
+        <p class="daily-status" id="dailyStatus" role="status" aria-live="polite"></p>
+      </div>
+      <dl class="daily-ledger">
+        <div><dt id="dailyBestLabel">今日最佳</dt><dd id="dailyBest">--</dd></div>
+        <div><dt id="dailyStreakLabel">连续完成</dt><dd id="dailyStreak">0 天</dd></div>
+        <div><dt id="dailyCountdownLabel">距离换题</dt><dd id="dailyCountdown">--:--:--</dd></div>
+      </dl>
+    </section>
 
     <section class="campaign-home" id="campaignHome" hidden aria-labelledby="campaignHomeTitle">
       <div class="campaign-home-head">
@@ -386,6 +415,13 @@
 
     <main class="layout">
       <div class="main-column">
+        <section class="daily-hud" id="dailyHud" hidden aria-label="每日挑战状态">
+          <button id="dailyBackBtn" type="button">← 今日题目</button>
+          <strong id="dailyChallengeLabel">今日一环</strong>
+          <span id="dailyMoveCount">步数 <strong>0</strong></span>
+          <span id="dailyTimer">00:00</span>
+          <button id="dailyUndoBtn" type="button" disabled>撤销</button>
+        </section>
         <section class="workshop-test-hud" id="workshopTestHud" hidden aria-label="自制关卡试玩">
           <button id="workshopTestBackBtn" type="button">← 返回工坊</button>
           <span><strong id="workshopTestHudTitle">自制关卡试玩</strong><small id="workshopTestHudWord"></small></span>
@@ -429,7 +465,7 @@
             </div>
           </div>
           <div class="input-area">
-            <input type="text" id="wordInput" name="word" data-i18n-aria="nextWordLabel" data-i18n-placeholder="wordPlaceholder" aria-label="下一个单词" placeholder="输入英文单词…" autocomplete="off" spellcheck="false" disabled>
+            <input type="text" id="wordInput" name="word" lang="en" dir="ltr" inputmode="text" autocapitalize="none" autocorrect="off" data-i18n-aria="nextWordLabel" data-i18n-placeholder="wordPlaceholder" aria-label="下一个单词" placeholder="输入英文单词…" autocomplete="off" spellcheck="false" disabled>
             <button class="btn btn-primary" id="submitBtn" type="button" data-i18n="submit" disabled>提交</button>
           </div>
           <div class="message" id="message" role="status" aria-live="polite"></div>
@@ -583,6 +619,25 @@
   </div>
 </div>
 
+<div class="overlay daily-overlay" id="dailyOverlay" role="dialog" aria-modal="true" aria-labelledby="dailyOverlayTitle">
+  <div class="overlay-card daily-result-card">
+    <div class="trophy" id="dailyOverlayKicker">DAILY LOOP COMPLETE</div>
+    <h2 id="dailyOverlayTitle">今日词环完成</h2>
+    <div class="daily-result-stamp" id="dailyResultStamp">5 步 · 00:42</div>
+    <p class="daily-result-copy" id="dailyResultCopy"></p>
+    <p class="daily-opponent-result" id="dailyOpponentResult" hidden></p>
+    <div class="daily-share-actions">
+      <button class="btn btn-primary" id="dailyShareBtn" type="button">挑战好友</button>
+      <button class="btn btn-secondary" id="dailyCopyBtn" type="button">复制链接</button>
+      <button class="btn btn-secondary" id="dailyDownloadBtn" type="button">保存成绩卡</button>
+    </div>
+    <div class="daily-result-actions">
+      <button class="btn btn-secondary" id="dailyReplayBtn" type="button">再玩一次</button>
+      <button class="btn btn-secondary" id="dailyCloseBtn" type="button">返回今日题目</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="campaignOverlay">
   <div class="overlay-card">
     <div class="trophy" id="campaignOverlayKicker">LEVEL COMPLETE</div>
@@ -625,13 +680,15 @@
 
 <script src="game.js?v=6" defer></script>
 <script src="campaign-levels.js?v=4" defer></script>
+<script src="daily-challenges.js?v=1" defer></script>
 <script src="campaign.js?v=7" defer></script>
+<script src="daily-challenge.js?v=1" defer></script>
 <script src="start-screen.js?v=2" defer></script>
 <script src="achievements.js?v=2" defer></script>
 <script src="user-system.js?v=4" defer></script>
 <script src="word-definitions.js?v=6" defer></script>
 <script src="word-feedback.js?v=1" defer></script>
-<script src="workshop.js?v=2" defer></script>
+<script src="workshop.js?v=3" defer></script>
 <script src="motion.js?v=3" defer></script>
 <script src="pwa.js?v=2" defer></script>
 </body>

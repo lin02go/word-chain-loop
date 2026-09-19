@@ -9,6 +9,11 @@ import { onRequestPost as submitWordFeedback } from './functions/api/word-feedba
 import { onRequestGet as getCustomLevels, onRequestPost as submitCustomLevel } from './functions/api/custom-levels.js';
 import { onRequestGet as getCommunityLevels } from './functions/api/community-levels.js';
 import { onRequestGet as getAdminCustomLevels, onRequestPatch as reviewCustomLevel } from './functions/api/admin/custom-levels.js';
+import { onRequestGet as getDailyChallenge } from './functions/api/daily-challenge/index.js';
+import { onRequestPost as completeDailyChallenge } from './functions/api/daily-challenge/complete.js';
+import { onRequestPost as recordDailyReferral } from './functions/api/daily-challenge/referral.js';
+import { onRequestPost as createDailyShare } from './functions/api/daily-challenge/share/index.js';
+import { onRequestGet as getDailyShare } from './functions/api/daily-challenge/share/[code].js';
 
 const apiRoutes = new Map([
   ['POST /api/auth/login', login],
@@ -25,6 +30,10 @@ const apiRoutes = new Map([
   ['GET /api/community-levels', getCommunityLevels],
   ['GET /api/admin/custom-levels', getAdminCustomLevels],
   ['PATCH /api/admin/custom-levels', reviewCustomLevel],
+  ['GET /api/daily-challenge', getDailyChallenge],
+  ['POST /api/daily-challenge/complete', completeDailyChallenge],
+  ['POST /api/daily-challenge/referral', recordDailyReferral],
+  ['POST /api/daily-challenge/share', createDailyShare],
 ]);
 
 export default {
@@ -32,6 +41,16 @@ export default {
     const url = new URL(request.url);
     const route = apiRoutes.get(`${request.method} ${url.pathname}`);
     if (route) return route({ request, env });
+    const dailyShareMatch = request.method === 'GET'
+      ? url.pathname.match(/^\/api\/daily-challenge\/share\/([^/]+)$/)
+      : null;
+    if (dailyShareMatch) {
+      return getDailyShare({
+        request,
+        env,
+        params: { code: decodeURIComponent(dailyShareMatch[1]) },
+      });
+    }
     if (url.pathname.startsWith('/api/')) {
       return new Response(JSON.stringify({ error: 'API route not found.', code: 'NOT_FOUND' }), {
         status: 404,

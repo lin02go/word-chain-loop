@@ -10,6 +10,7 @@ function loadGlobals(file) {
 
 const dictionary = loadGlobals('dictionary.js');
 const campaign = loadGlobals('campaign-levels.js');
+const campaignClient = fs.readFileSync('campaign.js', 'utf8');
 const words = dictionary.DICTIONARY;
 const tiers = dictionary.WORD_TIERS;
 const forms = dictionary.WORD_FORMS;
@@ -241,6 +242,9 @@ function hintCountsAlongRoute(mode, startInfo, route) {
 const modes = {};
 const report = [];
 const structureFailures = [];
+if (campaignClient.includes('_updateStatsQuick')) {
+  structureFailures.push('campaign client calls the removed _updateStatsQuick method');
+}
 const levelIds = new Set();
 const startWords = new Set();
 if (!Array.isArray(campaign.CAMPAIGN_LEVELS) || campaign.CAMPAIGN_LEVELS.length !== 100) {

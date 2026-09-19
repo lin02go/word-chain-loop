@@ -9,6 +9,20 @@
     this.lastFocused = null;
     this.bindUI();
     this.show();
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      if (params.has('challenge') || params.has('daily')) {
+        this.screen.classList.add('is-leaving');
+        document.body.classList.remove('start-screen-open');
+        var self = this;
+        setTimeout(function() {
+          self.screen.hidden = true;
+          self.screen.classList.remove('is-leaving');
+          var focusTarget = document.getElementById('dailyStartBtn');
+          if (focusTarget) focusTarget.focus({ preventScroll: true });
+        }, 520);
+      }
+    } catch (err) { /* URLSearchParams may be unavailable in older browsers */ }
   }
 
   StartScreenController.prototype.bindUI = function() {
@@ -93,9 +107,13 @@
   };
 
   StartScreenController.prototype.enterGame = function(mode) {
-    var nextMode = mode === 'campaign' ? 'campaign' : (mode === 'workshop' ? 'workshop' : 'casual');
+    var nextMode = mode === 'daily' ? 'daily' :
+      (mode === 'campaign' ? 'campaign' : (mode === 'workshop' ? 'workshop' : 'casual'));
     if (window.campaignController && window.campaignController.setMode) {
-      window.campaignController.setMode(nextMode === 'workshop' ? 'casual' : nextMode);
+      window.campaignController.setMode(nextMode === 'campaign' ? 'campaign' : 'casual', nextMode === 'daily');
+    }
+    if (nextMode === 'daily' && window.dailyChallengeController) {
+      window.dailyChallengeController.enter();
     }
     this.screen.classList.add('is-leaving');
     document.body.classList.remove('start-screen-open');
@@ -107,8 +125,8 @@
         window.workshopController.open('create');
         return;
       }
-      var focusTarget = nextMode === 'campaign' ?
-        document.getElementById('campaignContinueBtn') : document.getElementById('wordInput');
+      var focusTarget = nextMode === 'campaign' ? document.getElementById('campaignContinueBtn') :
+        (nextMode === 'daily' ? document.getElementById('dailyStartBtn') : document.getElementById('wordInput'));
       if (focusTarget && focusTarget.focus) focusTarget.focus({ preventScroll: true });
     }, 520);
   };

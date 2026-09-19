@@ -44,6 +44,7 @@
   function isProgressKey(key) {
     return key === 'word-chain-loop:achievements:v1' ||
       key === 'word-chain-loop:campaign-progress:v3' ||
+      key === 'word-chain-loop:daily:v1' ||
       key.indexOf('word-chain-loop:record:v3:') === 0;
   }
   function api(path, options) {

@@ -180,7 +180,7 @@ report.build_parameters ||= {
   ascii_lowercase_only: true,
   minimum_length: 3,
 };
-report.override_counts ||= {
+report.override_counts = {
   allowed: overrideCount('allow.txt'),
   denied: overrideCount('deny.txt'),
   featured_additions: overrideCount('featured.txt'),

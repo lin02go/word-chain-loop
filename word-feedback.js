@@ -130,7 +130,8 @@
     }
 
     var difficulty = typeof game !== 'undefined' && game ? game.difficulty : '';
-    var gameMode = window.campaignController && window.campaignController.mode ? window.campaignController.mode : '';
+    var gameMode = window.dailyChallengeController && window.dailyChallengeController.active ? 'daily' :
+      (window.campaignController && window.campaignController.mode ? window.campaignController.mode : '');
     this.submitButton.disabled = true;
     this.showStatus(copy('sending'));
     fetch('/api/word-feedback', {

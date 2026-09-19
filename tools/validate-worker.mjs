@@ -65,4 +65,14 @@ if (customLevels.status !== 503 || (await customLevels.json()).code !== 'DB_UNAV
 const community = await worker.fetch(new Request('https://example.test/api/community-levels'), { ASSETS: assets });
 if (community.status !== 503 || (await community.json()).code !== 'DB_UNAVAILABLE') throw new Error('Community-level API routing failed');
 
-console.log('Worker validation passed: static, account, password-reset, feedback, and workshop routes are reachable.');
+const dailyChallenge = await worker.fetch(new Request('https://example.test/api/daily-challenge'), { ASSETS: assets });
+if (dailyChallenge.status !== 503 || (await dailyChallenge.json()).code !== 'DB_UNAVAILABLE') {
+  throw new Error('Daily-challenge API routing failed');
+}
+
+const dailyShare = await worker.fetch(new Request('https://example.test/api/daily-challenge/share/Abcdef123456'), { ASSETS: assets });
+if (dailyShare.status !== 503 || (await dailyShare.json()).code !== 'DB_UNAVAILABLE') {
+  throw new Error('Daily share API routing failed');
+}
+
+console.log('Worker validation passed: static, account, password-reset, feedback, workshop, and daily-challenge routes are reachable.');

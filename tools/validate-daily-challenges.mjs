@@ -13,11 +13,32 @@ const campaign = loadGlobals('campaign-levels.js');
 const failures = [];
 const challenges = daily.DAILY_CHALLENGES;
 const difficulties = new Set(['easy', 'medium', 'hard']);
+const dailyClientText = fs.readFileSync('daily-challenge.js', 'utf8');
 
 try {
-  new vm.Script(fs.readFileSync('daily-challenge.js', 'utf8'), { filename: 'daily-challenge.js' });
+  new vm.Script(dailyClientText, { filename: 'daily-challenge.js' });
 } catch (error) {
   failures.push(`daily challenge controller has invalid JavaScript: ${error.message}`);
+}
+if (!dailyClientText.includes("window.location.protocol === 'http:'") ||
+    !dailyClientText.includes('if (!canUseBackend())')) {
+  failures.push('daily challenge API must avoid requests from unsupported URL protocols');
+}
+try {
+  let fetchCalled = false;
+  const blockedFetch = () => { fetchCalled = true; return Promise.resolve(); };
+  const fileContext = {
+    window: { location: { protocol: 'file:' }, fetch: blockedFetch },
+    document: {}, console, fetch: blockedFetch,
+  };
+  vm.createContext(fileContext);
+  vm.runInContext(dailyClientText, fileContext, { filename: 'daily-challenge.js' });
+  await fileContext.window.DailyChallengeController.prototype.fetchJson('/api/daily-challenge/complete', {
+    method: 'POST', body: '{}',
+  }).then(() => failures.push('file protocol daily API unexpectedly resolved')).catch(() => {});
+  if (fetchCalled) failures.push('file protocol daily API reached fetch instead of failing safely');
+} catch (error) {
+  failures.push(`file protocol daily API guard failed: ${error.message}`);
 }
 
 if (!Array.isArray(challenges)) {

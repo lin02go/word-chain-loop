@@ -117,6 +117,10 @@
 
   WordFeedbackController.prototype.submit = function() {
     var self = this;
+    if (window.location.protocol !== 'http:' && window.location.protocol !== 'https:') {
+      this.showStatus(copy('unavailable'), true);
+      return;
+    }
     this.syncAuthentication();
     if (!this.isAuthenticated()) {
       this.showStatus(copy('loginRequired'), true);

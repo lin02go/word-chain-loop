@@ -94,7 +94,8 @@
     showStatus('onlineStatus', 'ready', false);
   });
 
-  if ('serviceWorker' in navigator && window.isSecureContext) {
+  var supportedProtocol = window.location.protocol === 'http:' || window.location.protocol === 'https:';
+  if ('serviceWorker' in navigator && window.isSecureContext && supportedProtocol) {
     window.addEventListener('load', function() {
       navigator.serviceWorker.register('./service-worker.js', { scope: './' })
         .then(watchRegistration)

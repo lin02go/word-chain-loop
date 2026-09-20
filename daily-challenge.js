@@ -39,6 +39,9 @@
   };
 
   function el(id) { return document.getElementById(id); }
+  function canUseBackend() {
+    return window.location.protocol === 'http:' || window.location.protocol === 'https:';
+  }
 
   function language() {
     return typeof window.currentLanguage === 'string' && window.currentLanguage === 'en' ? 'en' : 'zh';
@@ -296,6 +299,7 @@
   };
 
   DailyChallengeController.prototype.fetchJson = function(url, options) {
+    if (!canUseBackend()) return Promise.reject(new Error('backend unavailable for this URL protocol'));
     if (!window.fetch) return Promise.reject(new Error('fetch unavailable'));
     var request = options || {};
     request.headers = request.headers || {};

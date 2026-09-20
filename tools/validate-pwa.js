@@ -75,6 +75,15 @@ try { new vm.Script(resetPasswordText, { filename: 'reset-password.js' }); } cat
 if (!/!self\.hasSyncedVersion\(result\.progressUpdatedAt\)/.test(userSystemText)) fail('Automatic cloud restore must guard against repeated versions');
 if (!/if \(changed\) setTimeout\(function\(\) \{ window\.location\.reload\(\); \}/.test(userSystemText)) fail('Cloud restore must reload only after progress changes');
 if (!/if \(!refreshRequested \|\| refreshing\) return;/.test(pwaText)) fail('Service Worker reload must require a user-requested update');
+if (!/window\.location\.protocol === 'http:' \|\| window\.location\.protocol === 'https:'/.test(pwaText)) {
+  fail('Service Worker registration must be limited to HTTP(S) pages');
+}
+if (!/if \(!canUseBackend\(\)\) return Promise\.reject/.test(userSystemText)) {
+  fail('Account API must avoid requests from unsupported URL protocols');
+}
+if (!/if \(!canUseBackend\(\)\) return Promise\.reject/.test(workshopText)) {
+  fail('Workshop API must avoid requests from unsupported URL protocols');
+}
 
 const shellMatch = workerText.match(/var SHELL_FILES = \[([\s\S]*?)\];/);
 if (!shellMatch) {

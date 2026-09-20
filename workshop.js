@@ -65,7 +65,11 @@
     if (!params) return value;
     return value.replace(/\{(\w+)\}/g, function(match, name) { return params[name] === undefined ? match : params[name]; });
   }
+  function canUseBackend() {
+    return window.location.protocol === 'http:' || window.location.protocol === 'https:';
+  }
   function api(path, options) {
+    if (!canUseBackend()) return Promise.reject(new Error('Workshop service requires HTTP or HTTPS.'));
     var requestOptions = options || {};
     requestOptions.headers = Object.assign({ accept: 'application/json' }, requestOptions.headers || {});
     requestOptions.cache = 'no-store';

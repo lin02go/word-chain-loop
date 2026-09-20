@@ -41,6 +41,9 @@
     return value.replace(/\{(\w+)\}/g, function(match, name) { return params[name] === undefined ? match : params[name]; });
   }
   function safeJson(value, fallback) { try { return JSON.parse(value); } catch (err) { return fallback; } }
+  function canUseBackend() {
+    return window.location.protocol === 'http:' || window.location.protocol === 'https:';
+  }
   function isProgressKey(key) {
     return key === 'word-chain-loop:achievements:v1' ||
       key === 'word-chain-loop:campaign-progress:v3' ||
@@ -48,6 +51,7 @@
       key.indexOf('word-chain-loop:record:v3:') === 0;
   }
   function api(path, options) {
+    if (!canUseBackend()) return Promise.reject(new Error('Account service requires HTTP or HTTPS.'));
     var requestOptions = options || {};
     requestOptions.headers = Object.assign({ accept: 'application/json' }, requestOptions.headers || {});
     requestOptions.cache = 'no-store';
